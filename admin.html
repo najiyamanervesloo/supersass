@@ -651,7 +651,8 @@
 
                                 <div>
                                     <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">Google Maps Embed iframe URL</label>
-                                    <input type="text" id="cnt-map" required class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-mono">
+                                    <input type="text" id="cnt-map" class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-mono" placeholder="Paste Google Maps link or <iframe src=...> HTML snippet">
+                                    <p class="text-[11px] text-slate-400 mt-1.5 font-medium">💡 Paste full Google Maps <code>&lt;iframe src="..."&gt;</code> HTML code, share link, or address. It will be parsed automatically.</p>
                                 </div>
 
                                 <div class="flex justify-end pt-4">
@@ -1655,6 +1656,28 @@
         }
 
         // --- CONTACT CMS ---
+        function cleanMapUrl(input, address) {
+            if (!input || typeof input !== 'string') {
+                const query = address ? encodeURIComponent(address) : '';
+                return query ? `https://maps.google.com/maps?q=${query}&output=embed` : '';
+            }
+            let url = input.trim();
+            if (url.includes('<iframe')) {
+                const match = url.match(/src=["']([^"']+)["']/i);
+                if (match && match[1]) url = match[1];
+            }
+            url = url.replace(/&amp;/g, '&');
+            if (url.includes('google.com/maps/embed') || url.includes('maps.google.com/maps/embed')) return url;
+            if (url.includes('google.com/maps') || url.includes('maps.google.com')) {
+                if (!url.includes('output=embed')) url += (url.includes('?') ? '&' : '?') + 'output=embed';
+                return url;
+            }
+            if (url && !url.startsWith('http')) {
+                return `https://maps.google.com/maps?q=${encodeURIComponent(url)}&output=embed`;
+            }
+            return url;
+        }
+
         async function renderContactTab() {
             const res = await fetch(`${API_URL}/admin/contact`, { headers: { 'Authorization': `Bearer ${authToken}` } });
             const c = await res.json();
@@ -1668,13 +1691,18 @@
 
         async function saveContactDetails(e) {
             e.preventDefault();
+            const rawMap = document.getElementById('cnt-map').value;
+            const addr = document.getElementById('cnt-address').value;
+            const cleanedMap = cleanMapUrl(rawMap, addr);
+            document.getElementById('cnt-map').value = cleanedMap;
+
             const body = {
                 mobile: document.getElementById('cnt-mobile').value,
                 whatsapp: document.getElementById('cnt-whatsapp').value,
                 email: document.getElementById('cnt-email').value,
                 businessHours: document.getElementById('cnt-hours').value,
-                address: document.getElementById('cnt-address').value,
-                mapUrl: document.getElementById('cnt-map').value
+                address: addr,
+                mapUrl: cleanedMap
             };
             const res = await fetch(`${API_URL}/admin/contact`, {
                 method: 'PUT',
