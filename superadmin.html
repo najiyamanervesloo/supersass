@@ -526,7 +526,7 @@
 
 <script>
     // ── State ──────────────────────────────────────────────────────────
-    const BASE = (window.location.port === '3000') ? '' : 'http://localhost:3000';
+    const BASE = window.location.protocol.startsWith('http') ? '' : 'http://localhost:3000';
     const SA_TOKEN_KEY = 'veslootech_sa_token';
     const SA_USER_KEY  = 'veslootech_sa_user';
     let saToken = localStorage.getItem(SA_TOKEN_KEY) || '';
