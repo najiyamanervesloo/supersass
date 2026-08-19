@@ -720,7 +720,7 @@
                                 <p
                                     class="text-[10px] font-extrabold text-appleSecondary dark:text-gray-400 uppercase tracking-widest mb-0.5">
                                     Mobile</p>
-                                <p class="text-lg font-bold">+91 73875 56786</p>
+                                <p id="cnt-display-mobile" class="text-lg font-bold">+91 73875 56786</p>
                             </div>
                         </div>
                         <div class="flex items-center gap-6">
@@ -735,7 +735,7 @@
                                 <p
                                     class="text-[10px] font-extrabold text-appleSecondary dark:text-gray-400 uppercase tracking-widest mb-0.5">
                                     WhatsApp</p>
-                                <p class="text-lg font-bold">+91 73875 56786</p>
+                                <p id="cnt-display-whatsapp" class="text-lg font-bold">+91 73875 56786</p>
                             </div>
                         </div>
                         <div class="flex items-center gap-6">
@@ -751,7 +751,7 @@
                                 <p
                                     class="text-[10px] font-extrabold text-appleSecondary dark:text-gray-400 uppercase tracking-widest mb-0.5">
                                     Email Address</p>
-                                <p class="text-sm font-bold truncate">captgains.trading@gmail.com</p>
+                                <p id="cnt-display-email" class="text-sm font-bold truncate">captgains.trading@gmail.com</p>
                             </div>
                         </div>
                         <div class="flex items-center gap-6">
@@ -767,7 +767,7 @@
                                 <p
                                     class="text-[10px] font-extrabold text-appleSecondary dark:text-gray-400 uppercase tracking-widest mb-0.5">
                                     Address</p>
-                                <p class="text-sm font-bold leading-snug">Sahyadri Siddhi Apartment,<br>Tuljainagar,
+                                <p id="cnt-display-address" class="text-sm font-bold leading-snug">Sahyadri Siddhi Apartment,<br>Tuljainagar,
                                     Sangli,<br>Miraj Kupwad, Maharashtra – 416416</p>
                             </div>
                         </div>
@@ -793,7 +793,7 @@
                 class="bg-white/60 dark:bg-darkCard/60 backdrop-blur-xl rounded-full px-8 py-4 flex items-center justify-center gap-6 sm:gap-10 shadow-premium border border-black/5 dark:border-white/10 hover:shadow-hover transition-shadow duration-500">
 
                 <!-- Instagram -->
-                <a href="#" target="_blank" class="group relative flex flex-col items-center justify-center tap-scale">
+                <a id="social-link-instagram" href="#" target="_blank" class="group relative flex flex-col items-center justify-center tap-scale">
                     <div
                         class="absolute inset-0 bg-pink-500/40 rounded-full blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500">
                     </div>
@@ -809,7 +809,7 @@
                 </a>
 
                 <!-- Facebook -->
-                <a href="#" target="_blank" class="group relative flex flex-col items-center justify-center tap-scale">
+                <a id="social-link-facebook" href="#" target="_blank" class="group relative flex flex-col items-center justify-center tap-scale">
                     <div
                         class="absolute inset-0 bg-blue-600/40 rounded-full blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500">
                     </div>
@@ -823,7 +823,7 @@
                 </a>
 
                 <!-- YouTube -->
-                <a href="#" target="_blank" class="group relative flex flex-col items-center justify-center tap-scale">
+                <a id="social-link-youtube" href="#" target="_blank" class="group relative flex flex-col items-center justify-center tap-scale">
                     <div
                         class="absolute inset-0 bg-red-600/40 rounded-full blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500">
                     </div>
@@ -1077,6 +1077,22 @@
                     if (c.mobile) {
                         const callBtn = document.querySelector('#hero-call-btn');
                         if (callBtn && !data.businessProfile?.heroCtaLink) callBtn.href = `tel:${c.mobile.replace(/\s+/g, '')}`;
+                        const disMobile = document.getElementById('cnt-display-mobile');
+                        if (disMobile) disMobile.innerText = c.mobile;
+                    }
+                    if (c.whatsapp) {
+                        const disWa = document.getElementById('cnt-display-whatsapp');
+                        if (disWa) disWa.innerText = c.whatsapp;
+                        const floatWa = document.getElementById('floating-wa-btn');
+                        if (floatWa) floatWa.href = `https://wa.me/${c.whatsapp.replace(/[^0-9]/g, '')}`;
+                    }
+                    if (c.email) {
+                        const disEmail = document.getElementById('cnt-display-email');
+                        if (disEmail) disEmail.innerText = c.email;
+                    }
+                    if (c.address) {
+                        const disAddr = document.getElementById('cnt-display-address');
+                        if (disAddr) disAddr.innerText = c.address;
                     }
                     if (c.mapUrl) {
                         const iframe = document.querySelector('#contact iframe');
@@ -1084,7 +1100,18 @@
                     }
                 }
 
-                // 7. SEO
+                // 7. Social Links
+                if (data.socialLinks) {
+                    const soc = data.socialLinks;
+                    const ig = document.getElementById('social-link-instagram');
+                    if (ig && soc.instagram) ig.href = soc.instagram;
+                    const fb = document.getElementById('social-link-facebook');
+                    if (fb && soc.facebook) fb.href = soc.facebook;
+                    const yt = document.getElementById('social-link-youtube');
+                    if (yt && soc.youtube) yt.href = soc.youtube;
+                }
+
+                // 8. SEO
                 if (data.seo) {
                     if (data.seo.siteTitle) document.title = data.seo.siteTitle;
                 }
