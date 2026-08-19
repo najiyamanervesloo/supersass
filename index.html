@@ -971,14 +971,15 @@
 
     <script>
         // ── Multi-Tenant Context Detection ──────────────────────────────
-        // If loaded under /c/:subname route, use client-specific API base.
+        // Supports clean tenant URLs (/:subname) and legacy /c/:subname.
         const _pathParts = window.location.pathname.split('/').filter(Boolean);
-        const _isClientSite = _pathParts[0] === 'c' && _pathParts[1];
-        const _clientSubname = _isClientSite ? _pathParts[1] : null;
+        const SYSTEM_NAMES = ['superadmin', 'admin', 'api', 'c', 'uploads'];
+        const _isClientSite = (_pathParts[0] === 'c' && _pathParts[1]) || (_pathParts[0] && !SYSTEM_NAMES.includes(_pathParts[0]));
+        const _clientSubname = _pathParts[0] === 'c' ? _pathParts[1] : (_isClientSite ? _pathParts[0] : null);
         const _baseOrigin = window.location.protocol.startsWith('http')
             ? '' : 'http://localhost:3000';
         const PUBLIC_API_URL = _isClientSite
-            ? `${_baseOrigin}/c/${_clientSubname}/api`
+            ? `${_baseOrigin}/${_clientSubname}/api`
             : `${_baseOrigin}/api`;
         // ────────────────────────────────────────────────────────────────
 
