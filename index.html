@@ -422,9 +422,19 @@
                     <div class="p-5">
                         <h3 class="font-bold text-lg mb-1">Beginner / Foundation Course</h3>
                         <p class="text-appleBlue font-extrabold text-base mb-4">₹ 10,000</p>
-                        <a href="https://wa.me/917387556786?text=Hi,%20I'm%20interested%20in%20the%20Beginner%20%2F%20Foundation%20Course"
+                <!-- Course 1 -->
+                <div
+                    class="scrolling-item group bg-white dark:bg-darkCard rounded-apple shadow-premium overflow-hidden border border-black/5 dark:border-white/5 tap-scale">
+                    <div class="h-44 overflow-hidden bg-black/5 dark:bg-gray-800">
+                        <img src="c1.png"
+                            class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 ease-out">
+                    </div>
+                    <div class="p-5">
+                        <h3 class="font-bold text-lg mb-1">Beginner / Foundation Course</h3>
+                        <p class="text-appleBlue font-extrabold text-base mb-4">₹ 10,000</p>
+                        <button onclick="openEnquiryModal('Beginner / Foundation Course')"
                             class="w-full bg-appleText dark:bg-white dark:text-appleText text-white py-3 rounded-xl font-bold text-xs flex items-center justify-center transition-transform active:scale-95">Enquire
-                            Now</a>
+                            Now</button>
                     </div>
                 </div>
                 <!-- Course 2 -->
@@ -437,9 +447,9 @@
                     <div class="p-5">
                         <h3 class="font-bold text-lg mb-1">Technical Analysis Course</h3>
                         <p class="text-appleBlue font-extrabold text-base mb-4">₹ 20,000</p>
-                        <a href="https://wa.me/917387556786?text=Hi,%20I'm%20interested%20in%20the%20Technical%20Analysis%20Course"
+                        <button onclick="openEnquiryModal('Technical Analysis Course')"
                             class="w-full bg-appleText dark:bg-white dark:text-appleText text-white py-3 rounded-xl font-bold text-xs flex items-center justify-center transition-transform active:scale-95">Enquire
-                            Now</a>
+                            Now</button>
                     </div>
                 </div>
                 <!-- Course 3 -->
@@ -452,9 +462,9 @@
                     <div class="p-5">
                         <h3 class="font-bold text-lg mb-1 line-clamp-1">Fundamental Analysis & Valuation Course</h3>
                         <p class="text-appleBlue font-extrabold text-base mb-4">₹ 45,000</p>
-                        <a href="https://wa.me/917387556786?text=Hi,%20I'm%20interested%20in%20the%20Fundamental%20Analysis%20%26%20Valuation%20Course"
+                        <button onclick="openEnquiryModal('Fundamental Analysis %26 Valuation Course')"
                             class="w-full bg-appleText dark:bg-white dark:text-appleText text-white py-3 rounded-xl font-bold text-xs flex items-center justify-center transition-transform active:scale-95">Enquire
-                            Now</a>
+                            Now</button>
                     </div>
                 </div>
                 <!-- Course 4 -->
@@ -467,9 +477,9 @@
                     <div class="p-5">
                         <h3 class="font-bold text-lg mb-1 line-clamp-1">Derivatives & Options Trading Strategies</h3>
                         <p class="text-appleBlue font-extrabold text-base mb-4">₹ 50,000</p>
-                        <a href="https://wa.me/917387556786?text=Hi,%20I'm%20interested%20in%20the%20Derivatives%20%26%20Options%20Trading%20Strategies"
+                        <button onclick="openEnquiryModal('Derivatives %26 Options Trading Strategies')"
                             class="w-full bg-appleText dark:bg-white dark:text-appleText text-white py-3 rounded-xl font-bold text-xs flex items-center justify-center transition-transform active:scale-95">Enquire
-                            Now</a>
+                            Now</button>
                     </div>
                 </div>
                 <!-- Course 5 -->
@@ -482,9 +492,11 @@
                     <div class="p-5">
                         <h3 class="font-bold text-lg mb-1">Certification Course</h3>
                         <p class="text-appleBlue font-extrabold text-base mb-4">₹ 60,000</p>
-                        <a href="https://wa.me/917387556786?text=Hi,%20I'm%20interested%20in%20the%20Certification%20Course"
+                        <button onclick="openEnquiryModal('Certification Course')"
                             class="w-full bg-appleText dark:bg-white dark:text-appleText text-white py-3 rounded-xl font-bold text-xs flex items-center justify-center transition-transform active:scale-95">Enquire
-                            Now</a>
+                            Now</button>
+                    </div>
+                </div>
                     </div>
                 </div>
             </div>
@@ -885,7 +897,7 @@
         </div>
 
         <!-- Floating WhatsApp -->
-        <a href="https://wa.me/917387556786"
+        <a id="floating-wa-btn" href="https://wa.me/917387556786"
             class="fixed bottom-28 right-8 w-16 h-16 bg-whatsappGreen rounded-full flex items-center justify-center shadow-[0_10px_30px_rgba(37,211,102,0.3)] text-white z-40 tap-scale hover:scale-110 hover:shadow-[0_0_40px_rgba(37,211,102,0.8)] transition-all duration-300 reveal delay-5">
             <svg class="w-9 h-9" fill="currentColor" viewBox="0 0 24 24">
                 <path
@@ -960,9 +972,15 @@
                         <label class="block text-xs font-bold uppercase tracking-wider text-appleSecondary dark:text-gray-400 mb-1">Message / Question</label>
                         <textarea id="enq-user-msg" rows="2" placeholder="I would like to know batch timings..." class="w-full px-4 py-3 bg-black/5 dark:bg-white/5 border border-black/10 dark:border-white/10 rounded-xl text-sm font-semibold text-appleText dark:text-white focus:outline-none focus:ring-2 focus:ring-appleBlue"></textarea>
                     </div>
-                    <button type="submit" id="enq-submit-btn" class="w-full py-4 bg-appleBlue text-white font-bold text-sm rounded-xl shadow-premium hover:opacity-90 transition-opacity">
-                        Submit Enquiry
-                    </button>
+                    <div class="flex gap-3 pt-2">
+                        <button type="submit" id="enq-submit-btn" class="flex-1 py-3.5 bg-appleBlue text-white font-bold text-xs rounded-xl shadow-premium hover:opacity-90 transition-opacity">
+                            Submit Enquiry
+                        </button>
+                        <button type="button" onclick="openWhatsAppEnquiry()" class="flex-1 py-3.5 bg-whatsappGreen text-white font-bold text-xs rounded-xl shadow-premium hover:opacity-90 transition-opacity flex items-center justify-center gap-1.5">
+                            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.438 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+                            WhatsApp
+                        </button>
+                    </div>
                 </form>
             </div>
         </div>
@@ -1001,6 +1019,29 @@
             { img: 'g5.jpg', title: 'Mentorship' },
             { img: 'g6.jpg', title: 'Student Success' }
         ];
+
+        // Clean Map URL Helper (parses full iframe tags, embed links, or standard search links)
+        function cleanMapUrl(input, address) {
+            if (!input || typeof input !== 'string') {
+                const query = address ? encodeURIComponent(address) : '';
+                return query ? `https://maps.google.com/maps?q=${query}&output=embed` : '';
+            }
+            let url = input.trim();
+            if (url.includes('<iframe')) {
+                const match = url.match(/src=["']([^"']+)["']/i);
+                if (match && match[1]) url = match[1];
+            }
+            url = url.replace(/&amp;/g, '&');
+            if (url.includes('google.com/maps/embed') || url.includes('maps.google.com/maps/embed')) return url;
+            if (url.includes('google.com/maps') || url.includes('maps.google.com')) {
+                if (!url.includes('output=embed')) url += (url.includes('?') ? '&' : '?') + 'output=embed';
+                return url;
+            }
+            if (url && !url.startsWith('http')) {
+                return `https://maps.google.com/maps?q=${encodeURIComponent(url)}&output=embed`;
+            }
+            return url;
+        }
 
         // FETCH DYNAMIC DATA FROM CMS SERVER
         async function fetchCmsData() {
@@ -1103,9 +1144,10 @@
                         const disAddr = document.getElementById('cnt-display-address');
                         if (disAddr) disAddr.innerText = c.address;
                     }
-                    if (c.mapUrl) {
-                        const iframe = document.querySelector('#contact iframe');
-                        if (iframe) iframe.src = c.mapUrl;
+                    const iframe = document.querySelector('#contact iframe');
+                    if (iframe) {
+                        const finalMapUrl = cleanMapUrl(c.mapUrl, c.address);
+                        if (finalMapUrl) iframe.src = finalMapUrl;
                     }
                 }
 
@@ -1227,6 +1269,25 @@
             modal.classList.remove('flex');
         }
 
+        function openWhatsAppEnquiry() {
+            const rawWa = dynamicCmsData?.contact?.whatsapp || '917387556786';
+            const cleanWa = rawWa.replace(/[^0-9]/g, '');
+            const course = document.getElementById('enq-course-name').value || 'General Course Enquiry';
+            const name = document.getElementById('enq-user-name').value || '';
+            const mobile = document.getElementById('enq-user-mobile').value || '';
+            const msg = document.getElementById('enq-user-msg').value || '';
+
+            const bizName = dynamicCmsData?.businessProfile?.name || 'Institute';
+            let text = `Hi ${bizName}, I am interested in ${course}.`;
+            if (name) text += ` My name is ${name}.`;
+            if (mobile) text += ` Mobile: ${mobile}.`;
+            if (msg) text += ` Note: ${msg}`;
+
+            const url = `https://wa.me/${cleanWa}?text=${encodeURIComponent(text)}`;
+            window.open(url, '_blank');
+            closeEnquiryModal();
+        }
+
         async function submitPublicEnquiry(e) {
             e.preventDefault();
             const btn = document.getElementById('enq-submit-btn');
@@ -1258,9 +1319,7 @@
                 }
             } catch (err) {
                 // Fallback to WhatsApp if API offline
-                const waUrl = `https://wa.me/917387556786?text=${encodeURIComponent(`Hi Captgains, I'm ${payload.name} (${payload.mobile}). Interested in ${payload.course}. ${payload.message}`)}`;
-                window.open(waUrl, '_blank');
-                closeEnquiryModal();
+                openWhatsAppEnquiry();
             } finally {
                 btn.disabled = false;
                 btn.innerText = 'Submit Enquiry';
@@ -1439,14 +1498,20 @@
         }
 
         function downloadVCard() {
-            const vCardData = `BEGIN:VCARD\nVERSION:3.0\nFN:Captgains Trading & Training Institute\nORG:Captgains Trading & Training Institute;\nTITLE:Trading & Training Institute\nTEL;TYPE=WORK,VOICE:+917387556786\nEMAIL;TYPE=WORK:captgains.trading@gmail.com\nADR;TYPE=WORK:;;Sahyadri Siddhi Apartment, Tuljainagar;Sangli;Maharashtra;416416;India\nURL:${window.location.href}\nEND:VCARD`;
+            const c = dynamicCmsData?.contact || {};
+            const bp = dynamicCmsData?.businessProfile || {};
+            const fn = bp.name || 'Digital Business Card';
+            const mobile = c.mobile || '+917387556786';
+            const email = c.email || 'contact@domain.com';
+            const addr = c.address ? c.address.replace(/\n/g, ' ') : '';
+            const vCardData = `BEGIN:VCARD\nVERSION:3.0\nFN:${fn}\nORG:${fn};\nTITLE:${bp.tagline || 'Business Card'}\nTEL;TYPE=WORK,VOICE:${mobile}\nEMAIL;TYPE=WORK:${email}\nADR;TYPE=WORK:;;${addr};;;;\nURL:${window.location.href}\nEND:VCARD`;
 
-            const blob = new Blob([vCardData], { type: 'text/vcard' });
+            const blob = new Blob([vCardData], { type: 'text/vcard;charset=utf-8' });
             const url = window.URL.createObjectURL(blob);
             const a = document.createElement('a');
             a.style.display = 'none';
             a.href = url;
-            a.download = 'Captgains.vcf';
+            a.download = `${fn.replace(/[^a-zA-Z0-9]/g, '_')}.vcf`;
             document.body.appendChild(a);
             a.click();
             window.URL.revokeObjectURL(url);
