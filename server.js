@@ -30,6 +30,17 @@ const CLIENTS_DIR = path.join(DATA_DIR, 'clients');
 const UPLOADS_DIR = path.join(__dirname, 'uploads');
 const CLIENT_UPLOADS_DIR = path.join(UPLOADS_DIR, 'clients');
 
+// ── Clean Tenant URL Middleware ───────────────────────────────────────────
+// Rewrites clean tenant URLs like /mujawar-coaching/api/* -> /c/mujawar-coaching/api/*
+app.use((req, res, next) => {
+    const parts = req.path.split('/').filter(Boolean);
+    const SYSTEM_PREFIXES = ['api', 'superadmin', 'admin', 'c', 'uploads', 'data', 'favicon.ico'];
+    if (parts.length >= 2 && parts[1] === 'api' && !SYSTEM_PREFIXES.includes(parts[0])) {
+        req.url = '/c/' + parts[0] + '/api' + req.url.substring(parts[0].length + 5);
+    }
+    next();
+});
+
 // Ensure directories exist
 if (!fs.existsSync(DATA_DIR)) fs.mkdirSync(DATA_DIR, { recursive: true });
 if (!fs.existsSync(UPLOADS_DIR)) fs.mkdirSync(UPLOADS_DIR, { recursive: true });
@@ -1070,26 +1081,30 @@ app.get('/superadmin*', (req, res) => {
     res.sendFile(path.join(__dirname, 'superadmin.html'));
 });
 
-// Client Admin Panel — serve admin.html but it will detect /c/:subname context
-app.get('/c/:subname/admin*', (req, res) => {
+// Client Admin Panel — serve admin.html for /:subname/admin and legacy /c/:subname/admin
+app.get(['/c/:subname/admin*', '/:subname/admin*'], (req, res, next) => {
+    const rawSubname = req.params.subname || (req.path.split('/')[1]);
+    if (rawSubname === 'superadmin' || rawSubname === 'admin' || rawSubname === 'api' || rawSubname === 'c') return next();
     res.sendFile(path.join(__dirname, 'admin.html'));
 });
 
-// Client Public Site — serve index.html but it will detect /c/:subname context
-app.get(['/c/:subname', '/c/:subname/'], (req, res) => {
-    const { subname } = req.params;
-    const client = findClient(subname);
+// Client Public Site — serve index.html for /:subname and legacy /c/:subname
+app.get(['/c/:subname', '/c/:subname/', '/:subname', '/:subname/'], (req, res, next) => {
+    const rawSubname = req.params.subname || (req.path.split('/')[1]);
+    const SYSTEM_NAMES = ['superadmin', 'admin', 'api', 'c', 'uploads', 'favicon.ico'];
+    if (SYSTEM_NAMES.includes(rawSubname)) return next();
+
+    const client = findClient(rawSubname);
     if (!client) return res.status(404).send('<h2 style="font-family:sans-serif;text-align:center;margin-top:20%;">Client site not found.</h2>');
     if (client.status === 'Suspended') return res.status(403).send('<h2 style="font-family:sans-serif;text-align:center;margin-top:20%;">This client site has been suspended.</h2>');
     res.sendFile(path.join(__dirname, 'index.html'));
 });
 
 // ── Static Asset Passthrough for Client Sites ─────────────────────────────
-// When index.html at /c/:subname uses relative asset paths like src="c1.png",
-// the browser requests /c/:subname/c1.png. We forward those to the root static.
+// When index.html uses relative asset paths like src="c1.png",
+// serve from root static assets.
 const STATIC_ASSET_EXTS = /\.(png|jpg|jpeg|gif|svg|webp|ico|css|js|woff|woff2|ttf|eot|mp4|pdf|vcf)$/i;
-app.get('/c/:subname/:file(*)', (req, res, next) => {
-    // If this looks like a static asset (has a file extension), serve from root
+app.get(['/c/:subname/:file(*)', '/:subname/:file(*)'], (req, res, next) => {
     const file = req.params.file;
     if (STATIC_ASSET_EXTS.test(file)) {
         const assetPath = path.join(__dirname, file);
@@ -1097,9 +1112,8 @@ app.get('/c/:subname/:file(*)', (req, res, next) => {
             return res.sendFile(assetPath);
         }
     }
-    next(); // not a static asset — pass to the admin/html routes below
+    next();
 });
-
 
 // Original Admin SPA Route
 app.get('/admin*', (req, res) => {
