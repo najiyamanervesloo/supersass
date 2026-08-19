@@ -1009,14 +1009,14 @@
     <!-- SCRIPT APPLICATION CONTROLLER -->
     <script>
         // ── Multi-Tenant Context Detection ──────────────────────────────
-        // Detects if admin is loaded under /c/:subname/admin path.
+        // Detects if admin is loaded under /:subname/admin or legacy /c/:subname/admin.
         const _adminPathParts = window.location.pathname.split('/').filter(Boolean);
-        const _adminIsClient = _adminPathParts[0] === 'c' && _adminPathParts[1];
-        const _adminSubname = _adminIsClient ? _adminPathParts[1] : null;
+        const _adminIsClient = (_adminPathParts[0] === 'c' && _adminPathParts[1]) || (_adminPathParts[1] === 'admin' && _adminPathParts[0] !== 'superadmin');
+        const _adminSubname = _adminPathParts[0] === 'c' ? _adminPathParts[1] : (_adminIsClient ? _adminPathParts[0] : null);
         const _adminBaseOrigin = window.location.protocol.startsWith('http')
             ? '' : 'http://localhost:3000';
         const API_URL = _adminIsClient
-            ? `${_adminBaseOrigin}/c/${_adminSubname}/api`
+            ? `${_adminBaseOrigin}/${_adminSubname}/api`
             : `${_adminBaseOrigin}/api`;
         // Token storage key is scoped per client so sessions don't collide
         const _tokenKey = _adminIsClient ? `captgains_auth_token_${_adminSubname}` : 'captgains_auth_token';
@@ -1045,7 +1045,7 @@
 
                 // Update View Public Site button to point to the client site
                 const viewSiteBtn = document.getElementById('view-public-site-btn');
-                if (viewSiteBtn) viewSiteBtn.href = `/c/${_adminSubname}`;
+                if (viewSiteBtn) viewSiteBtn.href = `/${_adminSubname}`;
 
                 // Update sidebar logo image path (go up to root from /c/subname/admin)
                 document.querySelectorAll('img[src="Captgains logo.png"]').forEach(img => {
