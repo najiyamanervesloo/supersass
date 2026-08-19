@@ -1,0 +1,1937 @@
+<!DOCTYPE html>
+<html lang="en" class="h-full bg-slate-50">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Captgains Admin Panel & CMS</title>
+    <!-- Inter Font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        brand: {
+                            50: '#eff6ff',
+                            100: '#dbeafe',
+                            500: '#3b82f6',
+                            600: '#2563eb',
+                            700: '#1d4ed8',
+                            900: '#1e3a8a',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        .custom-scrollbar::-webkit-scrollbar { width: 6px; height: 6px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: #f1f5f9; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+        .glass-header { background: rgba(255, 255, 255, 0.85); backdrop-filter: blur(12px); }
+    </style>
+</head>
+
+<body class="h-full text-slate-800 antialiased selection:bg-brand-500 selection:text-white">
+
+    <!-- APP CONTAINER -->
+    <div id="app" class="min-h-screen flex flex-col">
+
+        <!-- ========================================== -->
+        <!-- 1. LOGIN SCREEN -->
+        <!-- ========================================== -->
+        <div id="login-view" class="fixed inset-0 z-[500] flex items-center justify-center bg-slate-900 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-slate-800 via-slate-900 to-black p-4">
+            <div class="w-full max-w-md bg-white rounded-2xl shadow-2xl overflow-hidden border border-slate-100">
+                <!-- Header -->
+                <div class="bg-gradient-to-r from-slate-900 to-slate-800 p-8 text-center relative overflow-hidden">
+                    <div class="absolute -right-10 -top-10 w-32 h-32 bg-brand-500/20 rounded-full blur-2xl"></div>
+                    <div class="relative z-10">
+                        <div class="w-16 h-16 bg-white/10 backdrop-blur-md rounded-2xl mx-auto flex items-center justify-center p-2 mb-4 border border-white/20 shadow-inner">
+                            <img src="Captgains logo.png" id="login-logo" alt="Logo" class="w-full h-full object-contain">
+                        </div>
+                        <h1 class="text-2xl font-bold text-white tracking-tight" id="login-panel-title">Admin Panel</h1>
+                        <p class="text-xs text-slate-400 mt-1 font-medium" id="login-panel-subtitle">CMS Dashboard</p>
+                    </div>
+                </div>
+
+                <!-- Form -->
+                <form id="login-form" onsubmit="handleLogin(event)" class="p-8 space-y-5">
+                    <!-- Error Alert -->
+                    <div id="login-error" class="hidden p-3.5 bg-rose-50 border border-rose-200 rounded-xl text-xs font-semibold text-rose-600 flex items-center gap-2">
+                        <i data-lucide="alert-circle" class="w-4 h-4 shrink-0"></i>
+                        <span id="login-error-text">Invalid email or password</span>
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">Email Address</label>
+                        <div class="relative">
+                            <i data-lucide="mail" class="w-5 h-5 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2"></i>
+                            <input type="email" id="login-email" required
+                                class="w-full pl-11 pr-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm font-medium focus:outline-none focus:ring-2 focus:ring-brand-500 focus:bg-white transition-all"
+                                placeholder="admin@yourdomain.com">
+                        </div>
+                    </div>
+
+                    <div>
+                        <div class="flex items-center justify-between mb-2">
+                            <label class="text-xs font-bold text-slate-700 uppercase tracking-wider">Password</label>
+                            <button type="button" onclick="showForgotPasswordModal()" class="text-xs font-semibold text-brand-600 hover:text-brand-700">Forgot?</button>
+                        </div>
+                        <div class="relative">
+                            <i data-lucide="lock" class="w-5 h-5 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2"></i>
+                            <input type="password" id="login-password" required
+                                class="w-full pl-11 pr-11 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm font-medium focus:outline-none focus:ring-2 focus:ring-brand-500 focus:bg-white transition-all"
+                                placeholder="••••••••">
+                            <button type="button" onclick="togglePasswordVisibility()" class="absolute right-3.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600">
+                                <i data-lucide="eye" id="pass-eye-icon" class="w-5 h-5"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="flex items-center justify-between pt-1">
+                        <label class="flex items-center gap-2.5 cursor-pointer">
+                            <input type="checkbox" id="login-remember" checked class="w-4 h-4 text-brand-600 rounded border-slate-300 focus:ring-brand-500">
+                            <span class="text-xs font-medium text-slate-600">Remember session</span>
+                        </label>
+                    </div>
+
+                    <button type="submit" id="login-submit-btn"
+                        class="w-full py-3.5 bg-brand-600 hover:bg-brand-700 active:scale-[0.99] text-white rounded-xl font-bold text-sm shadow-lg shadow-brand-500/25 transition-all flex items-center justify-center gap-2">
+                        <span>Sign In to CMS</span>
+                        <i data-lucide="arrow-right" class="w-4 h-4"></i>
+                    </button>
+
+                    <div class="text-center pt-2" id="login-default-hint">
+                        <p class="text-[11px] text-slate-400">Use the credentials provided by your Super Admin.</p>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- ========================================== -->
+        <!-- MAIN DASHBOARD LAYOUT (AUTHENTICATED) -->
+        <!-- ========================================== -->
+        <div id="main-layout" class="hidden min-h-screen flex flex-1">
+
+            <!-- SIDEBAR -->
+            <aside id="sidebar" class="w-64 bg-slate-900 text-slate-300 flex flex-col fixed inset-y-0 left-0 z-40 transition-transform duration-300 transform md:translate-x-0 -translate-x-full border-r border-slate-800">
+                <!-- Sidebar Brand Header -->
+                <div class="h-16 px-6 flex items-center justify-between border-b border-slate-800 bg-slate-950/50">
+                    <div class="flex items-center gap-3">
+                        <div class="w-9 h-9 rounded-xl bg-white/10 p-1 flex items-center justify-center border border-white/10">
+                            <img src="Captgains logo.png" alt="Logo" class="w-full h-full object-contain">
+                        </div>
+                        <div>
+                            <span id="sidebar-brand-name" class="font-bold text-white text-base tracking-tight leading-none block">Admin Panel</span>
+                            <span id="sidebar-brand-sub" class="text-[10px] font-semibold uppercase tracking-wider text-slate-500">CMS Admin</span>
+                        </div>
+                    </div>
+                    <button onclick="toggleSidebar()" class="md:hidden text-slate-400 hover:text-white">
+                        <i data-lucide="x" class="w-5 h-5"></i>
+                    </button>
+                </div>
+
+                <!-- Sidebar Nav Menu -->
+                <nav class="flex-1 overflow-y-auto px-4 py-6 space-y-6 custom-scrollbar">
+                    <!-- Main Group -->
+                    <div>
+                        <p class="px-3 text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-2">Overview</p>
+                        <button onclick="switchTab('dashboard')" id="nav-dashboard" class="nav-btn active w-full flex items-center gap-3 px-3 py-2.5 rounded-xl font-semibold text-xs transition-colors hover:bg-slate-800 text-white bg-brand-600">
+                            <i data-lucide="layout-dashboard" class="w-4 h-4"></i>
+                            <span>Dashboard</span>
+                        </button>
+                    </div>
+
+                    <!-- Website Content Group -->
+                    <div>
+                        <p class="px-3 text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-2">Website Sections</p>
+                        <div class="space-y-1">
+                            <button onclick="switchTab('profile')" id="nav-profile" class="nav-btn w-full flex items-center gap-3 px-3 py-2 rounded-xl font-medium text-xs text-slate-400 hover:text-white hover:bg-slate-800 transition-colors">
+                                <i data-lucide="building" class="w-4 h-4"></i>
+                                <span>Business Profile</span>
+                            </button>
+                            <button onclick="switchTab('courses')" id="nav-courses" class="nav-btn w-full flex items-center justify-between px-3 py-2 rounded-xl font-medium text-xs text-slate-400 hover:text-white hover:bg-slate-800 transition-colors">
+                                <div class="flex items-center gap-3">
+                                    <i data-lucide="book-open" class="w-4 h-4"></i>
+                                    <span>Courses</span>
+                                </div>
+                                <span id="badge-courses-count" class="bg-brand-500/20 text-brand-300 text-[10px] px-2 py-0.5 rounded-full font-bold">5</span>
+                            </button>
+                            <button onclick="switchTab('expertise')" id="nav-expertise" class="nav-btn w-full flex items-center gap-3 px-3 py-2 rounded-xl font-medium text-xs text-slate-400 hover:text-white hover:bg-slate-800 transition-colors">
+                                <i data-lucide="award" class="w-4 h-4"></i>
+                                <span>Expertise</span>
+                            </button>
+                            <button onclick="switchTab('gallery')" id="nav-gallery" class="nav-btn w-full flex items-center justify-between px-3 py-2 rounded-xl font-medium text-xs text-slate-400 hover:text-white hover:bg-slate-800 transition-colors">
+                                <div class="flex items-center gap-3">
+                                    <i data-lucide="image" class="w-4 h-4"></i>
+                                    <span>Gallery</span>
+                                </div>
+                                <span id="badge-gallery-count" class="bg-slate-800 text-slate-400 text-[10px] px-2 py-0.5 rounded-full font-bold">6</span>
+                            </button>
+                            <button onclick="switchTab('upi')" id="nav-upi" class="nav-btn w-full flex items-center gap-3 px-3 py-2 rounded-xl font-medium text-xs text-slate-400 hover:text-white hover:bg-slate-800 transition-colors">
+                                <i data-lucide="qr-code" class="w-4 h-4"></i>
+                                <span>Payment / UPI</span>
+                            </button>
+                            <button onclick="switchTab('contact')" id="nav-contact" class="nav-btn w-full flex items-center gap-3 px-3 py-2 rounded-xl font-medium text-xs text-slate-400 hover:text-white hover:bg-slate-800 transition-colors">
+                                <i data-lucide="map-pin" class="w-4 h-4"></i>
+                                <span>Contact Details</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Leads Group -->
+                    <div>
+                        <p class="px-3 text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-2">Leads & Enquiries</p>
+                        <button onclick="switchTab('enquiries')" id="nav-enquiries" class="nav-btn w-full flex items-center justify-between px-3 py-2.5 rounded-xl font-medium text-xs text-slate-400 hover:text-white hover:bg-slate-800 transition-colors">
+                            <div class="flex items-center gap-3">
+                                <i data-lucide="inbox" class="w-4 h-4"></i>
+                                <span>Enquiries</span>
+                            </div>
+                            <span id="badge-enquiries-new" class="bg-emerald-500 text-white text-[10px] px-2 py-0.5 rounded-full font-extrabold animate-pulse">2 NEW</span>
+                        </button>
+                    </div>
+
+                    <!-- Settings Group -->
+                    <div>
+                        <p class="px-3 text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-2">System Settings</p>
+                        <div class="space-y-1">
+                            <button onclick="switchTab('action-buttons')" id="nav-action-buttons" class="nav-btn w-full flex items-center gap-3 px-3 py-2 rounded-xl font-medium text-xs text-slate-400 hover:text-white hover:bg-slate-800 transition-colors">
+                                <i data-lucide="sliders" class="w-4 h-4"></i>
+                                <span>Action Buttons</span>
+                            </button>
+                            <button onclick="switchTab('seo')" id="nav-seo" class="nav-btn w-full flex items-center gap-3 px-3 py-2 rounded-xl font-medium text-xs text-slate-400 hover:text-white hover:bg-slate-800 transition-colors">
+                                <i data-lucide="search" class="w-4 h-4"></i>
+                                <span>SEO Settings</span>
+                            </button>
+                            <button onclick="switchTab('users')" id="nav-users" class="nav-btn w-full flex items-center gap-3 px-3 py-2 rounded-xl font-medium text-xs text-slate-400 hover:text-white hover:bg-slate-800 transition-colors">
+                                <i data-lucide="users" class="w-4 h-4"></i>
+                                <span>Admin Users</span>
+                            </button>
+                            <button onclick="switchTab('logs')" id="nav-logs" class="nav-btn w-full flex items-center gap-3 px-3 py-2 rounded-xl font-medium text-xs text-slate-400 hover:text-white hover:bg-slate-800 transition-colors">
+                                <i data-lucide="history" class="w-4 h-4"></i>
+                                <span>Activity Logs</span>
+                            </button>
+                        </div>
+                    </div>
+                </nav>
+
+                <!-- Sidebar Footer User Profile -->
+                <div class="p-4 border-t border-slate-800 bg-slate-950/40 flex items-center justify-between">
+                    <div class="flex items-center gap-3 overflow-hidden">
+                        <div class="w-8 h-8 rounded-full bg-brand-600 text-white font-bold text-xs flex items-center justify-center shrink-0" id="user-avatar">
+                            SH
+                        </div>
+                        <div class="truncate">
+                            <p class="text-xs font-bold text-white truncate" id="user-name">Shaharukh Hakim</p>
+                            <p class="text-[10px] text-slate-400 font-semibold" id="user-role">SUPER ADMIN</p>
+                        </div>
+                    </div>
+                    <button onclick="handleLogout()" title="Logout" class="text-slate-400 hover:text-rose-400 p-1.5 rounded-lg hover:bg-slate-800 transition-colors">
+                        <i data-lucide="log-out" class="w-4 h-4"></i>
+                    </button>
+                </div>
+            </aside>
+
+            <!-- MAIN CONTENT AREA -->
+            <div class="flex-1 flex flex-col md:pl-64 min-w-0">
+
+                <!-- TOP HEADER -->
+                <header class="h-16 border-b border-slate-200 glass-header sticky top-0 z-30 px-6 flex items-center justify-between">
+                    <div class="flex items-center gap-4">
+                        <button onclick="toggleSidebar()" class="md:hidden p-2 text-slate-600 hover:text-slate-900 rounded-lg hover:bg-slate-100">
+                            <i data-lucide="menu" class="w-5 h-5"></i>
+                        </button>
+                        <h2 id="page-title" class="text-lg font-bold text-slate-900 tracking-tight">Dashboard Overview</h2>
+                    </div>
+
+                    <div class="flex items-center gap-3">
+                        <a id="view-public-site-btn" href="/" target="_blank" class="px-3.5 py-2 rounded-xl text-xs font-bold bg-slate-100 hover:bg-slate-200 text-slate-700 transition-colors flex items-center gap-2">
+                            <i data-lucide="external-link" class="w-3.5 h-3.5"></i>
+                            <span>View Public Site</span>
+                        </a>
+                        <button onclick="loadDashboardData()" title="Refresh CMS State" class="p-2 text-slate-500 hover:text-slate-800 rounded-xl hover:bg-slate-100 transition-colors">
+                            <i data-lucide="refresh-cw" class="w-4 h-4"></i>
+                        </button>
+                    </div>
+                </header>
+
+                <!-- DYNAMIC TAB CONTENTS -->
+                <main class="flex-1 p-6 md:p-8 max-w-7xl w-full mx-auto space-y-8">
+
+                    <!-- ========================================== -->
+                    <!-- TAB 1: DASHBOARD OVERVIEW -->
+                    <!-- ========================================== -->
+                    <div id="tab-dashboard" class="tab-content space-y-8">
+                        <!-- Stat Cards Grid -->
+                        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-4">
+                            <!-- Card 1 -->
+                            <div class="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-sm flex flex-col justify-between">
+                                <div class="flex items-center justify-between text-slate-400 mb-2">
+                                    <span class="text-xs font-bold uppercase tracking-wider text-slate-500">Total Courses</span>
+                                    <div class="p-2 rounded-xl bg-blue-50 text-blue-600"><i data-lucide="book-open" class="w-4 h-4"></i></div>
+                                </div>
+                                <div class="flex items-baseline justify-between">
+                                    <span id="stat-total-courses" class="text-2xl font-extrabold text-slate-900">5</span>
+                                    <span class="text-[10px] font-bold px-2 py-0.5 bg-blue-100 text-blue-700 rounded-full">CMS Active</span>
+                                </div>
+                            </div>
+                            <!-- Card 2 -->
+                            <div class="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-sm flex flex-col justify-between">
+                                <div class="flex items-center justify-between text-slate-400 mb-2">
+                                    <span class="text-xs font-bold uppercase tracking-wider text-slate-500">Published</span>
+                                    <div class="p-2 rounded-xl bg-emerald-50 text-emerald-600"><i data-lucide="check-circle" class="w-4 h-4"></i></div>
+                                </div>
+                                <div class="flex items-baseline justify-between">
+                                    <span id="stat-published-courses" class="text-2xl font-extrabold text-slate-900">5</span>
+                                    <span class="text-[10px] font-bold px-2 py-0.5 bg-emerald-100 text-emerald-700 rounded-full">Live</span>
+                                </div>
+                            </div>
+                            <!-- Card 3 -->
+                            <div class="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-sm flex flex-col justify-between">
+                                <div class="flex items-center justify-between text-slate-400 mb-2">
+                                    <span class="text-xs font-bold uppercase tracking-wider text-slate-500">Gallery Media</span>
+                                    <div class="p-2 rounded-xl bg-purple-50 text-purple-600"><i data-lucide="image" class="w-4 h-4"></i></div>
+                                </div>
+                                <div class="flex items-baseline justify-between">
+                                    <span id="stat-gallery-images" class="text-2xl font-extrabold text-slate-900">6</span>
+                                    <span class="text-[10px] font-bold px-2 py-0.5 bg-purple-100 text-purple-700 rounded-full">Images</span>
+                                </div>
+                            </div>
+                            <!-- Card 4 -->
+                            <div class="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-sm flex flex-col justify-between">
+                                <div class="flex items-center justify-between text-slate-400 mb-2">
+                                    <span class="text-xs font-bold uppercase tracking-wider text-slate-500">New Enquiries</span>
+                                    <div class="p-2 rounded-xl bg-amber-50 text-amber-600"><i data-lucide="inbox" class="w-4 h-4"></i></div>
+                                </div>
+                                <div class="flex items-baseline justify-between">
+                                    <span id="stat-new-enquiries" class="text-2xl font-extrabold text-slate-900">2</span>
+                                    <span class="text-[10px] font-bold px-2 py-0.5 bg-amber-100 text-amber-700 rounded-full">Leads</span>
+                                </div>
+                            </div>
+                            <!-- Card 5 -->
+                            <div class="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-sm flex flex-col justify-between">
+                                <div class="flex items-center justify-between text-slate-400 mb-2">
+                                    <span class="text-xs font-bold uppercase tracking-wider text-slate-500">Site Visits</span>
+                                    <div class="p-2 rounded-xl bg-indigo-50 text-indigo-600"><i data-lucide="eye" class="w-4 h-4"></i></div>
+                                </div>
+                                <div class="flex items-baseline justify-between">
+                                    <span id="stat-total-visits" class="text-2xl font-extrabold text-slate-900">1,420</span>
+                                    <span class="text-[10px] font-bold px-2 py-0.5 bg-indigo-100 text-indigo-700 rounded-full">+12%</span>
+                                </div>
+                            </div>
+                            <!-- Card 6 -->
+                            <div class="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-sm flex flex-col justify-between">
+                                <div class="flex items-center justify-between text-slate-400 mb-2">
+                                    <span class="text-xs font-bold uppercase tracking-wider text-slate-500">Active Status</span>
+                                    <div class="p-2 rounded-xl bg-emerald-50 text-emerald-600"><i data-lucide="radio" class="w-4 h-4"></i></div>
+                                </div>
+                                <div class="flex items-baseline justify-between">
+                                    <span id="stat-active-status" class="text-lg font-extrabold text-emerald-600">Active</span>
+                                    <span class="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-ping"></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Quick Actions Bar -->
+                        <div class="bg-white p-6 rounded-2xl border border-slate-200/80 shadow-sm">
+                            <h3 class="text-sm font-bold text-slate-900 mb-4 uppercase tracking-wider">Quick Actions</h3>
+                            <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3">
+                                <button onclick="openCourseModal()" class="p-4 rounded-xl border border-slate-200 hover:border-brand-500 hover:bg-brand-50/50 transition-all flex flex-col items-center gap-2 group text-center">
+                                    <div class="p-3 rounded-xl bg-brand-50 text-brand-600 group-hover:scale-110 transition-transform"><i data-lucide="plus-circle" class="w-5 h-5"></i></div>
+                                    <span class="text-xs font-bold text-slate-700 group-hover:text-brand-600">Add Course</span>
+                                </button>
+                                <button onclick="openGalleryModal()" class="p-4 rounded-xl border border-slate-200 hover:border-purple-500 hover:bg-purple-50/50 transition-all flex flex-col items-center gap-2 group text-center">
+                                    <div class="p-3 rounded-xl bg-purple-50 text-purple-600 group-hover:scale-110 transition-transform"><i data-lucide="upload-cloud" class="w-5 h-5"></i></div>
+                                    <span class="text-xs font-bold text-slate-700 group-hover:text-purple-600">Upload Media</span>
+                                </button>
+                                <button onclick="switchTab('profile')" class="p-4 rounded-xl border border-slate-200 hover:border-blue-500 hover:bg-blue-50/50 transition-all flex flex-col items-center gap-2 group text-center">
+                                    <div class="p-3 rounded-xl bg-blue-50 text-blue-600 group-hover:scale-110 transition-transform"><i data-lucide="edit-3" class="w-5 h-5"></i></div>
+                                    <span class="text-xs font-bold text-slate-700 group-hover:text-blue-600">Edit Profile</span>
+                                </button>
+                                <button onclick="switchTab('contact')" class="p-4 rounded-xl border border-slate-200 hover:border-amber-500 hover:bg-amber-50/50 transition-all flex flex-col items-center gap-2 group text-center">
+                                    <div class="p-3 rounded-xl bg-amber-50 text-amber-600 group-hover:scale-110 transition-transform"><i data-lucide="phone-call" class="w-5 h-5"></i></div>
+                                    <span class="text-xs font-bold text-slate-700 group-hover:text-amber-600">Update Contact</span>
+                                </button>
+                                <button onclick="switchTab('upi')" class="p-4 rounded-xl border border-slate-200 hover:border-emerald-500 hover:bg-emerald-50/50 transition-all flex flex-col items-center gap-2 group text-center col-span-2 sm:col-span-1">
+                                    <div class="p-3 rounded-xl bg-emerald-50 text-emerald-600 group-hover:scale-110 transition-transform"><i data-lucide="qr-code" class="w-5 h-5"></i></div>
+                                    <span class="text-xs font-bold text-slate-700 group-hover:text-emerald-600">Update UPI</span>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Recent Activity List -->
+                        <div class="bg-white p-6 rounded-2xl border border-slate-200/80 shadow-sm">
+                            <div class="flex items-center justify-between mb-4">
+                                <h3 class="text-sm font-bold text-slate-900 uppercase tracking-wider">Recent Activity Stream</h3>
+                                <button onclick="switchTab('logs')" class="text-xs font-bold text-brand-600 hover:text-brand-700">View All Logs</button>
+                            </div>
+                            <div id="recent-activity-list" class="space-y-3 divide-y divide-slate-100">
+                                <!-- Activity item template -->
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- ========================================== -->
+                    <!-- TAB 2: BUSINESS PROFILE -->
+                    <!-- ========================================== -->
+                    <div id="tab-profile" class="tab-content hidden space-y-6">
+                        <div class="bg-white p-8 rounded-2xl border border-slate-200/80 shadow-sm max-w-4xl">
+                            <div class="border-b border-slate-100 pb-6 mb-6">
+                                <h3 class="text-base font-bold text-slate-900">Business & Brand Configuration</h3>
+                                <p class="text-xs text-slate-500 mt-1">Manage core brand identity, logo, hero banner title and tagline.</p>
+                            </div>
+
+                            <form id="profile-form" onsubmit="saveBusinessProfile(event)" class="space-y-6">
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                    <div>
+                                        <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">Business Name</label>
+                                        <input type="text" id="prof-name" required class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm font-semibold focus:outline-none focus:ring-2 focus:ring-brand-500">
+                                    </div>
+                                    <div>
+                                        <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">Category / Industry</label>
+                                        <input type="text" id="prof-category" required class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm font-semibold focus:outline-none focus:ring-2 focus:ring-brand-500">
+                                    </div>
+                                </div>
+
+                                <div>
+                                    <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">Brand Tagline</label>
+                                    <input type="text" id="prof-tagline" required class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm font-semibold focus:outline-none focus:ring-2 focus:ring-brand-500">
+                                </div>
+
+                                <!-- Logo Upload -->
+                                <div>
+                                    <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">Official Brand Logo</label>
+                                    <div class="flex items-center gap-6 p-4 bg-slate-50 border border-slate-200 rounded-xl">
+                                        <div class="w-20 h-20 bg-white rounded-xl border border-slate-200 p-2 flex items-center justify-center shrink-0">
+                                            <img id="prof-logo-preview" src="Captgains logo.png" class="max-w-full max-h-full object-contain">
+                                        </div>
+                                        <div class="space-y-2">
+                                            <input type="text" id="prof-logo-url" class="w-full px-3 py-1.5 bg-white border border-slate-200 rounded-lg text-xs font-mono" placeholder="Image URL / Path">
+                                            <label class="inline-flex items-center gap-2 px-4 py-2 bg-brand-600 hover:bg-brand-700 text-white rounded-lg text-xs font-bold cursor-pointer transition-colors">
+                                                <i data-lucide="upload" class="w-3.5 h-3.5"></i>
+                                                <span>Upload / Replace Logo</span>
+                                                <input type="file" accept="image/*" class="hidden" onchange="handleFileUpload(this, 'prof-logo-url', 'prof-logo-preview')">
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Hero Content -->
+                                <div class="border-t border-slate-100 pt-6 space-y-4">
+                                    <h4 class="text-xs font-bold text-slate-900 uppercase tracking-wider">Hero Section Content</h4>
+                                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                        <div>
+                                            <label class="block text-xs font-semibold text-slate-600 mb-1">Heading</label>
+                                            <input type="text" id="prof-hero-heading" class="w-full px-4 py-2 bg-slate-50 border border-slate-200 rounded-xl text-sm font-medium">
+                                        </div>
+                                        <div>
+                                            <label class="block text-xs font-semibold text-slate-600 mb-1">CTA Button Text</label>
+                                            <input type="text" id="prof-hero-cta-text" class="w-full px-4 py-2 bg-slate-50 border border-slate-200 rounded-xl text-sm font-medium">
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <label class="block text-xs font-semibold text-slate-600 mb-1">Short Subtitle / Description</label>
+                                        <textarea id="prof-hero-desc" rows="2" class="w-full px-4 py-2 bg-slate-50 border border-slate-200 rounded-xl text-sm font-medium"></textarea>
+                                    </div>
+                                    <div>
+                                        <label class="block text-xs font-semibold text-slate-600 mb-1">CTA Button Link</label>
+                                        <input type="text" id="prof-hero-cta-link" class="w-full px-4 py-2 bg-slate-50 border border-slate-200 rounded-xl text-sm font-medium">
+                                    </div>
+                                </div>
+
+                                <!-- Profile Status -->
+                                <div class="flex items-center justify-between p-4 bg-slate-50 border border-slate-200 rounded-xl">
+                                    <div>
+                                        <span class="text-xs font-bold text-slate-900 block">Website Visibility Status</span>
+                                        <span class="text-[11px] text-slate-500">Enable or temporarily suspend public site access</span>
+                                    </div>
+                                    <select id="prof-status" class="px-4 py-2 bg-white border border-slate-200 rounded-xl text-xs font-bold">
+                                        <option value="Active">Active (Live)</option>
+                                        <option value="Inactive">Inactive (Maintenance)</option>
+                                    </select>
+                                </div>
+
+                                <div class="flex justify-end pt-4">
+                                    <button type="submit" class="px-6 py-3 bg-brand-600 hover:bg-brand-700 text-white font-bold text-xs rounded-xl shadow-md transition-colors flex items-center gap-2">
+                                        <i data-lucide="save" class="w-4 h-4"></i>
+                                        <span>Save Business Profile</span>
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+
+                    <!-- ========================================== -->
+                    <!-- TAB 3: COURSE MANAGEMENT -->
+                    <!-- ========================================== -->
+                    <div id="tab-courses" class="tab-content hidden space-y-6">
+                        <!-- Header & Actions -->
+                        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                            <div>
+                                <h3 class="text-base font-bold text-slate-900">Course Offerings & Pricing CMS</h3>
+                                <p class="text-xs text-slate-500">Manage courses, prices, features, and public course cards.</p>
+                            </div>
+                            <button onclick="openCourseModal()" class="px-4 py-2.5 bg-brand-600 hover:bg-brand-700 text-white font-bold text-xs rounded-xl shadow-md transition-colors flex items-center gap-2">
+                                <i data-lucide="plus" class="w-4 h-4"></i>
+                                <span>Add New Course</span>
+                            </button>
+                        </div>
+
+                        <!-- Course List Container -->
+                        <div id="courses-list-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                            <!-- Dynamic course cards injected here -->
+                        </div>
+                    </div>
+
+                    <!-- ========================================== -->
+                    <!-- TAB 4: EXPERTISE MANAGEMENT -->
+                    <!-- ========================================== -->
+                    <div id="tab-expertise" class="tab-content hidden space-y-6">
+                        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                            <div>
+                                <h3 class="text-base font-bold text-slate-900">Expertise & Specializations</h3>
+                                <p class="text-xs text-slate-500">Define institute trading domain specializations.</p>
+                            </div>
+                            <button onclick="openExpertiseModal()" class="px-4 py-2.5 bg-brand-600 hover:bg-brand-700 text-white font-bold text-xs rounded-xl shadow-md transition-colors flex items-center gap-2">
+                                <i data-lucide="plus" class="w-4 h-4"></i>
+                                <span>Add Expertise</span>
+                            </button>
+                        </div>
+
+                        <div id="expertise-list-container" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                            <!-- Dynamic expertise cards -->
+                        </div>
+                    </div>
+
+                    <!-- ========================================== -->
+                    <!-- TAB 5: GALLERY MANAGEMENT -->
+                    <!-- ========================================== -->
+                    <div id="tab-gallery" class="tab-content hidden space-y-6">
+                        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                            <div>
+                                <h3 class="text-base font-bold text-slate-900">Gallery & Media Manager</h3>
+                                <p class="text-xs text-slate-500">Upload batch photos, workshop pictures, and class moments.</p>
+                            </div>
+                            <button onclick="openGalleryModal()" class="px-4 py-2.5 bg-brand-600 hover:bg-brand-700 text-white font-bold text-xs rounded-xl shadow-md transition-colors flex items-center gap-2">
+                                <i data-lucide="upload-cloud" class="w-4 h-4"></i>
+                                <span>Upload New Media</span>
+                            </button>
+                        </div>
+
+                        <div id="gallery-grid-container" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
+                            <!-- Dynamic gallery media items -->
+                        </div>
+                    </div>
+
+                    <!-- ========================================== -->
+                    <!-- TAB 6: UPI PAYMENT MANAGEMENT -->
+                    <!-- ========================================== -->
+                    <div id="tab-upi" class="tab-content hidden space-y-6">
+                        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+                            <div class="lg:col-span-7 bg-white p-8 rounded-2xl border border-slate-200/80 shadow-sm">
+                                <div class="border-b border-slate-100 pb-6 mb-6">
+                                    <h3 class="text-base font-bold text-slate-900">Quick UPI Payment Setup</h3>
+                                    <p class="text-xs text-slate-500 mt-1">Configure UPI VPA ID, QR Code image, payee name, and payment button text.</p>
+                                </div>
+
+                                <form id="upi-form" onsubmit="saveUpiSettings(event)" class="space-y-6">
+                                    <div>
+                                        <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">UPI VPA Address / Handle</label>
+                                        <input type="text" id="upi-id" required class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm font-bold text-purple-700 focus:ring-2 focus:ring-purple-500">
+                                    </div>
+
+                                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                        <div>
+                                            <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">Payee Name</label>
+                                            <input type="text" id="upi-payee" required class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm font-semibold">
+                                        </div>
+                                        <div>
+                                            <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">Button Text</label>
+                                            <input type="text" id="upi-btn-text" required class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm font-semibold">
+                                        </div>
+                                    </div>
+
+                                    <!-- QR Image Upload -->
+                                    <div>
+                                        <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">QR Code Graphic</label>
+                                        <div class="flex items-center gap-6 p-4 bg-slate-50 border border-slate-200 rounded-xl">
+                                            <div class="w-24 h-24 bg-white rounded-xl border border-slate-200 p-2 flex items-center justify-center shrink-0">
+                                                <img id="upi-qr-preview" src="qr1.png" class="max-w-full max-h-full object-contain">
+                                            </div>
+                                            <div class="space-y-2">
+                                                <input type="text" id="upi-qr-url" class="w-full px-3 py-1.5 bg-white border border-slate-200 rounded-lg text-xs font-mono" placeholder="QR Code Image URL">
+                                                <div class="flex gap-2">
+                                                    <label class="inline-flex items-center gap-2 px-3 py-1.5 bg-purple-600 hover:bg-purple-700 text-white rounded-lg text-xs font-bold cursor-pointer transition-colors">
+                                                        <i data-lucide="upload" class="w-3.5 h-3.5"></i>
+                                                        <span>Upload QR Image</span>
+                                                        <input type="file" accept="image/*" class="hidden" onchange="handleFileUpload(this, 'upi-qr-url', 'upi-qr-preview')">
+                                                    </label>
+                                                    <button type="button" onclick="autoGenerateQrCode()" class="px-3 py-1.5 bg-slate-200 hover:bg-slate-300 text-slate-700 rounded-lg text-xs font-bold transition-colors">
+                                                        Auto-Generate QR
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="flex justify-end pt-2">
+                                        <button type="submit" class="px-6 py-3 bg-purple-600 hover:bg-purple-700 text-white font-bold text-xs rounded-xl shadow-md transition-colors flex items-center gap-2">
+                                            <i data-lucide="save" class="w-4 h-4"></i>
+                                            <span>Save Payment Settings</span>
+                                        </button>
+                                    </div>
+                                </form>
+                            </div>
+
+                            <!-- Live UPI Card Preview -->
+                            <div class="lg:col-span-5 bg-white p-8 rounded-2xl border border-slate-200/80 shadow-sm flex flex-col items-center text-center">
+                                <span class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-6">Live Website UPI Card Preview</span>
+                                <div class="w-52 h-52 bg-slate-50 border-2 border-slate-100 rounded-3xl p-3 shadow-inner flex items-center justify-center mb-6 relative">
+                                    <img id="upi-preview-card-img" src="qr1.png" class="max-w-full max-h-full object-contain rounded-xl">
+                                </div>
+                                <p id="upi-preview-card-id" class="font-bold text-slate-900 text-sm mb-6 font-mono bg-slate-100 px-4 py-2 rounded-xl">
+                                    shaharukhhakim29-1@okhdfcbank
+                                </p>
+                                <button class="w-full py-4 bg-purple-600 text-white font-bold text-sm rounded-2xl shadow-lg shadow-purple-500/20" id="upi-preview-card-btn">
+                                    Pay via UPI App
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- ========================================== -->
+                    <!-- TAB 7: CONTACT DETAILS -->
+                    <!-- ========================================== -->
+                    <div id="tab-contact" class="tab-content hidden space-y-6">
+                        <div class="bg-white p-8 rounded-2xl border border-slate-200/80 shadow-sm max-w-4xl">
+                            <div class="border-b border-slate-100 pb-6 mb-6">
+                                <h3 class="text-base font-bold text-slate-900">Institute Contact & Address Details</h3>
+                                <p class="text-xs text-slate-500 mt-1">Manage phone number, WhatsApp number, physical address, and Google Map iframe link.</p>
+                            </div>
+
+                            <form id="contact-form" onsubmit="saveContactDetails(event)" class="space-y-6">
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                    <div>
+                                        <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">Phone Number</label>
+                                        <input type="text" id="cnt-mobile" required class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm font-semibold">
+                                    </div>
+                                    <div>
+                                        <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">WhatsApp Number</label>
+                                        <input type="text" id="cnt-whatsapp" required class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm font-semibold text-emerald-700">
+                                    </div>
+                                </div>
+
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                    <div>
+                                        <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">Email Address</label>
+                                        <input type="email" id="cnt-email" required class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm font-semibold">
+                                    </div>
+                                    <div>
+                                        <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">Business Hours</label>
+                                        <input type="text" id="cnt-hours" required class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm font-semibold">
+                                    </div>
+                                </div>
+
+                                <div>
+                                    <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">Physical Address</label>
+                                    <textarea id="cnt-address" rows="3" required class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm font-semibold"></textarea>
+                                </div>
+
+                                <div>
+                                    <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">Google Maps Embed iframe URL</label>
+                                    <input type="text" id="cnt-map" required class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-mono">
+                                </div>
+
+                                <div class="flex justify-end pt-4">
+                                    <button type="submit" class="px-6 py-3 bg-brand-600 hover:bg-brand-700 text-white font-bold text-xs rounded-xl shadow-md transition-colors flex items-center gap-2">
+                                        <i data-lucide="save" class="w-4 h-4"></i>
+                                        <span>Save Contact Details</span>
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+
+                    <!-- ========================================== -->
+                    <!-- TAB 8: LEADS / ENQUIRIES -->
+                    <!-- ========================================== -->
+                    <div id="tab-enquiries" class="tab-content hidden space-y-6">
+                        <!-- Filters Bar -->
+                        <div class="bg-white p-6 rounded-2xl border border-slate-200/80 shadow-sm flex flex-col sm:flex-row items-center justify-between gap-4">
+                            <div class="flex flex-1 items-center gap-3 w-full sm:w-auto">
+                                <div class="relative flex-1 max-w-xs">
+                                    <i data-lucide="search" class="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2"></i>
+                                    <input type="text" id="enq-search" oninput="filterEnquiries()" placeholder="Search leads..." class="w-full pl-9 pr-4 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-medium">
+                                </div>
+                                <select id="enq-filter-status" onchange="filterEnquiries()" class="px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-semibold">
+                                    <option value="ALL">All Statuses</option>
+                                    <option value="New">New</option>
+                                    <option value="Contacted">Contacted</option>
+                                    <option value="Follow-up">Follow-up</option>
+                                    <option value="Converted">Converted</option>
+                                    <option value="Closed">Closed</option>
+                                </select>
+                            </div>
+                            <button onclick="exportEnquiriesCsv()" class="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold rounded-xl shadow-sm transition-colors flex items-center gap-2">
+                                <i data-lucide="download" class="w-4 h-4"></i>
+                                <span>Export CSV</span>
+                            </button>
+                        </div>
+
+                        <!-- Data Table -->
+                        <div class="bg-white rounded-2xl border border-slate-200/80 shadow-sm overflow-hidden">
+                            <div class="overflow-x-auto">
+                                <table class="w-full text-left border-collapse text-xs">
+                                    <thead>
+                                        <tr class="bg-slate-50 border-b border-slate-200 text-slate-500 font-bold uppercase tracking-wider">
+                                            <th class="py-3.5 px-4">Date & Time</th>
+                                            <th class="py-3.5 px-4">Customer Name</th>
+                                            <th class="py-3.5 px-4">Contact Info</th>
+                                            <th class="py-3.5 px-4">Course Interested</th>
+                                            <th class="py-3.5 px-4">Status</th>
+                                            <th class="py-3.5 px-4 text-right">Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="enquiries-table-body" class="divide-y divide-slate-100">
+                                        <!-- Dynamic rows -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- ========================================== -->
+                    <!-- TAB 9: ACTION BUTTONS -->
+                    <!-- ========================================== -->
+                    <div id="tab-action-buttons" class="tab-content hidden space-y-6">
+                        <div class="bg-white p-8 rounded-2xl border border-slate-200/80 shadow-sm max-w-4xl">
+                            <div class="border-b border-slate-100 pb-6 mb-6">
+                                <h3 class="text-base font-bold text-slate-900">Action Buttons & Social Links</h3>
+                                <p class="text-xs text-slate-500 mt-1">Configure quick action grid (Call, WhatsApp, Pay, Location, Share) and social media handles.</p>
+                            </div>
+                            <div id="action-buttons-list" class="space-y-4">
+                                <!-- Action button configs -->
+                            </div>
+                            <div class="flex justify-end pt-6">
+                                <button onclick="saveActionButtons()" class="px-6 py-3 bg-brand-600 hover:bg-brand-700 text-white font-bold text-xs rounded-xl shadow-md transition-colors flex items-center gap-2">
+                                    <i data-lucide="save" class="w-4 h-4"></i>
+                                    <span>Save Action Buttons</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- ========================================== -->
+                    <!-- TAB 10: SEO SETTINGS -->
+                    <!-- ========================================== -->
+                    <div id="tab-seo" class="tab-content hidden space-y-6">
+                        <div class="bg-white p-8 rounded-2xl border border-slate-200/80 shadow-sm max-w-4xl">
+                            <div class="border-b border-slate-100 pb-6 mb-6">
+                                <h3 class="text-base font-bold text-slate-900">SEO & Metadata Optimization</h3>
+                                <p class="text-xs text-slate-500 mt-1">Configure Google Search meta title, description, OpenGraph tags, and Google Analytics ID.</p>
+                            </div>
+
+                            <form id="seo-form" onsubmit="saveSeoSettings(event)" class="space-y-6">
+                                <div>
+                                    <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">Meta Title</label>
+                                    <input type="text" id="seo-title" required class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm font-semibold">
+                                </div>
+
+                                <div>
+                                    <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">Meta Description</label>
+                                    <textarea id="seo-desc" rows="3" required class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm font-medium"></textarea>
+                                </div>
+
+                                <div>
+                                    <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">Meta Keywords</label>
+                                    <input type="text" id="seo-keywords" class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm font-medium" placeholder="Trading, Stock Market, Training Institute">
+                                </div>
+
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                    <div>
+                                        <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">Google Analytics ID</label>
+                                        <input type="text" id="seo-ga" class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-mono" placeholder="G-XXXXXXXXXX">
+                                    </div>
+                                    <div>
+                                        <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">Search Console Meta Token</label>
+                                        <input type="text" id="seo-gsc" class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-mono" placeholder="verification-token">
+                                    </div>
+                                </div>
+
+                                <div class="flex justify-end pt-4">
+                                    <button type="submit" class="px-6 py-3 bg-brand-600 hover:bg-brand-700 text-white font-bold text-xs rounded-xl shadow-md transition-colors flex items-center gap-2">
+                                        <i data-lucide="save" class="w-4 h-4"></i>
+                                        <span>Save SEO Settings</span>
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+
+                    <!-- ========================================== -->
+                    <!-- TAB 11: ADMIN USERS -->
+                    <!-- ========================================== -->
+                    <div id="tab-users" class="tab-content hidden space-y-6">
+                        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                            <div>
+                                <h3 class="text-base font-bold text-slate-900">Admin User Accounts & Roles</h3>
+                                <p class="text-xs text-slate-500">Manage administrator logins and permissions (Super Admin, Admin, Editor).</p>
+                            </div>
+                            <button onclick="openUserModal()" class="px-4 py-2.5 bg-brand-600 hover:bg-brand-700 text-white font-bold text-xs rounded-xl shadow-md transition-colors flex items-center gap-2">
+                                <i data-lucide="user-plus" class="w-4 h-4"></i>
+                                <span>Create Admin User</span>
+                            </button>
+                        </div>
+
+                        <div class="bg-white rounded-2xl border border-slate-200/80 shadow-sm overflow-hidden">
+                            <table class="w-full text-left border-collapse text-xs">
+                                <thead>
+                                    <tr class="bg-slate-50 border-b border-slate-200 text-slate-500 font-bold uppercase tracking-wider">
+                                        <th class="py-3.5 px-4">User Name</th>
+                                        <th class="py-3.5 px-4">Email</th>
+                                        <th class="py-3.5 px-4">Role</th>
+                                        <th class="py-3.5 px-4">Status</th>
+                                        <th class="py-3.5 px-4">Last Login</th>
+                                        <th class="py-3.5 px-4 text-right">Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="users-table-body" class="divide-y divide-slate-100">
+                                    <!-- Dynamic user rows -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- ========================================== -->
+                    <!-- TAB 12: ACTIVITY LOGS -->
+                    <!-- ========================================== -->
+                    <div id="tab-logs" class="tab-content hidden space-y-6">
+                        <div class="bg-white p-6 rounded-2xl border border-slate-200/80 shadow-sm">
+                            <h3 class="text-base font-bold text-slate-900 mb-4">Audit & Action Logs</h3>
+                            <div class="overflow-x-auto">
+                                <table class="w-full text-left border-collapse text-xs">
+                                    <thead>
+                                        <tr class="bg-slate-50 border-b border-slate-200 text-slate-500 font-bold uppercase tracking-wider">
+                                            <th class="py-3.5 px-4">Timestamp</th>
+                                            <th class="py-3.5 px-4">User</th>
+                                            <th class="py-3.5 px-4">Module</th>
+                                            <th class="py-3.5 px-4">Action Summary</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="logs-table-body" class="divide-y divide-slate-100">
+                                        <!-- Dynamic logs -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                </main>
+            </div>
+        </div>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- MODALS & DRAWERS -->
+    <!-- ========================================== -->
+
+    <!-- COURSE EDIT/ADD MODAL -->
+    <div id="modal-course" class="fixed inset-0 z-[600] bg-slate-900/60 backdrop-blur-sm hidden items-center justify-center p-4">
+        <div class="bg-white w-full max-w-2xl rounded-2xl shadow-2xl overflow-hidden flex flex-col max-h-[90vh]">
+            <div class="px-6 py-4 bg-slate-900 text-white flex items-center justify-between">
+                <h3 id="modal-course-title" class="font-bold text-sm">Add New Course</h3>
+                <button onclick="closeCourseModal()" class="text-slate-400 hover:text-white"><i data-lucide="x" class="w-5 h-5"></i></button>
+            </div>
+            <form id="course-form" onsubmit="saveCourse(event)" class="p-6 overflow-y-auto space-y-4 custom-scrollbar">
+                <input type="hidden" id="crs-id">
+                <div>
+                    <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Course Title</label>
+                    <input type="text" id="crs-name" required class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-sm font-semibold">
+                </div>
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Price (₹)</label>
+                        <input type="number" id="crs-price" required class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-sm font-bold text-brand-600">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Duration</label>
+                        <input type="text" id="crs-duration" placeholder="e.g. 6 Weeks" required class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-sm font-semibold">
+                    </div>
+                </div>
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Category</label>
+                        <input type="text" id="crs-category" placeholder="e.g. Technical Analysis" required class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-sm font-semibold">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Status</label>
+                        <select id="crs-status" class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-bold">
+                            <option value="Published">Published</option>
+                            <option value="Draft">Draft</option>
+                            <option value="Hidden">Hidden</option>
+                        </select>
+                    </div>
+                </div>
+                <!-- Image upload -->
+                <div>
+                    <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Course Graphic / Cover Image</label>
+                    <div class="flex items-center gap-4 p-3 bg-slate-50 border border-slate-200 rounded-xl">
+                        <div class="w-16 h-16 bg-white rounded-lg border border-slate-200 p-1 flex items-center justify-center shrink-0">
+                            <img id="crs-img-preview" src="c1.png" class="max-w-full max-h-full object-cover">
+                        </div>
+                        <div class="flex-1 space-y-1.5">
+                            <input type="text" id="crs-image" class="w-full px-3 py-1 bg-white border border-slate-200 rounded-lg text-xs font-mono" placeholder="Image file or URL">
+                            <label class="inline-flex items-center gap-1.5 px-3 py-1 bg-brand-600 hover:bg-brand-700 text-white rounded-lg text-xs font-bold cursor-pointer">
+                                <i data-lucide="upload" class="w-3 h-3"></i>
+                                <span>Upload Image</span>
+                                <input type="file" accept="image/*" class="hidden" onchange="handleFileUpload(this, 'crs-image', 'crs-img-preview')">
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Short Description</label>
+                    <input type="text" id="crs-short-desc" required class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-medium">
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Full Detailed Description</label>
+                    <textarea id="crs-full-desc" rows="3" class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-medium"></textarea>
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Features (One feature per line)</label>
+                    <textarea id="crs-features" rows="3" placeholder="Stock Market Basics&#10;Risk Management&#10;Order Execution" class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-mono"></textarea>
+                </div>
+                <div class="flex justify-end gap-3 pt-4 border-t border-slate-100">
+                    <button type="button" onclick="closeCourseModal()" class="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs rounded-xl">Cancel</button>
+                    <button type="submit" class="px-5 py-2 bg-brand-600 hover:bg-brand-700 text-white font-bold text-xs rounded-xl shadow-md">Save Course</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- GALLERY MODAL -->
+    <div id="modal-gallery" class="fixed inset-0 z-[600] bg-slate-900/60 backdrop-blur-sm hidden items-center justify-center p-4">
+        <div class="bg-white w-full max-w-md rounded-2xl shadow-2xl overflow-hidden flex flex-col">
+            <div class="px-6 py-4 bg-slate-900 text-white flex items-center justify-between">
+                <h3 id="modal-gallery-title" class="font-bold text-sm">Upload Gallery Image</h3>
+                <button onclick="closeGalleryModal()" class="text-slate-400 hover:text-white"><i data-lucide="x" class="w-5 h-5"></i></button>
+            </div>
+            <form id="gallery-form" onsubmit="saveGalleryItem(event)" class="p-6 space-y-4">
+                <input type="hidden" id="gal-id">
+                <div>
+                    <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Image Title</label>
+                    <input type="text" id="gal-title" required class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-sm font-semibold">
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Category</label>
+                    <input type="text" id="gal-category" placeholder="Batches, Workshops, Training..." required class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-sm font-semibold">
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Image File</label>
+                    <div class="flex items-center gap-3 p-3 bg-slate-50 border border-slate-200 rounded-xl">
+                        <div class="w-14 h-14 bg-white rounded-lg border border-slate-200 p-1 flex items-center justify-center shrink-0">
+                            <img id="gal-img-preview" src="g1.jpg" class="max-w-full max-h-full object-cover">
+                        </div>
+                        <div class="flex-1 space-y-1">
+                            <input type="text" id="gal-image" class="w-full px-2 py-1 bg-white border border-slate-200 rounded-lg text-xs font-mono" placeholder="Image file">
+                            <label class="inline-flex items-center gap-1.5 px-3 py-1 bg-brand-600 hover:bg-brand-700 text-white rounded-lg text-xs font-bold cursor-pointer">
+                                <i data-lucide="upload" class="w-3 h-3"></i>
+                                <span>Browse Image</span>
+                                <input type="file" accept="image/*" class="hidden" onchange="handleFileUpload(this, 'gal-image', 'gal-img-preview')">
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Description</label>
+                    <textarea id="gal-desc" rows="2" class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-medium"></textarea>
+                </div>
+                <div class="flex justify-end gap-3 pt-2">
+                    <button type="button" onclick="closeGalleryModal()" class="px-4 py-2 bg-slate-100 text-slate-700 font-bold text-xs rounded-xl">Cancel</button>
+                    <button type="submit" class="px-5 py-2 bg-brand-600 text-white font-bold text-xs rounded-xl">Save Media</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- ENQUIRY DETAIL DRAWER -->
+    <div id="drawer-enquiry" class="fixed inset-0 z-[600] bg-slate-900/40 backdrop-blur-xs hidden justify-end">
+        <div class="bg-white w-full max-w-md h-full shadow-2xl flex flex-col p-6 space-y-6 overflow-y-auto">
+            <div class="flex items-center justify-between border-b border-slate-100 pb-4">
+                <h3 class="font-bold text-slate-900 text-base">Enquiry Detail View</h3>
+                <button onclick="closeEnquiryDrawer()" class="text-slate-400 hover:text-slate-700"><i data-lucide="x" class="w-5 h-5"></i></button>
+            </div>
+            <div id="enquiry-drawer-content" class="space-y-6 flex-1">
+                <!-- Dynamic lead info -->
+            </div>
+        </div>
+    </div>
+
+    <!-- TOAST NOTIFICATION -->
+    <div id="toast" class="fixed bottom-6 right-6 z-[700] bg-slate-900 text-white px-5 py-3 rounded-2xl shadow-2xl text-xs font-bold flex items-center gap-3 transform translate-y-20 opacity-0 transition-all duration-300 pointer-events-none">
+        <div id="toast-icon-box" class="p-1 rounded-lg bg-emerald-500 text-white"><i data-lucide="check" class="w-4 h-4"></i></div>
+        <span id="toast-message">Action saved successfully!</span>
+    </div>
+
+    <!-- SCRIPT APPLICATION CONTROLLER -->
+    <script>
+        // ── Multi-Tenant Context Detection ──────────────────────────────
+        // Detects if admin is loaded under /c/:subname/admin path.
+        const _adminPathParts = window.location.pathname.split('/').filter(Boolean);
+        const _adminIsClient = _adminPathParts[0] === 'c' && _adminPathParts[1];
+        const _adminSubname = _adminIsClient ? _adminPathParts[1] : null;
+        const _adminBaseOrigin = (window.location.protocol.startsWith('http') && window.location.port === '3000')
+            ? '' : 'http://localhost:3000';
+        const API_URL = _adminIsClient
+            ? `${_adminBaseOrigin}/c/${_adminSubname}/api`
+            : `${_adminBaseOrigin}/api`;
+        // Token storage key is scoped per client so sessions don't collide
+        const _tokenKey = _adminIsClient ? `captgains_auth_token_${_adminSubname}` : 'captgains_auth_token';
+        const _userKey  = _adminIsClient ? `captgains_auth_user_${_adminSubname}`  : 'captgains_auth_user';
+        // ────────────────────────────────────────────────────────────────
+
+        let authToken = localStorage.getItem(_tokenKey) || '';
+        let currentAdminUser = JSON.parse(localStorage.getItem(_userKey) || 'null');
+        let cmsState = {};
+
+        // INITIALIZE ON LOAD
+        window.addEventListener('DOMContentLoaded', () => {
+            lucide.createIcons();
+
+            // ── Context-aware UI setup ──────────────────────────────────
+            if (_adminIsClient && _adminSubname) {
+                // Update login panel title to show which client site
+                const titleEl = document.getElementById('login-panel-title');
+                const subtitleEl = document.getElementById('login-panel-subtitle');
+                if (titleEl) titleEl.textContent = 'Client Admin Panel';
+                if (subtitleEl) subtitleEl.textContent = `Site: ${_adminSubname}`;
+
+                // Set sidebar initial brand to subname (will be replaced after API loads)
+                const sbn = document.getElementById('sidebar-brand-name');
+                if (sbn) sbn.textContent = _adminSubname;
+
+                // Update View Public Site button to point to the client site
+                const viewSiteBtn = document.getElementById('view-public-site-btn');
+                if (viewSiteBtn) viewSiteBtn.href = `/c/${_adminSubname}`;
+
+                // Update sidebar logo image path (go up to root from /c/subname/admin)
+                document.querySelectorAll('img[src="Captgains logo.png"]').forEach(img => {
+                    img.src = '/Captgains logo.png';
+                });
+
+                // Update hint text on login form
+                const hintEl = document.getElementById('login-default-hint');
+                if (hintEl) hintEl.querySelector('p').textContent =
+                    `Login with the credentials set by your Super Admin.`;
+            } else {
+                // Original Captgains admin - restore defaults
+                const loginEmail = document.getElementById('login-email');
+                const loginPwd   = document.getElementById('login-password');
+                if (loginEmail) loginEmail.value = 'admin@captgains.com';
+                if (loginPwd)   loginPwd.value   = 'admin123';
+                const titleEl = document.getElementById('login-panel-title');
+                const subtitleEl = document.getElementById('login-panel-subtitle');
+                if (titleEl)    titleEl.textContent    = 'Captgains Admin';
+                if (subtitleEl) subtitleEl.textContent = 'Trading & Training Institute CMS';
+
+                // Restore sidebar brand for original Captgains panel
+                const sbn = document.getElementById('sidebar-brand-name');
+                if (sbn) sbn.textContent = 'Captgains';
+                const hintEl = document.getElementById('login-default-hint');
+                if (hintEl) hintEl.querySelector('p').innerHTML =
+                    'Default: <span class="font-bold text-slate-600">admin@captgains.com</span> / <span class="font-bold text-slate-600">admin123</span>';
+            }
+            // ──────────────────────────────────────────────────────────
+
+            if (authToken) {
+                showMainLayout();
+            } else {
+                showLoginView();
+            }
+        });
+
+
+        // LOGIN HANDLER
+        async function handleLogin(e) {
+            e.preventDefault();
+            const email = document.getElementById('login-email').value;
+            const password = document.getElementById('login-password').value;
+            const btn = document.getElementById('login-submit-btn');
+            const errBox = document.getElementById('login-error');
+
+            btn.disabled = true;
+            btn.innerHTML = `<i data-lucide="loader-2" class="w-4 h-4 animate-spin"></i> Authenticating...`;
+            lucide.createIcons();
+            errBox.classList.add('hidden');
+
+            try {
+                const res = await fetch(`${API_URL}/auth/login`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email, password })
+                });
+                const data = await res.json();
+
+                if (res.ok && data.token) {
+                    authToken = data.token;
+                    currentAdminUser = data.user;
+                    localStorage.setItem(_tokenKey, authToken);
+                    localStorage.setItem(_userKey, JSON.stringify(currentAdminUser));
+                    showToast('Login successful! Loading CMS...');
+                    showMainLayout();
+                } else {
+                    document.getElementById('login-error-text').innerText = data.error || 'Invalid credentials';
+                    errBox.classList.remove('hidden');
+                }
+            } catch (err) {
+                console.error('Login error:', err);
+                document.getElementById('login-error-text').innerText = 'Server connection error. Please ensure backend server is running (npm start / node server.js on port 3000).';
+                errBox.classList.remove('hidden');
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = `<span>Sign In to CMS</span> <i data-lucide="arrow-right" class="w-4 h-4"></i>`;
+                lucide.createIcons();
+            }
+        }
+
+        function handleLogout() {
+            authToken = '';
+            currentAdminUser = null;
+            localStorage.removeItem(_tokenKey);
+            localStorage.removeItem(_userKey);
+            showLoginView();
+            showToast('Logged out successfully');
+        }
+
+        function showLoginView() {
+            document.getElementById('login-view').classList.remove('hidden');
+            document.getElementById('main-layout').classList.add('hidden');
+        }
+
+        function showMainLayout() {
+            document.getElementById('login-view').classList.add('hidden');
+            document.getElementById('main-layout').classList.remove('hidden');
+            if (currentAdminUser) {
+                document.getElementById('user-name').innerText = currentAdminUser.name || 'Admin User';
+                document.getElementById('user-role').innerText = currentAdminUser.role || 'SUPER ADMIN';
+                document.getElementById('user-avatar').innerText = (currentAdminUser.name || 'AU').split(' ').map(n => n[0]).join('').substring(0, 2);
+            }
+            loadDashboardData();
+        }
+
+        function togglePasswordVisibility() {
+            const input = document.getElementById('login-password');
+            const icon = document.getElementById('pass-eye-icon');
+            if (input.type === 'password') {
+                input.type = 'text';
+                icon.setAttribute('data-lucide', 'eye-off');
+            } else {
+                input.type = 'password';
+                icon.setAttribute('data-lucide', 'eye');
+            }
+            lucide.createIcons();
+        }
+
+        function showForgotPasswordModal() {
+            alert('To reset your admin password, please contact the Super Admin or update admin_users in data/db.json.');
+        }
+
+        // TAB NAVIGATION
+        function switchTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+            document.querySelectorAll('.nav-btn').forEach(btn => {
+                btn.classList.remove('bg-brand-600', 'text-white');
+                btn.classList.add('text-slate-400');
+            });
+
+            const targetTab = document.getElementById(`tab-${tabId}`);
+            const targetNav = document.getElementById(`nav-${tabId}`);
+
+            if (targetTab) targetTab.classList.remove('hidden');
+            if (targetNav) {
+                targetNav.classList.add('bg-brand-600', 'text-white');
+                targetNav.classList.remove('text-slate-400');
+            }
+
+            const titleMap = {
+                dashboard: 'Dashboard Overview',
+                profile: 'Business Profile Management',
+                courses: 'Course Management',
+                expertise: 'Expertise Management',
+                gallery: 'Gallery Manager',
+                upi: 'UPI Payment Management',
+                contact: 'Contact Details CMS',
+                enquiries: 'Enquiries & Lead Management',
+                'action-buttons': 'Action Buttons Config',
+                seo: 'SEO Settings',
+                users: 'Admin Users',
+                logs: 'Audit Activity Logs'
+            };
+            document.getElementById('page-title').innerText = titleMap[tabId] || 'Admin Panel';
+
+            // Load tab specific data
+            if (tabId === 'courses') renderCoursesTab();
+            if (tabId === 'expertise') renderExpertiseTab();
+            if (tabId === 'gallery') renderGalleryTab();
+            if (tabId === 'upi') renderUpiTab();
+            if (tabId === 'contact') renderContactTab();
+            if (tabId === 'enquiries') renderEnquiriesTab();
+            if (tabId === 'action-buttons') renderActionButtonsTab();
+            if (tabId === 'seo') renderSeoTab();
+            if (tabId === 'users') renderUsersTab();
+            if (tabId === 'logs') renderLogsTab();
+        }
+
+        // FETCH ALL DASHBOARD & CMS DATA
+        async function loadDashboardData() {
+            try {
+                const res = await fetch(`${API_URL}/admin/dashboard`, {
+                    headers: { 'Authorization': `Bearer ${authToken}` }
+                });
+                if (res.status === 401 || res.status === 403) {
+                    handleLogout();
+                    return;
+                }
+                const data = await res.json();
+                document.getElementById('stat-total-courses').innerText = data.totalCourses || 0;
+                document.getElementById('stat-published-courses').innerText = data.publishedCourses || 0;
+                document.getElementById('stat-gallery-images').innerText = data.totalGalleryImages || 0;
+                document.getElementById('stat-new-enquiries').innerText = data.newEnquiries || 0;
+                document.getElementById('stat-total-visits').innerText = Number(data.totalVisits || 0).toLocaleString();
+
+                document.getElementById('badge-courses-count').innerText = data.totalCourses || 0;
+                document.getElementById('badge-gallery-count').innerText = data.totalGalleryImages || 0;
+                document.getElementById('badge-enquiries-new').innerText = `${data.newEnquiries || 0} NEW`;
+
+                // Render recent activity feed
+                const actList = document.getElementById('recent-activity-list');
+                actList.innerHTML = (data.recentActivity || []).map(act => `
+                    <div class="py-2.5 flex items-start gap-3 text-xs">
+                        <div class="w-7 h-7 rounded-lg bg-slate-100 text-slate-600 flex items-center justify-center shrink-0 mt-0.5"><i data-lucide="activity" class="w-3.5 h-3.5"></i></div>
+                        <div class="flex-1">
+                            <p class="font-bold text-slate-800">${act.action}</p>
+                            <p class="text-[10px] text-slate-400">${act.user} • ${act.module} • ${act.timestamp}</p>
+                        </div>
+                    </div>
+                `).join('');
+                lucide.createIcons();
+                // Update sidebar brand from live business profile
+                updateSidebarBrand();
+            } catch (err) {
+                console.error(err);
+            }
+        }
+
+        // ── SIDEBAR BRAND UPDATER ───────────────────────────────────────────
+        // Fetches the business profile and updates the sidebar brand name live.
+        // Called after login and after saving business profile.
+        async function updateSidebarBrand() {
+            try {
+                const res = await fetch(`${API_URL}/admin/business-profile`, {
+                    headers: { 'Authorization': `Bearer ${authToken}` }
+                });
+                if (!res.ok) return;
+                const p = await res.json();
+                const brandName = p.name || (_adminIsClient ? _adminSubname : 'Captgains');
+                const el = document.getElementById('sidebar-brand-name');
+                if (el) el.textContent = brandName;
+                // Also update the browser tab title
+                if (_adminIsClient) document.title = `${brandName} Admin`;
+            } catch (e) { /* silent fail */ }
+        }
+
+        // UPLOAD FILE HELPER
+        async function handleFileUpload(input, targetUrlId, targetPreviewId) {
+            if (!input.files || !input.files[0]) return;
+            const formData = new FormData();
+            formData.append('image', input.files[0]);
+
+            showToast('Uploading image file...');
+            try {
+                const res = await fetch(`${API_URL}/upload`, {
+                    method: 'POST',
+                    headers: { 'Authorization': `Bearer ${authToken}` },
+                    body: formData
+                });
+                const data = await res.json();
+                if (res.ok && data.filePath) {
+                    document.getElementById(targetUrlId).value = data.filePath;
+                    if (targetPreviewId) document.getElementById(targetPreviewId).src = data.filePath;
+                    showToast('Image uploaded successfully!');
+                } else {
+                    alert(data.error || 'File upload failed');
+                }
+            } catch (err) {
+                alert('Upload failed: ' + err.message);
+            }
+        }
+
+        // --- BUSINESS PROFILE ---
+        async function renderProfileTab() {
+            const res = await fetch(`${API_URL}/admin/business-profile`, { headers: { 'Authorization': `Bearer ${authToken}` } });
+            const p = await res.json();
+            document.getElementById('prof-name').value = p.name || '';
+            document.getElementById('prof-category').value = p.category || '';
+            document.getElementById('prof-tagline').value = p.tagline || '';
+            document.getElementById('prof-logo-url').value = p.logo || '';
+            document.getElementById('prof-logo-preview').src = p.logo || 'Captgains logo.png';
+            document.getElementById('prof-hero-heading').value = p.heroHeading || '';
+            document.getElementById('prof-hero-desc').value = p.heroDescription || '';
+            document.getElementById('prof-hero-cta-text').value = p.heroCtaText || '';
+            document.getElementById('prof-hero-cta-link').value = p.heroCtaLink || '';
+            document.getElementById('prof-status').value = p.status || 'Active';
+        }
+
+        async function saveBusinessProfile(e) {
+            e.preventDefault();
+            const body = {
+                name: document.getElementById('prof-name').value,
+                category: document.getElementById('prof-category').value,
+                tagline: document.getElementById('prof-tagline').value,
+                logo: document.getElementById('prof-logo-url').value,
+                heroHeading: document.getElementById('prof-hero-heading').value,
+                heroDescription: document.getElementById('prof-hero-desc').value,
+                heroCtaText: document.getElementById('prof-hero-cta-text').value,
+                heroCtaLink: document.getElementById('prof-hero-cta-link').value,
+                status: document.getElementById('prof-status').value
+            };
+            const res = await fetch(`${API_URL}/admin/business-profile`, {
+                method: 'PUT',
+                headers: { 'Authorization': `Bearer ${authToken}`, 'Content-Type': 'application/json' },
+                body: JSON.stringify(body)
+            });
+            if (res.ok) {
+                showToast('Business profile updated!');
+                // Update sidebar brand name instantly from the saved value
+                const savedName = body.name;
+                if (savedName) {
+                    const el = document.getElementById('sidebar-brand-name');
+                    if (el) el.textContent = savedName;
+                    if (_adminIsClient) document.title = `${savedName} Admin`;
+                }
+                loadDashboardData();
+            }
+        }
+
+        // --- COURSES CMS ---
+        async function renderCoursesTab() {
+            const res = await fetch(`${API_URL}/admin/courses`, { headers: { 'Authorization': `Bearer ${authToken}` } });
+            const courses = await res.json();
+            cmsState.courses = courses;
+
+            const container = document.getElementById('courses-list-container');
+            container.innerHTML = courses.map(c => `
+                <div class="bg-white rounded-2xl border border-slate-200/80 shadow-sm overflow-hidden flex flex-col justify-between">
+                    <div>
+                        <div class="h-44 bg-slate-100 relative overflow-hidden">
+                            <img src="${c.image}" class="w-full h-full object-cover">
+                            <span class="absolute top-3 right-3 px-2.5 py-1 rounded-full text-[10px] font-extrabold uppercase tracking-wider ${c.status === 'Published' ? 'bg-emerald-500 text-white' : 'bg-slate-700 text-white'}">
+                                ${c.status}
+                            </span>
+                        </div>
+                        <div class="p-5">
+                            <h4 class="font-bold text-slate-900 text-sm mb-1 line-clamp-1">${c.name}</h4>
+                            <p class="text-xs text-slate-500 mb-3 line-clamp-2">${c.shortDescription}</p>
+                            <p class="text-brand-600 font-extrabold text-lg">₹ ${Number(c.price).toLocaleString()}</p>
+                        </div>
+                    </div>
+                    <div class="px-5 py-3 bg-slate-50 border-t border-slate-100 flex items-center justify-between text-xs font-bold">
+                        <button onclick="duplicateCourse('${c.id}')" class="text-slate-500 hover:text-slate-800">Duplicate</button>
+                        <div class="flex items-center gap-2">
+                            <button onclick="editCourse('${c.id}')" class="px-3 py-1.5 bg-brand-50 text-brand-600 rounded-lg hover:bg-brand-100">Edit</button>
+                            <button onclick="deleteCourse('${c.id}')" class="p-1.5 text-rose-500 hover:text-rose-700"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+            lucide.createIcons();
+        }
+
+        function openCourseModal() {
+            document.getElementById('crs-id').value = '';
+            document.getElementById('course-form').reset();
+            document.getElementById('modal-course-title').innerText = 'Add New Course';
+            document.getElementById('modal-course').classList.remove('hidden');
+            document.getElementById('modal-course').classList.add('flex');
+        }
+
+        function closeCourseModal() {
+            document.getElementById('modal-course').classList.add('hidden');
+            document.getElementById('modal-course').classList.remove('flex');
+        }
+
+        function editCourse(id) {
+            const course = (cmsState.courses || []).find(c => c.id === id);
+            if (!course) return;
+            document.getElementById('crs-id').value = course.id;
+            document.getElementById('crs-name').value = course.name;
+            document.getElementById('crs-price').value = course.price;
+            document.getElementById('crs-duration').value = course.duration || '4 Weeks';
+            document.getElementById('crs-category').value = course.category || 'General';
+            document.getElementById('crs-status').value = course.status || 'Published';
+            document.getElementById('crs-image').value = course.image;
+            document.getElementById('crs-img-preview').src = course.image;
+            document.getElementById('crs-short-desc').value = course.shortDescription || '';
+            document.getElementById('crs-full-desc').value = course.fullDescription || '';
+            document.getElementById('crs-features').value = (course.features || []).join('\n');
+
+            document.getElementById('modal-course-title').innerText = 'Edit Course';
+            document.getElementById('modal-course').classList.remove('hidden');
+            document.getElementById('modal-course').classList.add('flex');
+        }
+
+        async function saveCourse(e) {
+            e.preventDefault();
+            const id = document.getElementById('crs-id').value;
+            const features = document.getElementById('crs-features').value.split('\n').map(f => f.trim()).filter(Boolean);
+
+            const body = {
+                name: document.getElementById('crs-name').value,
+                price: Number(document.getElementById('crs-price').value),
+                duration: document.getElementById('crs-duration').value,
+                category: document.getElementById('crs-category').value,
+                status: document.getElementById('crs-status').value,
+                image: document.getElementById('crs-image').value,
+                shortDescription: document.getElementById('crs-short-desc').value,
+                fullDescription: document.getElementById('crs-full-desc').value,
+                features: features
+            };
+
+            const method = id ? 'PUT' : 'POST';
+            const url = id ? `${API_URL}/admin/courses/${id}` : `${API_URL}/admin/courses`;
+
+            const res = await fetch(url, {
+                method,
+                headers: { 'Authorization': `Bearer ${authToken}`, 'Content-Type': 'application/json' },
+                body: JSON.stringify(body)
+            });
+
+            if (res.ok) {
+                closeCourseModal();
+                showToast(id ? 'Course updated!' : 'New course created!');
+                renderCoursesTab();
+                loadDashboardData();
+            }
+        }
+
+        async function duplicateCourse(id) {
+            const course = (cmsState.courses || []).find(c => c.id === id);
+            if (!course) return;
+            const duplicate = { ...course, name: `${course.name} (Copy)` };
+            delete duplicate.id;
+
+            const res = await fetch(`${API_URL}/admin/courses`, {
+                method: 'POST',
+                headers: { 'Authorization': `Bearer ${authToken}`, 'Content-Type': 'application/json' },
+                body: JSON.stringify(duplicate)
+            });
+            if (res.ok) {
+                showToast('Course duplicated!');
+                renderCoursesTab();
+            }
+        }
+
+        async function deleteCourse(id) {
+            if (!confirm('Are you sure you want to delete this course?')) return;
+            const res = await fetch(`${API_URL}/admin/courses/${id}`, {
+                method: 'DELETE',
+                headers: { 'Authorization': `Bearer ${authToken}` }
+            });
+            if (res.ok) {
+                showToast('Course deleted');
+                renderCoursesTab();
+                loadDashboardData();
+            }
+        }
+
+        // --- EXPERTISE CMS ---
+        async function renderExpertiseTab() {
+            const res = await fetch(`${API_URL}/admin/expertise`, { headers: { 'Authorization': `Bearer ${authToken}` } });
+            const items = await res.json();
+            cmsState.expertise = items;
+
+            const container = document.getElementById('expertise-list-container');
+            container.innerHTML = items.map(e => `
+                <div class="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-sm flex flex-col justify-between">
+                    <div>
+                        <div class="w-10 h-10 rounded-xl bg-brand-50 text-brand-600 flex items-center justify-center mb-3">
+                            <i data-lucide="trending-up" class="w-5 h-5"></i>
+                        </div>
+                        <h4 class="font-bold text-slate-900 text-sm mb-1">${e.title}</h4>
+                        <p class="text-xs text-slate-500">${e.description}</p>
+                    </div>
+                    <div class="pt-4 flex items-center justify-between text-xs font-bold border-t border-slate-100 mt-4">
+                        <span class="text-[10px] px-2 py-0.5 rounded-full ${e.status === 'Published' ? 'bg-emerald-100 text-emerald-700' : 'bg-slate-100 text-slate-600'}">${e.status}</span>
+                        <button onclick="deleteExpertise('${e.id}')" class="text-rose-500 hover:text-rose-700"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
+                    </div>
+                </div>
+            `).join('');
+            lucide.createIcons();
+        }
+
+        async function openExpertiseModal() {
+            const title = prompt('Enter Expertise Title (e.g. Equity & Option Trading):');
+            if (!title) return;
+            const description = prompt('Enter Short Description (e.g. Master market movements):') || '';
+            const res = await fetch(`${API_URL}/admin/expertise`, {
+                method: 'POST',
+                headers: { 'Authorization': `Bearer ${authToken}`, 'Content-Type': 'application/json' },
+                body: JSON.stringify({ title, description, icon: 'trending-up', status: 'Published' })
+            });
+            if (res.ok) {
+                showToast('Expertise added!');
+                renderExpertiseTab();
+            }
+        }
+
+        async function deleteExpertise(id) {
+            if (!confirm('Delete expertise item?')) return;
+            const res = await fetch(`${API_URL}/admin/expertise/${id}`, {
+                method: 'DELETE',
+                headers: { 'Authorization': `Bearer ${authToken}` }
+            });
+            if (res.ok) {
+                showToast('Expertise item deleted');
+                renderExpertiseTab();
+            }
+        }
+
+        // --- GALLERY CMS ---
+        async function renderGalleryTab() {
+            const res = await fetch(`${API_URL}/admin/gallery`, { headers: { 'Authorization': `Bearer ${authToken}` } });
+            const items = await res.json();
+            cmsState.gallery = items;
+
+            const container = document.getElementById('gallery-grid-container');
+            container.innerHTML = items.map(g => `
+                <div class="bg-white rounded-2xl border border-slate-200/80 shadow-sm overflow-hidden group relative">
+                    <div class="h-36 bg-slate-100">
+                        <img src="${g.image}" class="w-full h-full object-cover">
+                    </div>
+                    <div class="p-3">
+                        <p class="font-bold text-slate-800 text-xs truncate">${g.title}</p>
+                        <p class="text-[10px] text-slate-400 font-semibold uppercase tracking-wider">${g.category}</p>
+                    </div>
+                    <button onclick="deleteGalleryItem('${g.id}')" class="absolute top-2 right-2 p-1.5 bg-rose-600 text-white rounded-full opacity-0 group-hover:opacity-100 transition-opacity shadow-md">
+                        <i data-lucide="trash-2" class="w-3.5 h-3.5"></i>
+                    </button>
+                </div>
+            `).join('');
+            lucide.createIcons();
+        }
+
+        function openGalleryModal() {
+            document.getElementById('modal-gallery').classList.remove('hidden');
+            document.getElementById('modal-gallery').classList.add('flex');
+        }
+
+        function closeGalleryModal() {
+            document.getElementById('modal-gallery').classList.add('hidden');
+            document.getElementById('modal-gallery').classList.remove('flex');
+        }
+
+        async function saveGalleryItem(e) {
+            e.preventDefault();
+            const body = {
+                title: document.getElementById('gal-title').value,
+                category: document.getElementById('gal-category').value,
+                image: document.getElementById('gal-image').value,
+                description: document.getElementById('gal-desc').value,
+                status: 'Published'
+            };
+            const res = await fetch(`${API_URL}/admin/gallery`, {
+                method: 'POST',
+                headers: { 'Authorization': `Bearer ${authToken}`, 'Content-Type': 'application/json' },
+                body: JSON.stringify(body)
+            });
+            if (res.ok) {
+                closeGalleryModal();
+                showToast('Gallery image uploaded!');
+                renderGalleryTab();
+                loadDashboardData();
+            }
+        }
+
+        async function deleteGalleryItem(id) {
+            if (!confirm('Delete gallery media item?')) return;
+            const res = await fetch(`${API_URL}/admin/gallery/${id}`, {
+                method: 'DELETE',
+                headers: { 'Authorization': `Bearer ${authToken}` }
+            });
+            if (res.ok) {
+                showToast('Gallery media deleted');
+                renderGalleryTab();
+                loadDashboardData();
+            }
+        }
+
+        // --- UPI CMS ---
+        async function renderUpiTab() {
+            const res = await fetch(`${API_URL}/admin/upi`, { headers: { 'Authorization': `Bearer ${authToken}` } });
+            const upi = await res.json();
+            document.getElementById('upi-id').value = upi.upiId || '';
+            document.getElementById('upi-payee').value = upi.payeeName || '';
+            document.getElementById('upi-btn-text').value = upi.buttonText || '';
+            document.getElementById('upi-qr-url').value = upi.qrImage || '';
+            document.getElementById('upi-qr-preview').src = upi.qrImage || 'qr1.png';
+
+            document.getElementById('upi-preview-card-img').src = upi.qrImage || 'qr1.png';
+            document.getElementById('upi-preview-card-id').innerText = upi.upiId || '';
+            document.getElementById('upi-preview-card-btn').innerText = upi.buttonText || 'Pay via UPI App';
+        }
+
+        async function saveUpiSettings(e) {
+            e.preventDefault();
+            const body = {
+                upiId: document.getElementById('upi-id').value,
+                payeeName: document.getElementById('upi-payee').value,
+                buttonText: document.getElementById('upi-btn-text').value,
+                qrImage: document.getElementById('upi-qr-url').value
+            };
+            const res = await fetch(`${API_URL}/admin/upi`, {
+                method: 'PUT',
+                headers: { 'Authorization': `Bearer ${authToken}`, 'Content-Type': 'application/json' },
+                body: JSON.stringify(body)
+            });
+            if (res.ok) {
+                showToast('UPI settings saved!');
+                renderUpiTab();
+            }
+        }
+
+        function autoGenerateQrCode() {
+            const vpa = document.getElementById('upi-id').value.trim();
+            const payee = document.getElementById('upi-payee').value.trim();
+            if (!vpa) { alert('Please enter a UPI VPA ID first.'); return; }
+            const upiString = `upi://pay?pa=${encodeURIComponent(vpa)}&pn=${encodeURIComponent(payee || 'Captgains')}&cu=INR`;
+            const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=${encodeURIComponent(upiString)}`;
+            document.getElementById('upi-qr-url').value = qrUrl;
+            document.getElementById('upi-qr-preview').src = qrUrl;
+            showToast('QR Code auto-generated from UPI ID!');
+        }
+
+        // --- CONTACT CMS ---
+        async function renderContactTab() {
+            const res = await fetch(`${API_URL}/admin/contact`, { headers: { 'Authorization': `Bearer ${authToken}` } });
+            const c = await res.json();
+            document.getElementById('cnt-mobile').value = c.mobile || '';
+            document.getElementById('cnt-whatsapp').value = c.whatsapp || '';
+            document.getElementById('cnt-email').value = c.email || '';
+            document.getElementById('cnt-hours').value = c.businessHours || '';
+            document.getElementById('cnt-address').value = c.address || '';
+            document.getElementById('cnt-map').value = c.mapUrl || '';
+        }
+
+        async function saveContactDetails(e) {
+            e.preventDefault();
+            const body = {
+                mobile: document.getElementById('cnt-mobile').value,
+                whatsapp: document.getElementById('cnt-whatsapp').value,
+                email: document.getElementById('cnt-email').value,
+                businessHours: document.getElementById('cnt-hours').value,
+                address: document.getElementById('cnt-address').value,
+                mapUrl: document.getElementById('cnt-map').value
+            };
+            const res = await fetch(`${API_URL}/admin/contact`, {
+                method: 'PUT',
+                headers: { 'Authorization': `Bearer ${authToken}`, 'Content-Type': 'application/json' },
+                body: JSON.stringify(body)
+            });
+            if (res.ok) {
+                showToast('Contact details saved!');
+            }
+        }
+
+        // --- ENQUIRIES CMS ---
+        async function renderEnquiriesTab() {
+            const res = await fetch(`${API_URL}/admin/enquiries`, { headers: { 'Authorization': `Bearer ${authToken}` } });
+            const enquiries = await res.json();
+            cmsState.enquiries = enquiries;
+            filterEnquiries();
+        }
+
+        function filterEnquiries() {
+            const search = (document.getElementById('enq-search').value || '').toLowerCase();
+            const statusFilter = document.getElementById('enq-filter-status').value;
+
+            const filtered = (cmsState.enquiries || []).filter(e => {
+                const matchSearch = e.name.toLowerCase().includes(search) || e.mobile.includes(search) || e.course.toLowerCase().includes(search);
+                const matchStatus = statusFilter === 'ALL' || e.status === statusFilter;
+                return matchSearch && matchStatus;
+            });
+
+            const tbody = document.getElementById('enquiries-table-body');
+            tbody.innerHTML = filtered.map(e => `
+                <tr class="hover:bg-slate-50 transition-colors">
+                    <td class="py-3 px-4 font-mono text-slate-500">${e.date} ${e.time}</td>
+                    <td class="py-3 px-4 font-bold text-slate-900">${e.name}</td>
+                    <td class="py-3 px-4">
+                        <a href="tel:${e.mobile}" class="font-bold text-brand-600 hover:underline block">${e.mobile}</a>
+                        <span class="text-[10px] text-slate-400">${e.email || ''}</span>
+                    </td>
+                    <td class="py-3 px-4 font-semibold text-slate-700">${e.course}</td>
+                    <td class="py-3 px-4">
+                        <select onchange="updateEnquiryStatus('${e.id}', this.value)" class="px-2.5 py-1 rounded-lg text-[10px] font-bold border border-slate-200">
+                            <option value="New" ${e.status === 'New' ? 'selected' : ''}>New</option>
+                            <option value="Contacted" ${e.status === 'Contacted' ? 'selected' : ''}>Contacted</option>
+                            <option value="Follow-up" ${e.status === 'Follow-up' ? 'selected' : ''}>Follow-up</option>
+                            <option value="Converted" ${e.status === 'Converted' ? 'selected' : ''}>Converted</option>
+                            <option value="Closed" ${e.status === 'Closed' ? 'selected' : ''}>Closed</option>
+                        </select>
+                    </td>
+                    <td class="py-3 px-4 text-right">
+                        <button onclick="viewEnquiryDetail('${e.id}')" class="px-3 py-1 bg-brand-50 text-brand-600 rounded-lg font-bold hover:bg-brand-100">View</button>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        async function updateEnquiryStatus(id, newStatus) {
+            const res = await fetch(`${API_URL}/admin/enquiries/${id}`, {
+                method: 'PUT',
+                headers: { 'Authorization': `Bearer ${authToken}`, 'Content-Type': 'application/json' },
+                body: JSON.stringify({ status: newStatus })
+            });
+            if (res.ok) {
+                showToast(`Lead status updated to ${newStatus}`);
+                loadDashboardData();
+            }
+        }
+
+        function viewEnquiryDetail(id) {
+            const e = (cmsState.enquiries || []).find(item => item.id === id);
+            if (!e) return;
+
+            const drawer = document.getElementById('drawer-enquiry');
+            const content = document.getElementById('enquiry-drawer-content');
+
+            content.innerHTML = `
+                <div class="space-y-4">
+                    <div>
+                        <span class="text-[10px] font-bold uppercase tracking-wider text-slate-400">Customer Name</span>
+                        <h4 class="text-lg font-extrabold text-slate-900">${e.name}</h4>
+                    </div>
+                    <div class="flex items-center gap-3">
+                        <a href="tel:${e.mobile}" class="flex-1 py-2.5 bg-brand-600 text-white font-bold text-xs rounded-xl text-center flex items-center justify-center gap-2">
+                            <i data-lucide="phone" class="w-4 h-4"></i> Call Mobile
+                        </a>
+                        <a href="https://wa.me/${e.mobile.replace(/[^0-9]/g, '')}" target="_blank" class="flex-1 py-2.5 bg-emerald-600 text-white font-bold text-xs rounded-xl text-center flex items-center justify-center gap-2">
+                            <i data-lucide="message-circle" class="w-4 h-4"></i> WhatsApp
+                        </a>
+                    </div>
+                    <div class="bg-slate-50 p-4 rounded-xl space-y-2 text-xs">
+                        <p><span class="font-bold text-slate-500">Email:</span> ${e.email || 'N/A'}</p>
+                        <p><span class="font-bold text-slate-500">Course Interested:</span> ${e.course}</p>
+                        <p><span class="font-bold text-slate-500">Date & Time:</span> ${e.date} ${e.time}</p>
+                        <p><span class="font-bold text-slate-500">Lead Source:</span> ${e.source}</p>
+                    </div>
+                    <div>
+                        <span class="text-[10px] font-bold uppercase tracking-wider text-slate-400">Customer Message</span>
+                        <div class="p-3 bg-slate-50 border border-slate-200 rounded-xl text-xs text-slate-700 italic mt-1">${e.message || 'No message attached.'}</div>
+                    </div>
+                    <div>
+                        <span class="text-[10px] font-bold uppercase tracking-wider text-slate-400">Internal Admin Notes</span>
+                        <textarea id="enq-note-${e.id}" rows="3" class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs mt-1" placeholder="Add follow-up notes...">${e.notes || ''}</textarea>
+                        <button onclick="saveEnquiryNote('${e.id}')" class="mt-2 w-full py-2 bg-slate-900 text-white font-bold text-xs rounded-xl">Save Internal Notes</button>
+                    </div>
+                </div>
+            `;
+            drawer.classList.remove('hidden');
+            drawer.classList.add('flex');
+            lucide.createIcons();
+        }
+
+        async function saveEnquiryNote(id) {
+            const notes = document.getElementById(`enq-note-${id}`).value;
+            const res = await fetch(`${API_URL}/admin/enquiries/${id}`, {
+                method: 'PUT',
+                headers: { 'Authorization': `Bearer ${authToken}`, 'Content-Type': 'application/json' },
+                body: JSON.stringify({ notes })
+            });
+            if (res.ok) {
+                showToast('Internal note saved!');
+            }
+        }
+
+        function closeEnquiryDrawer() {
+            document.getElementById('drawer-enquiry').classList.add('hidden');
+            document.getElementById('drawer-enquiry').classList.remove('flex');
+        }
+
+        function exportEnquiriesCsv() {
+            const enquiries = cmsState.enquiries || [];
+            if (!enquiries.length) { alert('No leads to export.'); return; }
+            let csv = 'ID,Date,Time,Name,Mobile,Email,Course,Status,Source,Message\n';
+            enquiries.forEach(e => {
+                csv += `"${e.id}","${e.date}","${e.time}","${e.name}","${e.mobile}","${e.email}","${e.course}","${e.status}","${e.source}","${(e.message||'').replace(/"/g, '""')}"\n`;
+            });
+            const blob = new Blob([csv], { type: 'text/csv' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `captgains_enquiries_${new Date().toISOString().substring(0,10)}.csv`;
+            a.click();
+            URL.revokeObjectURL(url);
+        }
+
+        // --- ACTION BUTTONS & SOCIAL ---
+        async function renderActionButtonsTab() {
+            const res = await fetch(`${API_URL}/admin/action-buttons`, { headers: { 'Authorization': `Bearer ${authToken}` } });
+            const data = await res.json();
+            cmsState.actionButtons = data.actionButtons || [];
+
+            const container = document.getElementById('action-buttons-list');
+            container.innerHTML = cmsState.actionButtons.map((btn, idx) => `
+                <div class="flex items-center gap-4 p-4 bg-slate-50 border border-slate-200 rounded-xl">
+                    <div class="w-8 h-8 rounded-lg bg-white border border-slate-200 flex items-center justify-center font-bold text-xs">${idx + 1}</div>
+                    <input type="text" value="${btn.label}" id="btn-label-${idx}" class="w-32 px-3 py-1.5 bg-white border border-slate-200 rounded-lg text-xs font-bold">
+                    <input type="text" value="${btn.link}" id="btn-link-${idx}" class="flex-1 px-3 py-1.5 bg-white border border-slate-200 rounded-lg text-xs font-mono">
+                    <select id="btn-status-${idx}" class="px-3 py-1.5 bg-white border border-slate-200 rounded-lg text-xs font-bold">
+                        <option value="Active" ${btn.status === 'Active' ? 'selected' : ''}>Active</option>
+                        <option value="Inactive" ${btn.status === 'Inactive' ? 'selected' : ''}>Inactive</option>
+                    </select>
+                </div>
+            `).join('');
+        }
+
+        async function saveActionButtons() {
+            const updated = cmsState.actionButtons.map((btn, idx) => ({
+                ...btn,
+                label: document.getElementById(`btn-label-${idx}`).value,
+                link: document.getElementById(`btn-link-${idx}`).value,
+                status: document.getElementById(`btn-status-${idx}`).value
+            }));
+            const res = await fetch(`${API_URL}/admin/action-buttons`, {
+                method: 'PUT',
+                headers: { 'Authorization': `Bearer ${authToken}`, 'Content-Type': 'application/json' },
+                body: JSON.stringify({ actionButtons: updated })
+            });
+            if (res.ok) {
+                showToast('Action buttons updated!');
+            }
+        }
+
+        // --- SEO CMS ---
+        async function renderSeoTab() {
+            const res = await fetch(`${API_URL}/admin/seo`, { headers: { 'Authorization': `Bearer ${authToken}` } });
+            const s = await res.json();
+            document.getElementById('seo-title').value = s.siteTitle || '';
+            document.getElementById('seo-desc').value = s.metaDescription || '';
+            document.getElementById('seo-keywords').value = s.keywords || '';
+            document.getElementById('seo-ga').value = s.googleAnalyticsId || '';
+            document.getElementById('seo-gsc').value = s.searchConsoleVerification || '';
+        }
+
+        async function saveSeoSettings(e) {
+            e.preventDefault();
+            const body = {
+                siteTitle: document.getElementById('seo-title').value,
+                metaDescription: document.getElementById('seo-desc').value,
+                keywords: document.getElementById('seo-keywords').value,
+                googleAnalyticsId: document.getElementById('seo-ga').value,
+                searchConsoleVerification: document.getElementById('seo-gsc').value
+            };
+            const res = await fetch(`${API_URL}/admin/seo`, {
+                method: 'PUT',
+                headers: { 'Authorization': `Bearer ${authToken}`, 'Content-Type': 'application/json' },
+                body: JSON.stringify(body)
+            });
+            if (res.ok) {
+                showToast('SEO settings saved!');
+            }
+        }
+
+        // --- USERS CMS ---
+        async function renderUsersTab() {
+            const res = await fetch(`${API_URL}/admin/users`, { headers: { 'Authorization': `Bearer ${authToken}` } });
+            const users = await res.json();
+            const tbody = document.getElementById('users-table-body');
+            tbody.innerHTML = users.map(u => `
+                <tr class="hover:bg-slate-50">
+                    <td class="py-3 px-4 font-bold text-slate-900">${u.name}</td>
+                    <td class="py-3 px-4 text-slate-600">${u.email}</td>
+                    <td class="py-3 px-4 font-bold text-brand-600">${u.role}</td>
+                    <td class="py-3 px-4"><span class="px-2 py-0.5 rounded-full text-[10px] font-bold ${u.status==='Active'?'bg-emerald-100 text-emerald-700':'bg-slate-100 text-slate-600'}">${u.status}</span></td>
+                    <td class="py-3 px-4 text-slate-400">${u.lastLogin || 'Never'}</td>
+                    <td class="py-3 px-4 text-right">
+                        <button onclick="deleteUser('${u.id}')" class="text-rose-500 hover:text-rose-700"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
+                    </td>
+                </tr>
+            `).join('');
+            lucide.createIcons();
+        }
+
+        async function openUserModal() {
+            const name = prompt('Admin User Name:');
+            if (!name) return;
+            const email = prompt('Email Address:');
+            if (!email) return;
+            const password = prompt('Password:') || 'admin123';
+            const role = prompt('Role (SUPER ADMIN, ADMIN, EDITOR):', 'ADMIN') || 'ADMIN';
+
+            const res = await fetch(`${API_URL}/admin/users`, {
+                method: 'POST',
+                headers: { 'Authorization': `Bearer ${authToken}`, 'Content-Type': 'application/json' },
+                body: JSON.stringify({ name, email, password, role, status: 'Active' })
+            });
+            if (res.ok) {
+                showToast('Admin user created!');
+                renderUsersTab();
+            }
+        }
+
+        async function deleteUser(id) {
+            if (!confirm('Delete admin user account?')) return;
+            const res = await fetch(`${API_URL}/admin/users/${id}`, {
+                method: 'DELETE',
+                headers: { 'Authorization': `Bearer ${authToken}` }
+            });
+            if (res.ok) {
+                showToast('User deleted');
+                renderUsersTab();
+            }
+        }
+
+        // --- LOGS CMS ---
+        async function renderLogsTab() {
+            const res = await fetch(`${API_URL}/admin/logs`, { headers: { 'Authorization': `Bearer ${authToken}` } });
+            const logs = await res.json();
+            const tbody = document.getElementById('logs-table-body');
+            tbody.innerHTML = logs.map(l => `
+                <tr class="hover:bg-slate-50">
+                    <td class="py-3 px-4 font-mono text-slate-400">${l.timestamp}</td>
+                    <td class="py-3 px-4 font-bold text-slate-800">${l.user} <span class="text-[10px] text-slate-400">(${l.role})</span></td>
+                    <td class="py-3 px-4 font-bold text-brand-600">${l.module}</td>
+                    <td class="py-3 px-4 font-medium text-slate-700">${l.action}</td>
+                </tr>
+            `).join('');
+        }
+
+        // UTILITY FUNCTIONS
+        function toggleSidebar() {
+            document.getElementById('sidebar').classList.toggle('-translate-x-full');
+        }
+
+        function showToast(msg) {
+            const toast = document.getElementById('toast');
+            document.getElementById('toast-message').innerText = msg;
+            toast.classList.remove('translate-y-20', 'opacity-0');
+            setTimeout(() => {
+                toast.classList.add('translate-y-20', 'opacity-0');
+            }, 3000);
+        }
+    </script>
+</body>
+</html>

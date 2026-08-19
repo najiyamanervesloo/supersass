@@ -1,0 +1,848 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Veslootech Super Admin | Multi-Tenant Dashboard</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['Inter', 'sans-serif'] },
+                    colors: {
+                        sa: {
+                            50: '#f0f4ff', 100: '#dce6ff', 200: '#bacbff',
+                            500: '#6366f1', 600: '#4f46e5', 700: '#4338ca',
+                            900: '#1e1b4b'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        .glass-card {
+            background: rgba(255,255,255,0.05);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        .glow-indigo { box-shadow: 0 0 40px rgba(99, 102, 241, 0.3); }
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+        .animate-fadeUp { animation: fadeUp 0.4s ease forwards; }
+        @keyframes countUp { from { opacity: 0; } to { opacity: 1; } }
+        .status-active  { background: #d1fae5; color: #065f46; }
+        .status-suspend { background: #fee2e2; color: #991b1b; }
+        .plan-badge {
+            font-size: 10px; font-weight: 700; padding: 2px 8px;
+            border-radius: 99px; text-transform: uppercase; letter-spacing: 0.05em;
+        }
+        .plan-standard { background: #dbeafe; color: #1e40af; }
+        .plan-premium  { background: #ede9fe; color: #6d28d9; }
+        .plan-enterprise { background: #fef3c7; color: #92400e; }
+        ::-webkit-scrollbar { width: 5px; }
+        ::-webkit-scrollbar-track { background: #1e1b4b; }
+        ::-webkit-scrollbar-thumb { background: #4f46e5; border-radius: 4px; }
+        .copy-btn { cursor: pointer; transition: all 0.2s; }
+        .copy-btn:hover { transform: scale(1.1); }
+    </style>
+</head>
+<body class="bg-slate-950 text-white min-h-screen">
+
+<!-- ==========================================
+     LOGIN SCREEN
+     ========================================== -->
+<div id="login-view" class="fixed inset-0 z-50 flex items-center justify-center bg-slate-950 p-4">
+    <!-- Animated background -->
+    <div class="absolute inset-0 overflow-hidden pointer-events-none">
+        <div class="absolute top-1/4 left-1/4 w-96 h-96 bg-indigo-600/20 rounded-full blur-3xl animate-pulse"></div>
+        <div class="absolute bottom-1/4 right-1/4 w-72 h-72 bg-purple-600/20 rounded-full blur-3xl animate-pulse" style="animation-delay:1s"></div>
+    </div>
+    <div class="relative z-10 w-full max-w-md">
+        <!-- Logo & Title -->
+        <div class="text-center mb-8">
+            <div class="inline-flex items-center justify-center w-20 h-20 rounded-2xl bg-gradient-to-br from-indigo-500 to-purple-600 shadow-2xl glow-indigo mb-4">
+                <svg class="w-10 h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 21a9.004 9.004 0 008.716-6.747M12 21a9.004 9.004 0 01-8.716-6.747M12 21c2.485 0 4.5-4.03 4.5-9S14.485 3 12 3m0 18c-2.485 0-4.5-4.03-4.5-9S9.515 3 12 3m0 0a8.997 8.997 0 017.843 4.582M12 3a8.997 8.997 0 00-7.843 4.582m15.686 0A11.953 11.953 0 0112 10.5c-2.998 0-5.74-1.1-7.843-2.918m15.686 0A8.959 8.959 0 0121 12c0 .778-.099 1.533-.284 2.253m0 0A17.919 17.919 0 0112 16.5a17.92 17.92 0 01-8.716-2.247m0 0A9.015 9.015 0 013 12c0-1.605.42-3.113 1.157-4.418" />
+                </svg>
+            </div>
+            <h1 class="text-3xl font-black text-white tracking-tight">Veslootech</h1>
+            <p class="text-slate-400 text-sm mt-1 font-medium">Super Admin · Multi-Tenant Control Panel</p>
+        </div>
+
+        <!-- Login Card -->
+        <div class="glass-card rounded-2xl p-8">
+            <div id="login-error" class="hidden mb-4 p-3 bg-red-500/20 border border-red-500/30 rounded-xl text-red-300 text-xs font-semibold">
+                Invalid Super Admin credentials.
+            </div>
+            <form id="login-form" onsubmit="handleLogin(event)" class="space-y-5">
+                <div>
+                    <label class="block text-xs font-bold text-slate-400 uppercase tracking-widest mb-2">Email Address</label>
+                    <input type="email" id="login-email" value="superadmin@veslootech.com" required
+                        class="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-sm text-white font-medium focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent placeholder-slate-600 transition-all">
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-slate-400 uppercase tracking-widest mb-2">Password</label>
+                    <div class="relative">
+                        <input type="password" id="login-password" value="superadmin123" required
+                            class="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-sm text-white font-medium focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent placeholder-slate-600 transition-all pr-11">
+                        <button type="button" onclick="togglePwd()" class="absolute right-3.5 top-1/2 -translate-y-1/2 text-slate-500 hover:text-white transition-colors">
+                            <i data-lucide="eye" id="pwd-eye" class="w-4 h-4"></i>
+                        </button>
+                    </div>
+                </div>
+                <button type="submit" id="login-btn"
+                    class="w-full py-3.5 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 text-white font-bold rounded-xl shadow-lg transition-all flex items-center justify-center gap-2 active:scale-[0.99]">
+                    <i data-lucide="shield-check" class="w-4 h-4"></i>
+                    <span>Sign in as Super Admin</span>
+                </button>
+            </form>
+            <p class="text-center text-xs text-slate-600 mt-5">Default: <span class="text-slate-400 font-bold">superadmin@veslootech.com</span> / <span class="text-slate-400 font-bold">superadmin123</span></p>
+        </div>
+    </div>
+</div>
+
+<!-- ==========================================
+     MAIN DASHBOARD
+     ========================================== -->
+<div id="main-view" class="hidden min-h-screen flex flex-col">
+
+    <!-- TOP BAR -->
+    <header class="sticky top-0 z-40 bg-slate-900/80 backdrop-blur-xl border-b border-white/5 px-6 h-16 flex items-center justify-between">
+        <div class="flex items-center gap-3">
+            <div class="w-8 h-8 rounded-xl bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center">
+                <i data-lucide="globe" class="w-4 h-4 text-white"></i>
+            </div>
+            <div>
+                <span class="font-black text-white text-base tracking-tight">Veslootech</span>
+                <span class="text-slate-500 text-xs ml-2 font-semibold">Super Admin</span>
+            </div>
+        </div>
+        <div class="flex items-center gap-3">
+            <span id="sa-username" class="text-xs text-slate-400 font-semibold hidden md:block"></span>
+            <button onclick="openTab('clients')" class="hidden md:flex items-center gap-2 px-3.5 py-2 text-xs font-bold rounded-xl bg-indigo-600 hover:bg-indigo-500 transition-colors">
+                <i data-lucide="plus" class="w-3.5 h-3.5"></i> New Client
+            </button>
+            <button onclick="handleLogout()" class="p-2 text-slate-500 hover:text-red-400 rounded-xl hover:bg-white/5 transition-colors">
+                <i data-lucide="log-out" class="w-4 h-4"></i>
+            </button>
+        </div>
+    </header>
+
+    <div class="flex flex-1">
+        <!-- SIDEBAR -->
+        <aside class="w-56 bg-slate-900/50 border-r border-white/5 flex-shrink-0 hidden md:flex flex-col py-6 px-3 space-y-1">
+            <button onclick="openTab('dashboard')" id="nav-dashboard" class="sa-nav active w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-xs font-semibold text-left transition-all">
+                <i data-lucide="layout-dashboard" class="w-4 h-4 shrink-0"></i> Dashboard
+            </button>
+            <button onclick="openTab('clients')" id="nav-clients" class="sa-nav w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-xs font-semibold text-left transition-all">
+                <i data-lucide="users" class="w-4 h-4 shrink-0"></i> Manage Clients
+            </button>
+            <button onclick="openTab('create')" id="nav-create" class="sa-nav w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-xs font-semibold text-left transition-all">
+                <i data-lucide="plus-circle" class="w-4 h-4 shrink-0"></i> Create New Client
+            </button>
+            <div class="flex-1"></div>
+            <div class="px-4 py-3 rounded-xl bg-white/5 border border-white/5">
+                <p class="text-[10px] text-slate-500 font-semibold uppercase tracking-wider mb-1">Your Site</p>
+                <a href="/admin" target="_blank" class="flex items-center gap-2 text-xs text-indigo-400 font-bold hover:text-indigo-300 transition-colors">
+                    <i data-lucide="external-link" class="w-3 h-3"></i> Captgains Admin
+                </a>
+            </div>
+        </aside>
+
+        <!-- CONTENT -->
+        <main class="flex-1 p-6 md:p-8 overflow-y-auto">
+
+            <!-- ===================== DASHBOARD TAB ===================== -->
+            <div id="tab-dashboard" class="tab-content active animate-fadeUp space-y-8">
+                <div>
+                    <h2 class="text-2xl font-black text-white">Platform Overview</h2>
+                    <p class="text-slate-500 text-sm mt-1">All your client sites at a glance.</p>
+                </div>
+
+                <!-- KPI Cards -->
+                <div class="grid grid-cols-2 lg:grid-cols-5 gap-4">
+                    <div class="col-span-1 bg-gradient-to-br from-indigo-600 to-indigo-800 rounded-2xl p-5 shadow-lg">
+                        <p class="text-indigo-200 text-xs font-bold uppercase tracking-wider mb-2">Total Clients</p>
+                        <p id="kpi-total-clients" class="text-4xl font-black text-white">—</p>
+                    </div>
+                    <div class="col-span-1 bg-gradient-to-br from-emerald-600 to-teal-700 rounded-2xl p-5 shadow-lg">
+                        <p class="text-emerald-200 text-xs font-bold uppercase tracking-wider mb-2">Active Sites</p>
+                        <p id="kpi-active-clients" class="text-4xl font-black text-white">—</p>
+                    </div>
+                    <div class="col-span-1 bg-gradient-to-br from-purple-600 to-violet-800 rounded-2xl p-5 shadow-lg">
+                        <p class="text-purple-200 text-xs font-bold uppercase tracking-wider mb-2">Total Visits</p>
+                        <p id="kpi-total-visits" class="text-4xl font-black text-white">—</p>
+                    </div>
+                    <div class="col-span-1 bg-gradient-to-br from-amber-500 to-orange-600 rounded-2xl p-5 shadow-lg">
+                        <p class="text-amber-100 text-xs font-bold uppercase tracking-wider mb-2">All Enquiries</p>
+                        <p id="kpi-total-enquiries" class="text-4xl font-black text-white">—</p>
+                    </div>
+                    <div class="col-span-2 lg:col-span-1 bg-gradient-to-br from-rose-600 to-pink-700 rounded-2xl p-5 shadow-lg">
+                        <p class="text-rose-200 text-xs font-bold uppercase tracking-wider mb-2">New Enquiries</p>
+                        <p id="kpi-new-enquiries" class="text-4xl font-black text-white">—</p>
+                    </div>
+                </div>
+
+                <!-- Clients Table -->
+                <div class="bg-slate-900/60 border border-white/5 rounded-2xl overflow-hidden">
+                    <div class="px-6 py-4 border-b border-white/5 flex items-center justify-between">
+                        <h3 class="text-sm font-bold text-white uppercase tracking-wider">Client Sites</h3>
+                        <button onclick="openTab('create')" class="flex items-center gap-2 px-3 py-1.5 text-xs font-bold rounded-lg bg-indigo-600 hover:bg-indigo-500 transition-colors">
+                            <i data-lucide="plus" class="w-3 h-3"></i> New Client
+                        </button>
+                    </div>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-xs">
+                            <thead>
+                                <tr class="border-b border-white/5 text-slate-500 uppercase tracking-wider">
+                                    <th class="text-left px-6 py-3 font-bold">Business</th>
+                                    <th class="text-left px-4 py-3 font-bold">Subname</th>
+                                    <th class="text-left px-4 py-3 font-bold hidden md:table-cell">Plan</th>
+                                    <th class="text-left px-4 py-3 font-bold hidden lg:table-cell">Visits</th>
+                                    <th class="text-left px-4 py-3 font-bold hidden lg:table-cell">New Leads</th>
+                                    <th class="text-left px-4 py-3 font-bold">Status</th>
+                                    <th class="text-right px-6 py-3 font-bold">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="clients-table-body" class="divide-y divide-white/5">
+                                <tr>
+                                    <td colspan="7" class="px-6 py-10 text-center text-slate-600">Loading clients...</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ===================== CLIENTS TAB ===================== -->
+            <div id="tab-clients" class="tab-content animate-fadeUp space-y-6">
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                    <div>
+                        <h2 class="text-2xl font-black text-white">Manage Clients</h2>
+                        <p class="text-slate-500 text-sm mt-1">Create, manage, and share client websites.</p>
+                    </div>
+                    <button onclick="openTab('create')" class="flex items-center gap-2 px-4 py-2.5 text-xs font-bold rounded-xl bg-indigo-600 hover:bg-indigo-500 transition-colors shadow-lg">
+                        <i data-lucide="plus-circle" class="w-4 h-4"></i> Create New Client Site
+                    </button>
+                </div>
+                <div class="bg-slate-900/60 border border-white/5 rounded-2xl overflow-hidden">
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-xs">
+                            <thead>
+                                <tr class="border-b border-white/5 text-slate-500 uppercase tracking-wider">
+                                    <th class="text-left px-6 py-3 font-bold">Business Name</th>
+                                    <th class="text-left px-4 py-3 font-bold">Shareable Link</th>
+                                    <th class="text-left px-4 py-3 font-bold hidden md:table-cell">Owner Email</th>
+                                    <th class="text-left px-4 py-3 font-bold hidden md:table-cell">Plan</th>
+                                    <th class="text-left px-4 py-3 font-bold hidden lg:table-cell">Created</th>
+                                    <th class="text-left px-4 py-3 font-bold">Status</th>
+                                    <th class="text-right px-6 py-3 font-bold">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="clients-full-table-body" class="divide-y divide-white/5">
+                                <tr>
+                                    <td colspan="7" class="px-6 py-10 text-center text-slate-600">Loading...</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ===================== CREATE CLIENT TAB ===================== -->
+            <div id="tab-create" class="tab-content animate-fadeUp max-w-2xl">
+                <div class="mb-6">
+                    <h2 class="text-2xl font-black text-white">Create New Client Site</h2>
+                    <p class="text-slate-500 text-sm mt-1">Fill in the details below to provision a new multi-tenant website.</p>
+                </div>
+
+                <form id="create-client-form" onsubmit="createClient(event)" class="bg-slate-900/60 border border-white/5 rounded-2xl p-8 space-y-6">
+                    <div id="create-error" class="hidden p-3 bg-red-500/20 border border-red-500/30 rounded-xl text-red-300 text-xs font-semibold"></div>
+                    <div id="create-success" class="hidden p-4 bg-emerald-500/20 border border-emerald-500/30 rounded-xl"></div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                        <div>
+                            <label class="block text-xs font-bold text-slate-400 uppercase tracking-widest mb-2">Business Name *</label>
+                            <input type="text" id="new-business-name" required placeholder="e.g. TradeWise Academy"
+                                class="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-sm text-white font-medium focus:outline-none focus:ring-2 focus:ring-indigo-500 placeholder-slate-600"
+                                oninput="autoSlug()">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-slate-400 uppercase tracking-widest mb-2">Sub-Name (URL Slug) *</label>
+                            <div class="relative">
+                                <span class="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500 text-xs font-mono">/c/</span>
+                                <input type="text" id="new-subname" required placeholder="tradewise"
+                                    class="w-full pl-9 pr-4 py-3 bg-white/5 border border-white/10 rounded-xl text-sm text-indigo-300 font-bold font-mono focus:outline-none focus:ring-2 focus:ring-indigo-500 placeholder-slate-600"
+                                    oninput="this.value=this.value.toLowerCase().replace(/[^a-z0-9-]/g,'-')">
+                            </div>
+                            <p class="text-slate-600 text-[11px] mt-1">Only lowercase letters, numbers, and hyphens.</p>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                        <div>
+                            <label class="block text-xs font-bold text-slate-400 uppercase tracking-widest mb-2">Admin Name *</label>
+                            <input type="text" id="new-admin-name" placeholder="Owner / Manager Name"
+                                class="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-sm text-white font-medium focus:outline-none focus:ring-2 focus:ring-indigo-500 placeholder-slate-600">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-slate-400 uppercase tracking-widest mb-2">Owner Email *</label>
+                            <input type="email" id="new-owner-email" required placeholder="owner@example.com"
+                                class="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-sm text-white font-medium focus:outline-none focus:ring-2 focus:ring-indigo-500 placeholder-slate-600">
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                        <div>
+                            <label class="block text-xs font-bold text-slate-400 uppercase tracking-widest mb-2">Admin Password *</label>
+                            <input type="password" id="new-owner-password" required placeholder="Set a strong password"
+                                class="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-sm text-white font-medium focus:outline-none focus:ring-2 focus:ring-indigo-500 placeholder-slate-600">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-slate-400 uppercase tracking-widest mb-2">Plan</label>
+                            <select id="new-plan" class="w-full px-4 py-3 bg-slate-800 border border-white/10 rounded-xl text-sm text-white font-medium focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                                <option value="Standard">Standard</option>
+                                <option value="Premium">Premium</option>
+                                <option value="Enterprise">Enterprise</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Preview URL -->
+                    <div class="p-4 bg-white/5 border border-white/10 rounded-xl flex items-center gap-3">
+                        <i data-lucide="link" class="w-4 h-4 text-indigo-400 shrink-0"></i>
+                        <div class="flex-1 min-w-0">
+                            <p class="text-[11px] text-slate-500 font-semibold mb-0.5">SHAREABLE LINK PREVIEW</p>
+                            <p id="link-preview" class="text-sm text-indigo-300 font-bold font-mono truncate">yourdomain.com/c/<span class="text-white">subname</span></p>
+                        </div>
+                    </div>
+
+                    <div class="flex gap-3 pt-2">
+                        <button type="submit" id="create-btn"
+                            class="flex-1 py-3.5 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 text-white font-bold rounded-xl transition-all flex items-center justify-center gap-2 shadow-lg">
+                            <i data-lucide="rocket" class="w-4 h-4"></i>
+                            <span>Create Client Site</span>
+                        </button>
+                        <button type="button" onclick="openTab('clients')"
+                            class="px-6 py-3.5 bg-white/5 hover:bg-white/10 border border-white/10 text-white font-bold rounded-xl transition-all text-sm">
+                            Cancel
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+        </main>
+    </div>
+</div>
+
+<!-- ==========================================
+     EDIT CLIENT MODAL
+     ========================================== -->
+<div id="edit-modal" class="fixed inset-0 z-[200] hidden items-center justify-center p-4 bg-black/70 backdrop-blur-sm">
+    <div class="bg-slate-900 border border-white/10 rounded-2xl w-full max-w-md p-8 shadow-2xl">
+        <div class="flex items-center justify-between mb-6">
+            <h3 class="text-lg font-black text-white">Edit Client</h3>
+            <button onclick="closeEditModal()" class="text-slate-500 hover:text-white transition-colors">
+                <i data-lucide="x" class="w-5 h-5"></i>
+            </button>
+        </div>
+        <form id="edit-form" onsubmit="saveEditClient(event)" class="space-y-4">
+            <input type="hidden" id="edit-client-id">
+            <div>
+                <label class="block text-xs font-bold text-slate-400 uppercase tracking-widest mb-2">Business Name</label>
+                <input type="text" id="edit-business-name" required
+                    class="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-sm text-white font-medium focus:outline-none focus:ring-2 focus:ring-indigo-500">
+            </div>
+            <div>
+                <label class="block text-xs font-bold text-slate-400 uppercase tracking-widest mb-2">Status</label>
+                <select id="edit-status" class="w-full px-4 py-3 bg-slate-800 border border-white/10 rounded-xl text-sm text-white font-medium focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                    <option value="Active">Active</option>
+                    <option value="Suspended">Suspended</option>
+                </select>
+            </div>
+            <div>
+                <label class="block text-xs font-bold text-slate-400 uppercase tracking-widest mb-2">Plan</label>
+                <select id="edit-plan" class="w-full px-4 py-3 bg-slate-800 border border-white/10 rounded-xl text-sm text-white font-medium focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                    <option value="Standard">Standard</option>
+                    <option value="Premium">Premium</option>
+                    <option value="Enterprise">Enterprise</option>
+                </select>
+            </div>
+            <div class="flex gap-3 pt-2">
+                <button type="submit" class="flex-1 py-3 bg-indigo-600 hover:bg-indigo-500 text-white font-bold rounded-xl transition-colors">Save Changes</button>
+                <button type="button" onclick="closeEditModal()" class="px-5 py-3 bg-white/5 hover:bg-white/10 border border-white/10 text-white font-bold rounded-xl transition-colors">Cancel</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- ==========================================
+     SHARE MODAL
+     ========================================== -->
+<div id="share-modal" class="fixed inset-0 z-[200] hidden items-center justify-center p-4 bg-black/70 backdrop-blur-sm">
+    <div class="bg-slate-900 border border-white/10 rounded-2xl w-full max-w-md p-8 shadow-2xl">
+        <div class="flex items-center justify-between mb-6">
+            <h3 class="text-lg font-black text-white">Shareable Links</h3>
+            <button onclick="closeShareModal()" class="text-slate-500 hover:text-white transition-colors">
+                <i data-lucide="x" class="w-5 h-5"></i>
+            </button>
+        </div>
+        <div class="space-y-4">
+            <div>
+                <p class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-2">Public Website</p>
+                <div class="flex items-center gap-2">
+                    <code id="share-public-link" class="flex-1 px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-sm text-indigo-300 font-mono truncate"></code>
+                    <button onclick="copyLink('share-public-link')" class="copy-btn p-2.5 bg-indigo-600 hover:bg-indigo-500 rounded-xl transition-colors" title="Copy">
+                        <i data-lucide="copy" class="w-4 h-4 text-white"></i>
+                    </button>
+                </div>
+            </div>
+            <div>
+                <p class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-2">Admin Panel</p>
+                <div class="flex items-center gap-2">
+                    <code id="share-admin-link" class="flex-1 px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-sm text-purple-300 font-mono truncate"></code>
+                    <button onclick="copyLink('share-admin-link')" class="copy-btn p-2.5 bg-purple-600 hover:bg-purple-500 rounded-xl transition-colors" title="Copy">
+                        <i data-lucide="copy" class="w-4 h-4 text-white"></i>
+                    </button>
+                </div>
+            </div>
+            <div class="flex gap-3 pt-2">
+                <a id="share-open-site" href="#" target="_blank"
+                    class="flex-1 flex items-center justify-center gap-2 py-3 bg-white/5 hover:bg-white/10 border border-white/10 text-white font-bold rounded-xl transition-colors text-xs">
+                    <i data-lucide="external-link" class="w-3.5 h-3.5"></i> Open Site
+                </a>
+                <a id="share-open-admin" href="#" target="_blank"
+                    class="flex-1 flex items-center justify-center gap-2 py-3 bg-white/5 hover:bg-white/10 border border-white/10 text-white font-bold rounded-xl transition-colors text-xs">
+                    <i data-lucide="settings" class="w-3.5 h-3.5"></i> Open Admin
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- TOAST -->
+<div id="toast" class="fixed bottom-6 right-6 z-[999] bg-slate-800 border border-white/10 text-white px-5 py-3 rounded-2xl shadow-2xl text-xs font-bold flex items-center gap-3 transform translate-y-20 opacity-0 transition-all duration-300 pointer-events-none">
+    <div class="p-1 rounded-lg bg-emerald-500"><i data-lucide="check" class="w-3.5 h-3.5 text-white"></i></div>
+    <span id="toast-msg">Done!</span>
+</div>
+
+<script>
+    // ── State ──────────────────────────────────────────────────────────
+    const BASE = (window.location.port === '3000') ? '' : 'http://localhost:3000';
+    const SA_TOKEN_KEY = 'veslootech_sa_token';
+    const SA_USER_KEY  = 'veslootech_sa_user';
+    let saToken = localStorage.getItem(SA_TOKEN_KEY) || '';
+    let saUser  = JSON.parse(localStorage.getItem(SA_USER_KEY) || 'null');
+    let clientsData = [];
+
+    // ── Init ───────────────────────────────────────────────────────────
+    window.addEventListener('DOMContentLoaded', () => {
+        lucide.createIcons();
+        if (saToken) {
+            showMain();
+        } else {
+            document.getElementById('login-view').classList.remove('hidden');
+        }
+    });
+
+    // ── Auth ───────────────────────────────────────────────────────────
+    async function handleLogin(e) {
+        e.preventDefault();
+        const btn = document.getElementById('login-btn');
+        const errBox = document.getElementById('login-error');
+        errBox.classList.add('hidden');
+        btn.disabled = true;
+        btn.innerHTML = '<i data-lucide="loader-2" class="w-4 h-4 animate-spin"></i> Authenticating...';
+        lucide.createIcons();
+
+        try {
+            const res = await fetch(`${BASE}/api/superadmin/login`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ email: document.getElementById('login-email').value, password: document.getElementById('login-password').value })
+            });
+            const data = await res.json();
+            if (res.ok && data.token) {
+                saToken = data.token;
+                saUser  = data.user;
+                localStorage.setItem(SA_TOKEN_KEY, saToken);
+                localStorage.setItem(SA_USER_KEY, JSON.stringify(saUser));
+                showMain();
+            } else {
+                errBox.textContent = data.error || 'Invalid credentials';
+                errBox.classList.remove('hidden');
+            }
+        } catch (err) {
+            errBox.textContent = 'Server connection error. Make sure the server is running.';
+            errBox.classList.remove('hidden');
+        } finally {
+            btn.disabled = false;
+            btn.innerHTML = '<i data-lucide="shield-check" class="w-4 h-4"></i><span>Sign in as Super Admin</span>';
+            lucide.createIcons();
+        }
+    }
+
+    function handleLogout() {
+        saToken = ''; saUser = null;
+        localStorage.removeItem(SA_TOKEN_KEY);
+        localStorage.removeItem(SA_USER_KEY);
+        document.getElementById('main-view').classList.add('hidden');
+        document.getElementById('login-view').classList.remove('hidden');
+        lucide.createIcons();
+    }
+
+    function showMain() {
+        document.getElementById('login-view').classList.add('hidden');
+        document.getElementById('main-view').classList.remove('hidden');
+        if (saUser) document.getElementById('sa-username').textContent = saUser.name || 'Super Admin';
+        loadDashboard();
+        loadClients();
+        lucide.createIcons();
+    }
+
+    function togglePwd() {
+        const inp = document.getElementById('login-password');
+        inp.type = inp.type === 'password' ? 'text' : 'password';
+        document.getElementById('pwd-eye').setAttribute('data-lucide', inp.type === 'password' ? 'eye' : 'eye-off');
+        lucide.createIcons();
+    }
+
+    // ── Tab Navigation ─────────────────────────────────────────────────
+    function openTab(id) {
+        document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+        document.getElementById(`tab-${id}`).classList.add('active');
+        document.querySelectorAll('.sa-nav').forEach(b => {
+            b.classList.remove('bg-indigo-600/30', 'text-indigo-300');
+            b.classList.add('text-slate-500', 'hover:text-white', 'hover:bg-white/5');
+        });
+        const navBtn = document.getElementById(`nav-${id}`);
+        if (navBtn) {
+            navBtn.classList.add('bg-indigo-600/30', 'text-indigo-300');
+            navBtn.classList.remove('text-slate-500', 'hover:text-white');
+        }
+        lucide.createIcons();
+    }
+
+    // ── Dashboard ──────────────────────────────────────────────────────
+    async function loadDashboard() {
+        try {
+            const res = await fetch(`${BASE}/api/superadmin/dashboard`, { headers: { Authorization: `Bearer ${saToken}` } });
+            const d = await res.json();
+            document.getElementById('kpi-total-clients').textContent   = d.totalClients || 0;
+            document.getElementById('kpi-active-clients').textContent  = d.activeClients || 0;
+            document.getElementById('kpi-total-visits').textContent    = (d.totalVisits || 0).toLocaleString();
+            document.getElementById('kpi-total-enquiries').textContent = d.totalEnquiries || 0;
+            document.getElementById('kpi-new-enquiries').textContent   = d.newEnquiries || 0;
+        } catch (err) { console.error('Dashboard load error:', err); }
+    }
+
+    // ── Clients ────────────────────────────────────────────────────────
+    async function loadClients() {
+        try {
+            const res = await fetch(`${BASE}/api/superadmin/clients`, { headers: { Authorization: `Bearer ${saToken}` } });
+            const data = await res.json();
+            clientsData = data.clients || [];
+            renderClientsTable();
+            renderClientsFullTable();
+        } catch (err) { console.error('Clients load error:', err); }
+    }
+
+    function statusBadge(status) {
+        const cls = status === 'Active' ? 'status-active' : 'status-suspend';
+        return `<span class="px-2 py-0.5 rounded-full text-[10px] font-bold ${cls}">${status}</span>`;
+    }
+
+    function planBadge(plan) {
+        const cls = plan === 'Premium' ? 'plan-premium' : plan === 'Enterprise' ? 'plan-enterprise' : 'plan-standard';
+        return `<span class="plan-badge ${cls}">${plan || 'Standard'}</span>`;
+    }
+
+    function renderClientsTable() {
+        const tbody = document.getElementById('clients-table-body');
+        if (!clientsData.length) {
+            tbody.innerHTML = `<tr><td colspan="7" class="px-6 py-12 text-center text-slate-600">
+                <i data-lucide="inbox" class="w-8 h-8 mx-auto mb-2 text-slate-700"></i>
+                <p>No clients yet. <button onclick="openTab('create')" class="text-indigo-400 font-bold hover:text-indigo-300">Create your first client →</button></p>
+            </td></tr>`;
+            lucide.createIcons(); return;
+        }
+        tbody.innerHTML = clientsData.map(c => `
+            <tr class="hover:bg-white/2 transition-colors">
+                <td class="px-6 py-4">
+                    <div class="font-bold text-white">${escHtml(c.businessName)}</div>
+                    <div class="text-slate-500 text-[10px] mt-0.5">${escHtml(c.ownerEmail || '')}</div>
+                </td>
+                <td class="px-4 py-4 font-mono text-indigo-400 font-bold">${escHtml(c.subname)}</td>
+                <td class="px-4 py-4 hidden md:table-cell">${planBadge(c.plan)}</td>
+                <td class="px-4 py-4 hidden lg:table-cell text-slate-300">${(c.stats?.totalVisits || 0).toLocaleString()}</td>
+                <td class="px-4 py-4 hidden lg:table-cell">
+                    ${c.newEnquiries > 0 ? `<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-500/20 text-amber-300">${c.newEnquiries} NEW</span>` : `<span class="text-slate-600">${c.enquiriesCount || 0}</span>`}
+                </td>
+                <td class="px-4 py-4">${statusBadge(c.status)}</td>
+                <td class="px-6 py-4 text-right">
+                    <div class="flex items-center justify-end gap-2">
+                        <button onclick="openShareModal('${escHtml(c.subname)}')" class="p-1.5 text-slate-400 hover:text-indigo-300 hover:bg-indigo-600/20 rounded-lg transition-colors" title="Share Links">
+                            <i data-lucide="share-2" class="w-3.5 h-3.5"></i>
+                        </button>
+                        <a href="/c/${escHtml(c.subname)}" target="_blank" class="p-1.5 text-slate-400 hover:text-emerald-300 hover:bg-emerald-600/20 rounded-lg transition-colors" title="Open Site">
+                            <i data-lucide="external-link" class="w-3.5 h-3.5"></i>
+                        </a>
+                    </div>
+                </td>
+            </tr>
+        `).join('');
+        lucide.createIcons();
+    }
+
+    function renderClientsFullTable() {
+        const tbody = document.getElementById('clients-full-table-body');
+        if (!clientsData.length) {
+            tbody.innerHTML = `<tr><td colspan="7" class="px-6 py-12 text-center text-slate-600">No clients yet. <button onclick="openTab('create')" class="text-indigo-400 font-bold">Create one →</button></td></tr>`;
+            lucide.createIcons(); return;
+        }
+        tbody.innerHTML = clientsData.map(c => {
+            const pubLink = `${window.location.origin}/c/${c.subname}`;
+            const adminLink = `${window.location.origin}/c/${c.subname}/admin`;
+            return `
+            <tr class="hover:bg-white/2 transition-colors">
+                <td class="px-6 py-4">
+                    <div class="font-bold text-white text-sm">${escHtml(c.businessName)}</div>
+                    <div class="text-slate-500 text-[10px] mt-0.5">ID: ${escHtml(c.id)}</div>
+                </td>
+                <td class="px-4 py-4">
+                    <div class="flex items-center gap-2">
+                        <code class="text-indigo-300 text-[11px] font-mono bg-indigo-600/10 px-2 py-0.5 rounded">/c/${escHtml(c.subname)}</code>
+                        <button onclick="copyText('${pubLink}')" class="copy-btn text-slate-500 hover:text-white transition-colors" title="Copy public link">
+                            <i data-lucide="copy" class="w-3.5 h-3.5"></i>
+                        </button>
+                    </div>
+                </td>
+                <td class="px-4 py-4 hidden md:table-cell text-slate-400 text-[11px]">${escHtml(c.ownerEmail || '')}</td>
+                <td class="px-4 py-4 hidden md:table-cell">${planBadge(c.plan)}</td>
+                <td class="px-4 py-4 hidden lg:table-cell text-slate-500 text-[11px]">${c.createdAt || '—'}</td>
+                <td class="px-4 py-4">${statusBadge(c.status)}</td>
+                <td class="px-6 py-4 text-right">
+                    <div class="flex items-center justify-end gap-1">
+                        <button onclick="openShareModal('${escHtml(c.subname)}')" class="p-1.5 text-slate-400 hover:text-indigo-300 hover:bg-white/5 rounded-lg transition-colors" title="Share">
+                            <i data-lucide="share-2" class="w-3.5 h-3.5"></i>
+                        </button>
+                        <a href="${pubLink}" target="_blank" class="p-1.5 text-slate-400 hover:text-emerald-300 hover:bg-white/5 rounded-lg transition-colors" title="Open Site">
+                            <i data-lucide="globe" class="w-3.5 h-3.5"></i>
+                        </a>
+                        <a href="${adminLink}" target="_blank" class="p-1.5 text-slate-400 hover:text-blue-300 hover:bg-white/5 rounded-lg transition-colors" title="Open Admin">
+                            <i data-lucide="settings" class="w-3.5 h-3.5"></i>
+                        </a>
+                        <button onclick="openEditModal('${escHtml(c.id)}')" class="p-1.5 text-slate-400 hover:text-amber-300 hover:bg-white/5 rounded-lg transition-colors" title="Edit">
+                            <i data-lucide="pencil" class="w-3.5 h-3.5"></i>
+                        </button>
+                        <button onclick="deleteClient('${escHtml(c.id)}','${escHtml(c.businessName)}')" class="p-1.5 text-slate-400 hover:text-red-400 hover:bg-white/5 rounded-lg transition-colors" title="Delete">
+                            <i data-lucide="trash-2" class="w-3.5 h-3.5"></i>
+                        </button>
+                    </div>
+                </td>
+            </tr>`;
+        }).join('');
+        lucide.createIcons();
+    }
+
+    // ── Create Client ──────────────────────────────────────────────────
+    function autoSlug() {
+        const name = document.getElementById('new-business-name').value;
+        const slug = name.toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'');
+        document.getElementById('new-subname').value = slug;
+        document.getElementById('link-preview').innerHTML =
+            `${window.location.origin}/c/<span class="text-white">${slug || 'subname'}</span>`;
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+        const subnameInput = document.getElementById('new-subname');
+        if (subnameInput) {
+            subnameInput.addEventListener('input', () => {
+                document.getElementById('link-preview').innerHTML =
+                    `${window.location.origin}/c/<span class="text-white">${subnameInput.value || 'subname'}</span>`;
+            });
+        }
+    });
+
+    async function createClient(e) {
+        e.preventDefault();
+        const btn = document.getElementById('create-btn');
+        const errBox = document.getElementById('create-error');
+        const successBox = document.getElementById('create-success');
+        errBox.classList.add('hidden');
+        successBox.classList.add('hidden');
+        btn.disabled = true;
+        btn.innerHTML = '<i data-lucide="loader-2" class="w-4 h-4 animate-spin"></i><span>Creating...</span>';
+        lucide.createIcons();
+
+        const payload = {
+            businessName: document.getElementById('new-business-name').value,
+            subname:      document.getElementById('new-subname').value,
+            adminName:    document.getElementById('new-admin-name').value,
+            ownerEmail:   document.getElementById('new-owner-email').value,
+            ownerPassword:document.getElementById('new-owner-password').value,
+            plan:         document.getElementById('new-plan').value
+        };
+
+        try {
+            const res = await fetch(`${BASE}/api/superadmin/clients`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${saToken}` },
+                body: JSON.stringify(payload)
+            });
+            const data = await res.json();
+            if (res.ok) {
+                const pubLink = `${window.location.origin}/c/${payload.subname}`;
+                const adminLink = `${window.location.origin}/c/${payload.subname}/admin`;
+                successBox.innerHTML = `
+                    <div class="flex items-start gap-3">
+                        <div class="p-1.5 rounded-lg bg-emerald-500 mt-0.5"><i data-lucide="check" class="w-3.5 h-3.5 text-white"></i></div>
+                        <div>
+                            <p class="text-emerald-300 font-bold text-sm mb-2">✅ Client site created successfully!</p>
+                            <p class="text-emerald-400 text-xs mb-1">🌐 Public Site: <a href="${pubLink}" target="_blank" class="underline text-emerald-200">${pubLink}</a></p>
+                            <p class="text-emerald-400 text-xs">🔐 Admin Panel: <a href="${adminLink}" target="_blank" class="underline text-emerald-200">${adminLink}</a></p>
+                        </div>
+                    </div>`;
+                successBox.classList.remove('hidden');
+                lucide.createIcons();
+                document.getElementById('create-client-form').reset();
+                document.getElementById('link-preview').innerHTML = `${window.location.origin}/c/<span class="text-white">subname</span>`;
+                loadDashboard();
+                loadClients();
+                showToast('Client site created!');
+            } else {
+                errBox.textContent = data.error || 'Failed to create client.';
+                errBox.classList.remove('hidden');
+            }
+        } catch (err) {
+            errBox.textContent = 'Server error. Please try again.';
+            errBox.classList.remove('hidden');
+        } finally {
+            btn.disabled = false;
+            btn.innerHTML = '<i data-lucide="rocket" class="w-4 h-4"></i><span>Create Client Site</span>';
+            lucide.createIcons();
+        }
+    }
+
+    // ── Edit Client ────────────────────────────────────────────────────
+    function openEditModal(clientId) {
+        const client = clientsData.find(c => c.id === clientId);
+        if (!client) return;
+        document.getElementById('edit-client-id').value = client.id;
+        document.getElementById('edit-business-name').value = client.businessName;
+        document.getElementById('edit-status').value = client.status;
+        document.getElementById('edit-plan').value = client.plan || 'Standard';
+        const modal = document.getElementById('edit-modal');
+        modal.classList.remove('hidden');
+        modal.classList.add('flex');
+    }
+
+    function closeEditModal() {
+        const modal = document.getElementById('edit-modal');
+        modal.classList.add('hidden');
+        modal.classList.remove('flex');
+    }
+
+    async function saveEditClient(e) {
+        e.preventDefault();
+        const id = document.getElementById('edit-client-id').value;
+        const payload = {
+            businessName: document.getElementById('edit-business-name').value,
+            status:       document.getElementById('edit-status').value,
+            plan:         document.getElementById('edit-plan').value
+        };
+        const res = await fetch(`${BASE}/api/superadmin/clients/${id}`, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${saToken}` },
+            body: JSON.stringify(payload)
+        });
+        if (res.ok) {
+            showToast('Client updated!');
+            closeEditModal();
+            loadDashboard();
+            loadClients();
+        } else {
+            showToast('Update failed.');
+        }
+    }
+
+    // ── Delete Client ──────────────────────────────────────────────────
+    async function deleteClient(id, name) {
+        if (!confirm(`⚠️ DELETE "${name}"?\n\nThis will permanently remove ALL their data (courses, gallery, enquiries, settings).\n\nThis action CANNOT be undone.`)) return;
+        const res = await fetch(`${BASE}/api/superadmin/clients/${id}`, {
+            method: 'DELETE',
+            headers: { Authorization: `Bearer ${saToken}` }
+        });
+        if (res.ok) {
+            showToast(`"${name}" deleted.`);
+            loadDashboard();
+            loadClients();
+        } else {
+            const d = await res.json();
+            alert(d.error || 'Delete failed.');
+        }
+    }
+
+    // ── Share Modal ────────────────────────────────────────────────────
+    function openShareModal(subname) {
+        const pubLink   = `${window.location.origin}/c/${subname}`;
+        const adminLink = `${window.location.origin}/c/${subname}/admin`;
+        document.getElementById('share-public-link').textContent  = pubLink;
+        document.getElementById('share-admin-link').textContent   = adminLink;
+        document.getElementById('share-open-site').href   = pubLink;
+        document.getElementById('share-open-admin').href  = adminLink;
+        const modal = document.getElementById('share-modal');
+        modal.classList.remove('hidden');
+        modal.classList.add('flex');
+        lucide.createIcons();
+    }
+
+    function closeShareModal() {
+        const modal = document.getElementById('share-modal');
+        modal.classList.add('hidden');
+        modal.classList.remove('flex');
+    }
+
+    // ── Utilities ──────────────────────────────────────────────────────
+    function copyLink(elemId) {
+        const text = document.getElementById(elemId).textContent;
+        copyText(text);
+    }
+
+    function copyText(text) {
+        navigator.clipboard.writeText(text).then(() => showToast('Link copied to clipboard!')).catch(() => {
+            const el = document.createElement('textarea');
+            el.value = text; document.body.appendChild(el); el.select();
+            document.execCommand('copy'); document.body.removeChild(el);
+            showToast('Link copied!');
+        });
+    }
+
+    function escHtml(str) {
+        return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#039;');
+    }
+
+    function showToast(msg) {
+        const t = document.getElementById('toast');
+        document.getElementById('toast-msg').textContent = msg;
+        t.classList.remove('translate-y-20', 'opacity-0');
+        setTimeout(() => t.classList.add('translate-y-20', 'opacity-0'), 3000);
+    }
+
+    // Close modals on backdrop click
+    document.getElementById('edit-modal').addEventListener('click', function(e) { if (e.target === this) closeEditModal(); });
+    document.getElementById('share-modal').addEventListener('click', function(e) { if (e.target === this) closeShareModal(); });
+</script>
+</body>
+</html>

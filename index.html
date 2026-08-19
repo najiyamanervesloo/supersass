@@ -1,0 +1,1390 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Captgains | Digital Business Card by Veslootech</title>
+
+    <!-- SEO & Social Sharing Metadata -->
+    <meta name="description"
+        content="Master stock market trading, fundamental analysis, and derivatives. Join Captgains Trading & Training Institute and build generational wealth.">
+    <meta name="keywords"
+        content="Trading, Stock Market, Fundamental Analysis, Technical Analysis, Training Institute, Captgains">
+    <meta name="author" content="Captgains">
+
+    <!-- Open Graph / Social Sharing -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Captgains | Trading & Training Institute">
+    <meta property="og:description"
+        content="Master stock market trading, fundamental analysis, and derivatives. Join Captgains and build generational wealth.">
+    <meta property="og:image" content="Captgains logo.png">
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:title" content="Captgains | Trading & Training Institute">
+    <meta property="twitter:description"
+        content="Master stock market trading, fundamental analysis, and derivatives. Join Captgains and build generational wealth.">
+    <meta property="twitter:image" content="Captgains logo.png">
+
+    <!-- Favicons -->
+    <link rel="icon" href="Captgains logo.png" type="image/png">
+    <link rel="apple-touch-icon" href="Captgains logo.png">
+    <!-- Inter Font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        appleBlue: '#0071e3',
+                        appleBg: '#f5f5f7',
+                        appleText: '#1d1d1f',
+                        appleSecondary: '#86868b', /* Official Apple Gray for Light Mode */
+                        appleCard: '#ffffff',
+                        darkBg: '#000000',
+                        darkCard: '#1c1c1e',
+                        whatsappGreen: '#25D366',
+                    },
+                    borderRadius: {
+                        'apple': '22px',
+                    },
+                    boxShadow: {
+                        'soft': '0 8px 24px rgba(0,0,0,0.04)',
+                        'premium': '0 16px 40px rgba(0,0,0,0.06)',
+                        'hover': '0 24px 48px rgba(0,0,0,0.08)',
+                    },
+                    animation: {
+                        'float': 'float 6s ease-in-out infinite',
+                        'spin-slow': 'spin 8s linear infinite',
+                    },
+                    keyframes: {
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0)' },
+                            '50%': { transform: 'translateY(-10px)' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            -webkit-tap-highlight-color: transparent;
+            scroll-behavior: smooth;
+            transition: background-color 0.5s ease, color 0.5s ease;
+        }
+
+        .glass {
+            background: rgba(255, 255, 255, 0.75);
+            backdrop-filter: saturate(180%) blur(24px);
+            -webkit-backdrop-filter: saturate(180%) blur(24px);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+        }
+
+        .dark .glass {
+            background: rgba(28, 28, 30, 0.75);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .hide-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+
+        /* Premium Animations */
+        .reveal {
+            opacity: 0;
+            transform: translateY(40px) scale(0.98);
+            transition: all 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+        }
+
+        /* Staggered Group Animation */
+        .reveal-group .reveal-item {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+
+        .reveal-group.active .reveal-item {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .delay-1 {
+            transition-delay: 100ms !important;
+        }
+
+        .delay-2 {
+            transition-delay: 200ms !important;
+        }
+
+        .delay-3 {
+            transition-delay: 300ms !important;
+        }
+
+        .delay-4 {
+            transition-delay: 400ms !important;
+        }
+
+        .delay-5 {
+            transition-delay: 500ms !important;
+        }
+
+        .delay-6 {
+            transition-delay: 600ms !important;
+        }
+
+        .tap-scale {
+            transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.3s ease;
+        }
+
+        .tap-scale:active {
+            transform: scale(0.95);
+        }
+
+        .gradient-mesh {
+            background-image:
+                radial-gradient(at 0% 0%, rgba(0, 113, 227, 0.04) 0px, transparent 50%),
+                radial-gradient(at 100% 0%, rgba(0, 113, 227, 0.02) 0px, transparent 50%);
+        }
+
+        .dark .gradient-mesh {
+            background-image:
+                radial-gradient(at 0% 0%, rgba(0, 113, 227, 0.15) 0px, transparent 50%),
+                radial-gradient(at 100% 0%, rgba(28, 28, 30, 0.4) 0px, transparent 50%);
+        }
+
+        /* Scrolling styling */
+        .scrolling-wrapper {
+            display: flex;
+            overflow-x: auto;
+            gap: 16px;
+            padding-bottom: 24px;
+            scroll-snap-type: x mandatory;
+            scroll-behavior: smooth;
+        }
+
+        .scrolling-item {
+            flex: 0 0 280px;
+            scroll-snap-align: start;
+        }
+
+        .nav-btn {
+            @apply w-8 h-8 rounded-full border border-black/10 dark:border-white/10 flex items-center justify-center bg-white dark:bg-white/5 shadow-sm tap-scale text-appleSecondary dark:text-gray-400 hover:text-appleBlue hover:border-appleBlue transition-all duration-300;
+        }
+
+        /* Masonry Grid Styling */
+        .masonry-grid {
+            column-count: 2;
+            column-gap: 16px;
+        }
+
+        @media (min-width: 768px) {
+            .masonry-grid {
+                column-count: 3;
+            }
+        }
+
+        @media (min-width: 1024px) {
+            .masonry-grid {
+                column-count: 4;
+            }
+        }
+
+        .masonry-item {
+            display: inline-block;
+            width: 100%;
+            margin-bottom: 16px;
+            break-inside: avoid;
+            opacity: 0;
+            animation: fadeInScale 0.6s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+        }
+
+        @keyframes fadeInScale {
+            0% {
+                opacity: 0;
+                transform: translateY(20px) scale(0.95);
+            }
+
+            100% {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+    </style>
+</head>
+
+<body class="pb-32 gradient-mesh bg-appleBg dark:bg-darkBg text-appleText dark:text-white">
+
+    <div class="max-w-7xl mx-auto px-0 md:px-8 lg:px-12 min-h-screen relative overflow-x-hidden">
+
+        <!-- Theme Toggle -->
+        <div class="fixed top-6 right-6 z-[60] reveal delay-2">
+            <button onclick="toggleDarkMode()"
+                class="glass p-3 rounded-full shadow-premium tap-scale flex items-center justify-center hover:scale-105 transition-transform">
+                <svg id="theme-icon" class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                    stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                        d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z">
+                    </path>
+                </svg>
+            </button>
+        </div>
+
+        <!-- Hero Section -->
+        <section id="home" class="relative pt-24 pb-6 px-6 text-center">
+            <div class="reveal active">
+                <!-- Highlighted Horizontal Logo Container -->
+                <div class="relative inline-block mb-12 animate-float mt-2">
+                    <!-- Deep Ambient Glow Background -->
+                    <div
+                        class="absolute -inset-4 bg-gradient-to-r from-appleBlue/40 via-whatsappGreen/30 to-appleBlue/40 dark:from-appleBlue/50 dark:via-whatsappGreen/30 dark:to-appleBlue/50 rounded-[32px] blur-2xl animate-pulse">
+                    </div>
+
+                    <!-- Main Glass Card for Wide Logo -->
+                    <div
+                        class="w-72 h-40 sm:w-80 sm:h-44 md:w-96 md:h-56 bg-white/80 dark:bg-darkCard/80 backdrop-blur-xl rounded-[28px] p-1.5 shadow-hover border border-white/60 dark:border-white/10 relative z-10 group overflow-hidden">
+                        <!-- Glass Reflection / Shimmer Effect on Hover -->
+                        <div
+                            class="absolute top-0 -left-[150%] w-[150%] h-full bg-gradient-to-r from-transparent via-white/50 to-transparent dark:via-white/10 transform -skew-x-12 transition-transform duration-1000 ease-in-out group-hover:translate-x-[200%] z-20 pointer-events-none">
+                        </div>
+
+                        <!-- Image Inner Container -->
+                        <div
+                            class="w-full h-full bg-black/5 dark:bg-black/50 rounded-[22px] overflow-hidden relative z-10 shadow-inner flex items-center justify-center">
+                            <!-- Official Brand Logo -->
+                            <img id="hero-logo-img" src="Captgains logo.png" alt="Captgains Logo"
+                                class="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-700 ease-out">
+                        </div>
+                    </div>
+                    <div
+                        class="absolute -bottom-3 -right-3 bg-white dark:bg-darkCard px-3 py-1.5 rounded-full border border-black/5 dark:border-white/10 shadow-lg flex items-center gap-2 z-20 reveal delay-3">
+                        <div class="w-2.5 h-2.5 bg-green-500 rounded-full animate-pulse"></div>
+                        <span id="hero-status-badge"
+                            class="text-[10px] font-bold uppercase tracking-wider text-appleText dark:text-white">Open</span>
+                    </div>
+                </div>
+                <h1 id="hero-title" class="text-4xl md:text-5xl lg:text-7xl font-black tracking-tight mb-3 reveal delay-1">Captgains
+                </h1>
+                <p id="hero-subtitle"
+                    class="text-appleSecondary dark:text-gray-400 font-medium text-lg md:text-xl lg:text-2xl mb-10 px-4 italic reveal delay-2">
+                    Trading & Training Institute <br class="md:hidden">Together We Build</p>
+
+                <div class="flex flex-col sm:flex-row items-center justify-center gap-4 px-2 mb-8 reveal delay-3">
+                    <a id="hero-call-btn" href="tel:+917387556786"
+                        class="w-full sm:w-72 bg-appleText dark:bg-white dark:text-appleText text-white py-4 rounded-apple font-bold text-base tap-scale shadow-premium flex items-center justify-center gap-3 hover:shadow-hover transition-shadow duration-300">
+                        <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+                            stroke-linecap="round" stroke-linejoin="round">
+                            <path
+                                d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z" />
+                        </svg>
+                        <span id="hero-call-btn-text">Call +91 7387556786</span>
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Quick Action Grid (Staggered Animation with Hover Effects) -->
+        <section class="max-w-4xl mx-auto px-6 mb-16 reveal-group">
+            <div class="grid grid-cols-3 md:grid-cols-6 gap-4">
+                <a href="tel:+917387556786"
+                    class="reveal-item delay-1 group bg-white dark:bg-darkCard p-5 rounded-apple flex flex-col items-center gap-3 tap-scale border border-black/5 dark:border-white/5 shadow-soft hover:shadow-hover hover:-translate-y-1.5 transition-all duration-300">
+                    <div
+                        class="w-12 h-12 rounded-2xl bg-blue-50/80 dark:bg-blue-500/10 shadow-inner flex items-center justify-center text-appleBlue transition-all duration-300 group-hover:scale-110 group-hover:bg-blue-100 dark:group-hover:bg-blue-500/20">
+                        <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                            stroke-linecap="round" stroke-linejoin="round">
+                            <path
+                                d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z" />
+                        </svg>
+                    </div>
+                    <span
+                        class="text-[10px] font-extrabold uppercase tracking-widest text-appleSecondary dark:text-gray-400 group-hover:text-appleBlue transition-colors duration-300">Call</span>
+                </a>
+                <a href="https://wa.me/917387556786"
+                    class="reveal-item delay-2 group bg-white dark:bg-darkCard p-5 rounded-apple flex flex-col items-center gap-3 tap-scale border border-black/5 dark:border-white/5 shadow-soft hover:shadow-hover hover:-translate-y-1.5 transition-all duration-300">
+                    <div
+                        class="w-12 h-12 rounded-2xl bg-green-50/80 dark:bg-green-500/10 shadow-inner flex items-center justify-center text-whatsappGreen transition-all duration-300 group-hover:scale-110 group-hover:bg-green-100 dark:group-hover:bg-green-500/20">
+                        <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+                            <path
+                                d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.438 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z" />
+                        </svg>
+                    </div>
+                    <span
+                        class="text-[10px] font-extrabold uppercase tracking-widest text-appleSecondary dark:text-gray-400 group-hover:text-whatsappGreen transition-colors duration-300">WhatsApp</span>
+                </a>
+                <a href="#contact"
+                    class="reveal-item delay-3 group bg-white dark:bg-darkCard p-5 rounded-apple flex flex-col items-center gap-3 tap-scale border border-black/5 dark:border-white/5 shadow-soft hover:shadow-hover hover:-translate-y-1.5 transition-all duration-300">
+                    <div
+                        class="w-12 h-12 rounded-2xl bg-red-50/80 dark:bg-red-500/10 shadow-inner flex items-center justify-center text-red-500 transition-all duration-300 group-hover:scale-110 group-hover:bg-red-100 dark:group-hover:bg-red-500/20">
+                        <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                            stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
+                            <circle cx="12" cy="10" r="3" />
+                        </svg>
+                    </div>
+                    <span
+                        class="text-[10px] font-extrabold uppercase tracking-widest text-appleSecondary dark:text-gray-400 group-hover:text-red-500 transition-colors duration-300">Location</span>
+                </a>
+                <a href="#pay"
+                    class="reveal-item delay-4 group bg-white dark:bg-darkCard p-5 rounded-apple flex flex-col items-center gap-3 tap-scale border border-black/5 dark:border-white/5 shadow-soft hover:shadow-hover hover:-translate-y-1.5 transition-all duration-300">
+                    <div
+                        class="w-12 h-12 rounded-2xl bg-purple-50/80 dark:bg-purple-500/10 shadow-inner flex items-center justify-center text-purple-600 transition-all duration-300 group-hover:scale-110 group-hover:bg-purple-100 dark:group-hover:bg-purple-500/20">
+                        <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                            stroke-linecap="round" stroke-linejoin="round">
+                            <rect x="1" y="4" width="22" height="16" rx="2" ry="2" />
+                            <line x1="1" y1="10" x2="23" y2="10" />
+                        </svg>
+                    </div>
+                    <span
+                        class="text-[10px] font-extrabold uppercase tracking-widest text-appleSecondary dark:text-gray-400 group-hover:text-purple-600 transition-colors duration-300">Pay</span>
+                </a>
+                <button onclick="sharePage()"
+                    class="reveal-item delay-5 group bg-white dark:bg-darkCard p-5 rounded-apple flex flex-col items-center gap-3 tap-scale border border-black/5 dark:border-white/5 shadow-soft hover:shadow-hover hover:-translate-y-1.5 transition-all duration-300">
+                    <div
+                        class="w-12 h-12 rounded-2xl bg-orange-50/80 dark:bg-orange-500/10 shadow-inner flex items-center justify-center text-orange-600 transition-all duration-300 group-hover:scale-110 group-hover:bg-orange-100 dark:group-hover:bg-orange-500/20">
+                        <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                            stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="18" cy="5" r="3" />
+                            <circle cx="6" cy="12" r="3" />
+                            <circle cx="18" cy="19" r="3" />
+                            <line x1="8.59" y1="13.51" x2="15.42" y2="17.49" />
+                            <line x1="15.41" y1="6.51" x2="8.59" y2="10.49" />
+                        </svg>
+                    </div>
+                    <span
+                        class="text-[10px] font-extrabold uppercase tracking-widest text-appleSecondary dark:text-gray-400 group-hover:text-orange-600 transition-colors duration-300">Share</span>
+                </button>
+                <a href="#contact"
+                    class="reveal-item delay-6 group bg-white dark:bg-darkCard p-5 rounded-apple flex flex-col items-center gap-3 tap-scale border border-black/5 dark:border-white/5 shadow-soft hover:shadow-hover hover:-translate-y-1.5 transition-all duration-300">
+                    <div
+                        class="w-12 h-12 rounded-2xl bg-yellow-50/80 dark:bg-yellow-500/10 shadow-inner flex items-center justify-center text-yellow-600 transition-all duration-300 group-hover:scale-110 group-hover:bg-yellow-100 dark:group-hover:bg-yellow-500/20">
+                        <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                            stroke-linecap="round" stroke-linejoin="round">
+                            <polygon
+                                points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
+                        </svg>
+                    </div>
+                    <span
+                        class="text-[10px] font-extrabold uppercase tracking-widest text-appleSecondary dark:text-gray-400 group-hover:text-yellow-600 transition-colors duration-300">Review</span>
+                </a>
+            </div>
+        </section>
+
+        <!-- Product / Courses Section -->
+        <section id="products" class="mb-16 reveal">
+            <div class="px-8 flex items-center justify-between mb-8">
+                <div>
+                    <h2 class="text-3xl md:text-4xl lg:text-5xl font-bold mb-2">Courses</h2>
+                    <p class="text-xs text-appleSecondary dark:text-gray-400 font-medium tracking-wide">Premium Learning
+                    </p>
+                </div>
+                <div class="flex items-center gap-3">
+                    <button onclick="openFullGallery('products')"
+                        class="text-xs font-bold text-appleBlue px-3 py-1 bg-blue-50 dark:bg-blue-500/10 rounded-full tap-scale transition-colors hover:bg-blue-100 dark:hover:bg-blue-500/20">View
+                        All</button>
+                    <div class="flex gap-1.5">
+                        <button onclick="scrollSection('products-scroll', -280)" class="nav-btn">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"
+                                    d="M15 19l-7-7 7-7" />
+                            </svg>
+                        </button>
+                        <button onclick="scrollSection('products-scroll', 280)" class="nav-btn">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"
+                                    d="M9 5l7 7-7 7" />
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div id="products-scroll" class="scrolling-wrapper px-8 hide-scrollbar">
+                <!-- Course 1 -->
+                <div
+                    class="scrolling-item group bg-white dark:bg-darkCard rounded-apple shadow-premium overflow-hidden border border-black/5 dark:border-white/5 tap-scale">
+                    <div class="h-44 overflow-hidden bg-black/5 dark:bg-gray-800">
+                        <img src="c1.png"
+                            class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 ease-out">
+                    </div>
+                    <div class="p-5">
+                        <h3 class="font-bold text-lg mb-1">Beginner / Foundation Course</h3>
+                        <p class="text-appleBlue font-extrabold text-base mb-4">₹ 10,000</p>
+                        <a href="https://wa.me/917387556786?text=Hi,%20I'm%20interested%20in%20the%20Beginner%20%2F%20Foundation%20Course"
+                            class="w-full bg-appleText dark:bg-white dark:text-appleText text-white py-3 rounded-xl font-bold text-xs flex items-center justify-center transition-transform active:scale-95">Enquire
+                            Now</a>
+                    </div>
+                </div>
+                <!-- Course 2 -->
+                <div
+                    class="scrolling-item group bg-white dark:bg-darkCard rounded-apple shadow-premium overflow-hidden border border-black/5 dark:border-white/5 tap-scale">
+                    <div class="h-44 overflow-hidden bg-black/5 dark:bg-gray-800">
+                        <img src="c2.png"
+                            class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 ease-out">
+                    </div>
+                    <div class="p-5">
+                        <h3 class="font-bold text-lg mb-1">Technical Analysis Course</h3>
+                        <p class="text-appleBlue font-extrabold text-base mb-4">₹ 20,000</p>
+                        <a href="https://wa.me/917387556786?text=Hi,%20I'm%20interested%20in%20the%20Technical%20Analysis%20Course"
+                            class="w-full bg-appleText dark:bg-white dark:text-appleText text-white py-3 rounded-xl font-bold text-xs flex items-center justify-center transition-transform active:scale-95">Enquire
+                            Now</a>
+                    </div>
+                </div>
+                <!-- Course 3 -->
+                <div
+                    class="scrolling-item group bg-white dark:bg-darkCard rounded-apple shadow-premium overflow-hidden border border-black/5 dark:border-white/5 tap-scale">
+                    <div class="h-44 overflow-hidden bg-black/5 dark:bg-gray-800">
+                        <img src="c3.png"
+                            class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 ease-out">
+                    </div>
+                    <div class="p-5">
+                        <h3 class="font-bold text-lg mb-1 line-clamp-1">Fundamental Analysis & Valuation Course</h3>
+                        <p class="text-appleBlue font-extrabold text-base mb-4">₹ 45,000</p>
+                        <a href="https://wa.me/917387556786?text=Hi,%20I'm%20interested%20in%20the%20Fundamental%20Analysis%20%26%20Valuation%20Course"
+                            class="w-full bg-appleText dark:bg-white dark:text-appleText text-white py-3 rounded-xl font-bold text-xs flex items-center justify-center transition-transform active:scale-95">Enquire
+                            Now</a>
+                    </div>
+                </div>
+                <!-- Course 4 -->
+                <div
+                    class="scrolling-item group bg-white dark:bg-darkCard rounded-apple shadow-premium overflow-hidden border border-black/5 dark:border-white/5 tap-scale">
+                    <div class="h-44 overflow-hidden bg-black/5 dark:bg-gray-800">
+                        <img src="https://images.unsplash.com/photo-1642543492481-44e81e3914a7?auto=format&fit=crop&w=600&q=80"
+                            class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 ease-out">
+                    </div>
+                    <div class="p-5">
+                        <h3 class="font-bold text-lg mb-1 line-clamp-1">Derivatives & Options Trading Strategies</h3>
+                        <p class="text-appleBlue font-extrabold text-base mb-4">₹ 50,000</p>
+                        <a href="https://wa.me/917387556786?text=Hi,%20I'm%20interested%20in%20the%20Derivatives%20%26%20Options%20Trading%20Strategies"
+                            class="w-full bg-appleText dark:bg-white dark:text-appleText text-white py-3 rounded-xl font-bold text-xs flex items-center justify-center transition-transform active:scale-95">Enquire
+                            Now</a>
+                    </div>
+                </div>
+                <!-- Course 5 -->
+                <div
+                    class="scrolling-item group bg-white dark:bg-darkCard rounded-apple shadow-premium overflow-hidden border border-black/5 dark:border-white/5 tap-scale">
+                    <div class="h-44 overflow-hidden bg-black/5 dark:bg-gray-800">
+                        <img src="https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?auto=format&fit=crop&w=600&q=80"
+                            class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 ease-out">
+                    </div>
+                    <div class="p-5">
+                        <h3 class="font-bold text-lg mb-1">Certification Course</h3>
+                        <p class="text-appleBlue font-extrabold text-base mb-4">₹ 60,000</p>
+                        <a href="https://wa.me/917387556786?text=Hi,%20I'm%20interested%20in%20the%20Certification%20Course"
+                            class="w-full bg-appleText dark:bg-white dark:text-appleText text-white py-3 rounded-xl font-bold text-xs flex items-center justify-center transition-transform active:scale-95">Enquire
+                            Now</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Expertise Section (Staggered Animation with Hover Effects) -->
+        <section id="expertise" class="px-6 mb-16 reveal-group">
+            <h2 class="text-3xl md:text-4xl lg:text-5xl font-bold mb-8 px-2 reveal-item delay-1">Expertise</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                <div
+                    class="reveal-item delay-2 group bg-white dark:bg-darkCard p-6 rounded-apple shadow-soft flex items-center gap-6 border border-black/5 dark:border-white/5 hover:shadow-premium hover:-translate-y-1 transition-all duration-300">
+                    <div
+                        class="bg-blue-50 dark:bg-blue-500/10 w-16 h-16 rounded-[20px] flex items-center justify-center text-appleBlue shrink-0 shadow-inner transition-transform duration-300 group-hover:scale-110 group-hover:rotate-3">
+                        <svg class="w-8 h-8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"
+                            stroke-linecap="round" stroke-linejoin="round">
+                            <polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline>
+                            <polyline points="17 6 23 6 23 12"></polyline>
+                        </svg>
+                    </div>
+                    <div>
+                        <h3 class="font-bold text-xl group-hover:text-appleBlue transition-colors duration-300">Equity &
+                            Option Trading</h3>
+                        <p class="text-sm text-appleSecondary dark:text-gray-400 mt-1">Master market movements.</p>
+                    </div>
+                </div>
+                <div
+                    class="reveal-item delay-3 group bg-white dark:bg-darkCard p-6 rounded-apple shadow-soft flex items-center gap-6 border border-black/5 dark:border-white/5 hover:shadow-premium hover:-translate-y-1 transition-all duration-300">
+                    <div
+                        class="bg-orange-50 dark:bg-orange-500/10 w-16 h-16 rounded-[20px] flex items-center justify-center text-orange-500 shrink-0 shadow-inner transition-transform duration-300 group-hover:scale-110 group-hover:rotate-3">
+                        <svg class="w-8 h-8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"
+                            stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M21.21 15.89A10 10 0 1 1 8 2.83"></path>
+                            <path d="M22 12A10 10 0 0 0 12 2v10z"></path>
+                        </svg>
+                    </div>
+                    <div>
+                        <h3 class="font-bold text-xl group-hover:text-orange-500 transition-colors duration-300">Mutual
+                            Fund Investments</h3>
+                        <p class="text-sm text-appleSecondary dark:text-gray-400 mt-1">Build long-term wealth.</p>
+                    </div>
+                </div>
+                <div
+                    class="reveal-item delay-4 group bg-white dark:bg-darkCard p-6 rounded-apple shadow-soft flex items-center gap-6 border border-black/5 dark:border-white/5 hover:shadow-premium hover:-translate-y-1 transition-all duration-300">
+                    <div
+                        class="bg-green-50 dark:bg-green-500/10 w-16 h-16 rounded-[20px] flex items-center justify-center text-green-500 shrink-0 shadow-inner transition-transform duration-300 group-hover:scale-110 group-hover:rotate-3">
+                        <svg class="w-8 h-8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"
+                            stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <line x1="2" y1="12" x2="22" y2="12"></line>
+                            <path
+                                d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z">
+                            </path>
+                        </svg>
+                    </div>
+                    <div>
+                        <h3 class="font-bold text-xl group-hover:text-green-500 transition-colors duration-300">Forex
+                            Trading</h3>
+                        <p class="text-sm text-appleSecondary dark:text-gray-400 mt-1">Global currency markets.</p>
+                    </div>
+                </div>
+                <div
+                    class="reveal-item delay-5 group bg-white dark:bg-darkCard p-6 rounded-apple shadow-soft flex items-center gap-6 border border-black/5 dark:border-white/5 hover:shadow-premium hover:-translate-y-1 transition-all duration-300">
+                    <div
+                        class="bg-purple-50 dark:bg-purple-500/10 w-16 h-16 rounded-[20px] flex items-center justify-center text-purple-500 shrink-0 shadow-inner transition-transform duration-300 group-hover:scale-110 group-hover:rotate-3">
+                        <svg class="w-8 h-8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"
+                            stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <path d="M9 8h4.5a2.5 2.5 0 0 1 0 5H9"></path>
+                            <path d="M9 13h5a2.5 2.5 0 0 1 0 5H9"></path>
+                            <line x1="11" y1="8" x2="11" y2="5"></line>
+                            <line x1="14" y1="8" x2="14" y2="5"></line>
+                            <line x1="11" y1="18" x2="11" y2="21"></line>
+                            <line x1="14" y1="18" x2="14" y2="21"></line>
+                        </svg>
+                    </div>
+                    <div>
+                        <h3 class="font-bold text-xl group-hover:text-purple-500 transition-colors duration-300">Crypto
+                            Trading</h3>
+                        <p class="text-sm text-appleSecondary dark:text-gray-400 mt-1">Next-gen digital assets.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Gallery Section -->
+        <section id="gallery" class="mb-16 reveal">
+            <div class="px-8 flex items-center justify-between mb-8">
+                <div>
+                    <h2 class="text-3xl md:text-4xl lg:text-5xl font-bold mb-2">Gallery</h2>
+                </div>
+                <div class="flex items-center gap-3">
+                    <button onclick="openFullGallery('gallery')"
+                        class="text-xs font-bold text-appleBlue px-3 py-1 bg-blue-50 dark:bg-blue-500/10 rounded-full tap-scale transition-colors hover:bg-blue-100 dark:hover:bg-blue-500/20">View
+                        All</button>
+                    <div class="flex gap-1.5">
+                        <button onclick="scrollSection('gallery-scroll', -300)" class="nav-btn">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"
+                                    d="M15 19l-7-7 7-7" />
+                            </svg>
+                        </button>
+                        <button onclick="scrollSection('gallery-scroll', 300)" class="nav-btn">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"
+                                    d="M9 5l7 7-7 7" />
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div id="gallery-scroll" class="scrolling-wrapper px-8 hide-scrollbar">
+                <div onclick="openLightbox(this.querySelector('img').src)"
+                    class="flex-shrink-0 w-72 h-80 bg-black/5 dark:bg-gray-800 rounded-apple overflow-hidden tap-scale shadow-premium border border-black/5 dark:border-white/10 relative group cursor-zoom-in">
+                    <img src="g1.jpg" alt="Student Batches"
+                        class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 ease-out">
+                    <div
+                        class="absolute inset-0 bg-black/30 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
+                        <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                            stroke-width="2">
+                            <path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v6m3-3H7" />
+                        </svg>
+                    </div>
+                </div>
+                <div onclick="openLightbox(this.querySelector('img').src)"
+                    class="flex-shrink-0 w-72 h-80 bg-black/5 dark:bg-gray-800 rounded-apple overflow-hidden tap-scale shadow-premium border border-black/5 dark:border-white/10 relative group cursor-zoom-in">
+                    <img src="g2.jpg" alt="Training Session"
+                        class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 ease-out">
+                    <div
+                        class="absolute inset-0 bg-black/30 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
+                        <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                            stroke-width="2">
+                            <path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v6m3-3H7" />
+                        </svg>
+                    </div>
+                </div>
+                <div onclick="openLightbox(this.querySelector('img').src)"
+                    class="flex-shrink-0 w-72 h-80 bg-black/5 dark:bg-gray-800 rounded-apple overflow-hidden tap-scale shadow-premium border border-black/5 dark:border-white/10 relative group cursor-zoom-in">
+                    <img src="g3.jpg" alt="Workshops"
+                        class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 ease-out">
+                    <div
+                        class="absolute inset-0 bg-black/30 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
+                        <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                            stroke-width="2">
+                            <path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v6m3-3H7" />
+                        </svg>
+                    </div>
+                </div>
+                <div onclick="openLightbox(this.querySelector('img').src)"
+                    class="flex-shrink-0 w-72 h-80 bg-black/5 dark:bg-gray-800 rounded-apple overflow-hidden tap-scale shadow-premium border border-black/5 dark:border-white/10 relative group cursor-zoom-in">
+                    <img src="g4.jpg" alt="Trading Classes"
+                        class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 ease-out">
+                    <div
+                        class="absolute inset-0 bg-black/30 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
+                        <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                            stroke-width="2">
+                            <path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v6m3-3H7" />
+                        </svg>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Payment Section -->
+        <section id="pay" class="px-6 mb-16 reveal flex justify-center">
+            <div
+                class="bg-white dark:bg-darkCard rounded-apple p-10 shadow-premium text-center border border-black/5 dark:border-white/5 transition-all w-full max-w-lg hover:shadow-hover">
+                <h2 class="text-2xl font-bold mb-8 italic">Quick UPI Payment</h2>
+                <div
+                    class="w-56 h-56 bg-white dark:bg-gray-800 mx-auto mb-8 p-4 rounded-3xl flex items-center justify-center border-2 border-black/5 dark:border-white/10 shadow-inner relative overflow-hidden group">
+                    <!-- Scanner Animation -->
+                    <div
+                        class="absolute top-0 left-0 right-0 h-1 bg-purple-500/50 shadow-[0_0_15px_rgba(168,85,247,0.8)] animate-[float_3s_ease-in-out_infinite]">
+                    </div>
+                    <div class="absolute inset-0 bg-purple-500/5 rounded-3xl"></div>
+
+                    <!-- Uploaded QR Code -->
+                    <img src="qr1.png" alt="Scan to Pay"
+                        class="w-full h-full object-contain relative z-10 rounded-xl bg-white p-2">
+
+                    <svg class="w-full h-full text-black/10 dark:text-gray-700" viewBox="0 0 24 24" fill="currentColor">
+                        <path
+                            d="M3 3h8v8H3V3zm2 2v4h4V5H5zm8-2h8v8h-8V3zm2 2v4h4V5h-4zM3 13h8v8H3v-8zm2 2v4h4v-4H5zm13-2h3v2h-3v-2zm-3 0h2v2h-2v-2zm3 3h3v2h-3v-2zm-3 0h2v2h-2v-2zm3 3h3v2h-3v-2zm-3 0h2v2h-2v-2zM13 13h2v2h-2v-2zm0 3h2v2h-2v-2zM15 15h2v2h-2v-2z" />
+                    </svg>
+                    <div
+                        class="absolute bg-white dark:bg-darkCard p-2 px-3 rounded-lg shadow-soft border border-black/5 dark:border-white/10 transform group-hover:scale-110 transition-transform">
+                        <span class="text-sm font-bold text-purple-600 tracking-tight">₹ RUPEE</span>
+                    </div>
+                </div>
+                <p class="text-appleText dark:text-white font-bold text-xl mb-8">
+                    shaharukhhakim29-1@okhdfcbank
+                </p>
+
+                <a href="#"
+                    onclick="this.href='upi://pay?pa=shaharukhhakim29-1@okhdfcbank&pn=Shaharukh%20Hakim&cu=INR&tr=TXN' + Date.now()"
+                    class="w-full inline-flex items-center justify-center gap-3 bg-purple-600 text-white py-5 rounded-apple font-bold text-base tap-scale shadow-lg hover:bg-purple-700 transition-colors">
+
+                    Pay via UPI App
+
+                </a>
+            </div>
+        </section>
+
+        <!-- Contact Section -->
+        <section id="contact" class="px-6 mb-24 reveal">
+            <h2 class="text-3xl md:text-4xl lg:text-5xl font-bold mb-8 px-2">Contact Details</h2>
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch">
+                <!-- Map Column -->
+                <div
+                    class="lg:col-span-5 h-80 lg:h-auto bg-black/5 dark:bg-gray-900 rounded-[32px] overflow-hidden shadow-premium border border-black/5 dark:border-white/5 relative group min-h-[300px]">
+                    <!-- Google Map embed configured for Sangli, Maharashtra -->
+                    <iframe
+                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d122241.45330366865!2d74.5097486446706!3d16.851941217094254!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bc12276f57137f1%3A0x6fb86b3cc7728ce6!2sSangli%20Miraj%20Kupwad%2C%20Maharashtra!5e0!3m2!1sen!2sin!4v1700000000000"
+                        width="100%" height="100%" style="border:0;" loading="lazy"></iframe>
+                    <div
+                        class="absolute inset-0 bg-black/10 group-hover:bg-transparent transition-colors duration-500 pointer-events-none">
+                    </div>
+                </div>
+                <!-- Info Column -->
+                <div
+                    class="lg:col-span-7 bg-white dark:bg-darkCard rounded-[32px] p-8 lg:p-12 shadow-premium border border-black/5 dark:border-white/5 flex flex-col justify-between">
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-8 mb-8">
+                        <div class="flex items-center gap-6">
+                            <div
+                                class="w-14 h-14 rounded-2xl bg-blue-50 dark:bg-blue-500/10 flex items-center justify-center text-appleBlue shrink-0 shadow-inner">
+                                <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path
+                                        d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z" />
+                                </svg>
+                            </div>
+                            <div>
+                                <p
+                                    class="text-[10px] font-extrabold text-appleSecondary dark:text-gray-400 uppercase tracking-widest mb-0.5">
+                                    Mobile</p>
+                                <p class="text-lg font-bold">+91 73875 56786</p>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-6">
+                            <div
+                                class="w-14 h-14 rounded-2xl bg-green-50 dark:bg-green-500/10 flex items-center justify-center text-whatsappGreen shrink-0 shadow-inner">
+                                <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+                                    <path
+                                        d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.438 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z" />
+                                </svg>
+                            </div>
+                            <div>
+                                <p
+                                    class="text-[10px] font-extrabold text-appleSecondary dark:text-gray-400 uppercase tracking-widest mb-0.5">
+                                    WhatsApp</p>
+                                <p class="text-lg font-bold">+91 73875 56786</p>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-6">
+                            <div
+                                class="w-14 h-14 rounded-2xl bg-orange-50 dark:bg-orange-500/10 flex items-center justify-center text-orange-500 shrink-0 shadow-inner">
+                                <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <rect x="3" y="5" width="18" height="14" rx="2" ry="2"></rect>
+                                    <polyline points="3 7 12 13 21 7"></polyline>
+                                </svg>
+                            </div>
+                            <div class="overflow-hidden">
+                                <p
+                                    class="text-[10px] font-extrabold text-appleSecondary dark:text-gray-400 uppercase tracking-widest mb-0.5">
+                                    Email Address</p>
+                                <p class="text-sm font-bold truncate">captgains.trading@gmail.com</p>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-6">
+                            <div
+                                class="w-14 h-14 rounded-2xl bg-red-50 dark:bg-red-500/10 flex items-center justify-center text-red-500 shrink-0 shadow-inner">
+                                <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
+                                    <circle cx="12" cy="10" r="3" />
+                                </svg>
+                            </div>
+                            <div>
+                                <p
+                                    class="text-[10px] font-extrabold text-appleSecondary dark:text-gray-400 uppercase tracking-widest mb-0.5">
+                                    Address</p>
+                                <p class="text-sm font-bold leading-snug">Sahyadri Siddhi Apartment,<br>Tuljainagar,
+                                    Sangli,<br>Miraj Kupwad, Maharashtra – 416416</p>
+                            </div>
+                        </div>
+                    </div> <!-- Close Grid -->
+                    <button onclick="downloadVCard()"
+                        class="w-full bg-appleText dark:bg-white dark:text-appleText text-white py-4 mt-6 rounded-xl font-bold text-base tap-scale shadow-premium flex items-center justify-center gap-2 hover:opacity-90 transition-opacity">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"></path>
+                        </svg>
+                        Save Contact
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Social Media Section -->
+        <section id="social" class="px-6 mb-24 reveal flex flex-col items-center">
+            <h2
+                class="text-sm md:text-base font-extrabold mb-6 text-appleSecondary dark:text-gray-400 tracking-widest uppercase text-center">
+                Connect With Us</h2>
+
+            <div
+                class="bg-white/60 dark:bg-darkCard/60 backdrop-blur-xl rounded-full px-8 py-4 flex items-center justify-center gap-6 sm:gap-10 shadow-premium border border-black/5 dark:border-white/10 hover:shadow-hover transition-shadow duration-500">
+
+                <!-- Instagram -->
+                <a href="#" target="_blank" class="group relative flex flex-col items-center justify-center tap-scale">
+                    <div
+                        class="absolute inset-0 bg-pink-500/40 rounded-full blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500">
+                    </div>
+                    <div
+                        class="w-14 h-14 rounded-full bg-white dark:bg-gray-800 shadow-soft flex items-center justify-center text-pink-500 relative z-10 group-hover:-translate-y-1 border border-black/5 dark:border-white/10 transition-all duration-300">
+                        <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                            stroke-linecap="round" stroke-linejoin="round">
+                            <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
+                            <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
+                            <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
+                        </svg>
+                    </div>
+                </a>
+
+                <!-- Facebook -->
+                <a href="#" target="_blank" class="group relative flex flex-col items-center justify-center tap-scale">
+                    <div
+                        class="absolute inset-0 bg-blue-600/40 rounded-full blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500">
+                    </div>
+                    <div
+                        class="w-14 h-14 rounded-full bg-white dark:bg-gray-800 shadow-soft flex items-center justify-center text-blue-600 relative z-10 group-hover:-translate-y-1 border border-black/5 dark:border-white/10 transition-all duration-300">
+                        <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                            stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path>
+                        </svg>
+                    </div>
+                </a>
+
+                <!-- YouTube -->
+                <a href="#" target="_blank" class="group relative flex flex-col items-center justify-center tap-scale">
+                    <div
+                        class="absolute inset-0 bg-red-600/40 rounded-full blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500">
+                    </div>
+                    <div
+                        class="w-14 h-14 rounded-full bg-white dark:bg-gray-800 shadow-soft flex items-center justify-center text-red-600 relative z-10 group-hover:-translate-y-1 border border-black/5 dark:border-white/10 transition-all duration-300">
+                        <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                            stroke-linecap="round" stroke-linejoin="round">
+                            <path
+                                d="M22.54 6.42a2.78 2.78 0 0 0-1.94-2C18.88 4 12 4 12 4s-6.88 0-8.6.42a2.78 2.78 0 0 0-1.94 2C1 8.17 1 12 1 12s0 3.83.46 5.58a2.78 2.78 0 0 0 1.94 2C5.12 20 12 20 12 20s6.88 0 8.6-.42a2.78 2.78 0 0 0 1.94-2C23 15.83 23 12 23 12s0-3.83-.46-5.58z">
+                            </path>
+                            <polygon points="9.75 15.02 15.5 12 9.75 8.98 9.75 15.02"></polygon>
+                        </svg>
+                    </div>
+                </a>
+
+            </div>
+        </section>
+
+        <!-- Navigation (Slide up on load) -->
+        <div class="fixed bottom-8 left-0 right-0 px-6 z-50 pointer-events-none reveal delay-6"
+            style="transform: translateY(100px);">
+            <nav
+                class="max-w-[420px] mx-auto glass rounded-[32px] shadow-premium p-2 flex items-center justify-between pointer-events-auto border border-black/5 dark:border-white/40">
+                <a href="#home"
+                    class="flex-1 flex flex-col items-center py-2.5 text-appleBlue transition-all hover:scale-110"><svg
+                        class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+                        stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
+                        <polyline points="9 22 9 12 15 12 15 22" />
+                    </svg></a>
+                <a href="#products"
+                    class="flex-1 flex flex-col items-center py-2.5 text-appleSecondary dark:text-gray-400 transition-all hover:scale-110"><svg
+                        class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+                        stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z" />
+                        <path d="M3 6h18" />
+                        <path d="M16 10a4 4 0 0 1-8 0" />
+                    </svg></a>
+                <a href="#gallery"
+                    class="flex-1 flex flex-col items-center py-2.5 text-appleSecondary dark:text-gray-400 transition-all hover:scale-110"><svg
+                        class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+                        stroke-linecap="round" stroke-linejoin="round">
+                        <rect x="3" y="3" width="18" height="18" rx="2" ry="2" />
+                        <circle cx="8.5" cy="8.5" r="1.5" />
+                        <polyline points="21 15 16 10 5 21" />
+                    </svg></a>
+                <a href="#pay"
+                    class="flex-1 flex flex-col items-center py-2.5 text-appleSecondary dark:text-gray-400 transition-all hover:scale-110"><span
+                        class="text-xl font-bold leading-none">₹</span></a>
+                <a href="#contact"
+                    class="flex-1 flex flex-col items-center py-2.5 text-appleSecondary dark:text-gray-400 transition-all hover:scale-110">
+                    <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+                        stroke-linecap="round" stroke-linejoin="round">
+                        <path
+                            d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z" />
+                    </svg>
+                </a>
+            </nav>
+        </div>
+
+        <!-- Floating WhatsApp -->
+        <a href="https://wa.me/917387556786"
+            class="fixed bottom-28 right-8 w-16 h-16 bg-whatsappGreen rounded-full flex items-center justify-center shadow-[0_10px_30px_rgba(37,211,102,0.3)] text-white z-40 tap-scale hover:scale-110 hover:shadow-[0_0_40px_rgba(37,211,102,0.8)] transition-all duration-300 reveal delay-5">
+            <svg class="w-9 h-9" fill="currentColor" viewBox="0 0 24 24">
+                <path
+                    d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.438 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z" />
+            </svg>
+        </a>
+
+        <!-- Toast -->
+        <div id="toast"
+            class="fixed bottom-32 left-1/2 -translate-x-1/2 glass text-appleText dark:text-white px-8 py-4 rounded-full text-sm font-bold z-[100] opacity-0 transition-all duration-300 translate-y-4 pointer-events-none shadow-premium">
+            Link copied!
+        </div>
+
+        <!-- FULL MASONRY GALLERY MODAL (Animated Backdrop) -->
+        <div id="full-gallery-modal"
+            class="fixed inset-0 z-[100] bg-appleBg/90 dark:bg-darkBg/90 backdrop-blur-xl hidden opacity-0 transition-all duration-500 pointer-events-none overflow-y-auto">
+            <div id="modal-content"
+                class="max-w-5xl mx-auto px-6 pt-12 pb-24 transform scale-95 transition-transform duration-500">
+                <div class="flex items-center justify-between mb-8 sticky top-0 py-4 -mx-6 px-6 z-10">
+                    <h2 id="modal-title" class="text-3xl font-extrabold text-appleText dark:text-white">Our Gallery</h2>
+                    <button onclick="closeFullGallery()"
+                        class="p-3 bg-white/50 dark:bg-white/10 backdrop-blur-md rounded-full tap-scale border border-black/10 dark:border-white/10 hover:bg-white dark:hover:bg-white/20 transition-colors">
+                        <svg class="w-6 h-6 text-appleText dark:text-white" fill="none" stroke="currentColor"
+                            viewBox="0 0 24 24" stroke-width="2.5">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                        </svg>
+                    </button>
+                </div>
+
+                <div id="modal-dynamic-container">
+                    <!-- Images or Products will be injected here dynamically -->
+                </div>
+            </div>
+          <!-- Lightbox -->
+        <div id="lightbox" onclick="closeLightbox()"
+            class="fixed inset-0 bg-black/95 z-[200] hidden items-center justify-center p-6 backdrop-blur-xl opacity-0 transition-opacity duration-300">
+            <img id="lightbox-img" src="" alt="Preview"
+                class="max-w-full max-h-[85vh] rounded-2xl object-contain shadow-hover scale-95 transition-transform duration-500 ease-out">
+        </div>
+
+        <!-- PUBLIC COURSE ENQUIRY MODAL -->
+        <div id="enquiry-public-modal" class="fixed inset-0 z-[300] bg-black/70 backdrop-blur-md hidden items-center justify-center p-4">
+            <div class="bg-white dark:bg-darkCard w-full max-w-md rounded-apple p-6 shadow-hover relative overflow-hidden border border-black/10 dark:border-white/10">
+                <button onclick="closeEnquiryModal()" class="absolute top-4 right-4 p-2 text-slate-400 hover:text-white rounded-full">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                </button>
+                <div class="mb-6">
+                    <h3 class="text-2xl font-extrabold text-appleText dark:text-white mb-1">Enquire Now</h3>
+                    <p class="text-xs text-appleSecondary dark:text-gray-400 font-medium">Join Captgains Institute and master stock market trading.</p>
+                </div>
+                <form id="public-enquiry-form" onsubmit="submitPublicEnquiry(event)" class="space-y-4">
+                    <input type="hidden" id="enq-course-name" value="General Course Enquiry">
+                    <div>
+                        <label class="block text-xs font-bold uppercase tracking-wider text-appleSecondary dark:text-gray-400 mb-1">Course Selected</label>
+                        <input type="text" id="enq-course-display" readonly class="w-full px-4 py-3 bg-black/5 dark:bg-white/5 border border-black/10 dark:border-white/10 rounded-xl text-sm font-bold text-appleBlue">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold uppercase tracking-wider text-appleSecondary dark:text-gray-400 mb-1">Your Full Name *</label>
+                        <input type="text" id="enq-user-name" required placeholder="e.g. Rahul Sharma" class="w-full px-4 py-3 bg-black/5 dark:bg-white/5 border border-black/10 dark:border-white/10 rounded-xl text-sm font-semibold text-appleText dark:text-white focus:outline-none focus:ring-2 focus:ring-appleBlue">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold uppercase tracking-wider text-appleSecondary dark:text-gray-400 mb-1">Mobile / WhatsApp Number *</label>
+                        <input type="tel" id="enq-user-mobile" required placeholder="+91 98765 43210" class="w-full px-4 py-3 bg-black/5 dark:bg-white/5 border border-black/10 dark:border-white/10 rounded-xl text-sm font-semibold text-appleText dark:text-white focus:outline-none focus:ring-2 focus:ring-appleBlue">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold uppercase tracking-wider text-appleSecondary dark:text-gray-400 mb-1">Email Address (Optional)</label>
+                        <input type="email" id="enq-user-email" placeholder="name@domain.com" class="w-full px-4 py-3 bg-black/5 dark:bg-white/5 border border-black/10 dark:border-white/10 rounded-xl text-sm font-semibold text-appleText dark:text-white focus:outline-none focus:ring-2 focus:ring-appleBlue">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold uppercase tracking-wider text-appleSecondary dark:text-gray-400 mb-1">Message / Question</label>
+                        <textarea id="enq-user-msg" rows="2" placeholder="I would like to know batch timings..." class="w-full px-4 py-3 bg-black/5 dark:bg-white/5 border border-black/10 dark:border-white/10 rounded-xl text-sm font-semibold text-appleText dark:text-white focus:outline-none focus:ring-2 focus:ring-appleBlue"></textarea>
+                    </div>
+                    <button type="submit" id="enq-submit-btn" class="w-full py-4 bg-appleBlue text-white font-bold text-sm rounded-xl shadow-premium hover:opacity-90 transition-opacity">
+                        Submit Enquiry
+                    </button>
+                </form>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        // ── Multi-Tenant Context Detection ──────────────────────────────
+        // If loaded under /c/:subname route, use client-specific API base.
+        const _pathParts = window.location.pathname.split('/').filter(Boolean);
+        const _isClientSite = _pathParts[0] === 'c' && _pathParts[1];
+        const _clientSubname = _isClientSite ? _pathParts[1] : null;
+        const _baseOrigin = (window.location.protocol.startsWith('http') && window.location.port === '3000')
+            ? '' : 'http://localhost:3000';
+        const PUBLIC_API_URL = _isClientSite
+            ? `${_baseOrigin}/c/${_clientSubname}/api`
+            : `${_baseOrigin}/api`;
+        // ────────────────────────────────────────────────────────────────
+
+        let dynamicCmsData = null;
+
+        let productsData = [
+            { img: 'c1.png', title: 'Beginner / Foundation Course', price: '₹ 10,000' },
+            { img: 'c2.png', title: 'Technical Analysis Course', price: '₹ 20,000' },
+            { img: 'c3.png', title: 'Fundamental Analysis & Valuation', price: '₹ 45,000' },
+            { img: 'https://images.unsplash.com/photo-1642543492481-44e81e3914a7?auto=format&fit=crop&w=600&q=80', title: 'Derivatives & Options Trading', price: '₹ 50,000' },
+            { img: 'https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?auto=format&fit=crop&w=600&q=80', title: 'Certification Course', price: '₹ 60,000' }
+        ];
+
+        let portfolioData = [
+            { img: 'g1.jpg', title: 'Student Batches' },
+            { img: 'g2.jpg', title: 'Training Session' },
+            { img: 'g3.jpg', title: 'Workshops' },
+            { img: 'g4.jpg', title: 'Trading Classes' },
+            { img: 'g5.jpg', title: 'Mentorship' },
+            { img: 'g6.jpg', title: 'Student Success' }
+        ];
+
+        // FETCH DYNAMIC DATA FROM CMS SERVER
+        async function fetchCmsData() {
+            try {
+                // Register visit count
+                fetch(`${PUBLIC_API_URL}/stats/visit`, { method: 'POST' }).catch(() => {});
+
+                const res = await fetch(`${PUBLIC_API_URL}/public-data`);
+                if (!res.ok) return;
+                const data = await res.json();
+                dynamicCmsData = data;
+
+                // 1. Business Profile
+                if (data.businessProfile) {
+                    const bp = data.businessProfile;
+                    if (bp.logo) document.getElementById('hero-logo-img').src = bp.logo;
+                    if (bp.heroHeading) document.getElementById('hero-title').innerText = bp.heroHeading;
+                    if (bp.heroDescription) document.getElementById('hero-subtitle').innerHTML = bp.heroDescription;
+                    if (bp.heroCtaText) document.getElementById('hero-call-btn-text').innerText = bp.heroCtaText;
+                    if (bp.heroCtaLink) document.getElementById('hero-call-btn').href = bp.heroCtaLink;
+                    if (bp.status) document.getElementById('hero-status-badge').innerText = bp.status === 'Active' ? 'Open' : 'Closed';
+                }
+
+                // 2. Courses
+                if (Array.isArray(data.courses) && data.courses.length > 0) {
+                    productsData = data.courses.map(c => ({
+                        img: c.image,
+                        title: c.name,
+                        price: `₹ ${Number(c.price).toLocaleString()}`
+                    }));
+                    renderCoursesSection(data.courses);
+                }
+
+                // 3. Expertise
+                if (Array.isArray(data.expertise) && data.expertise.length > 0) {
+                    renderExpertiseSection(data.expertise);
+                }
+
+                // 4. Gallery
+                if (Array.isArray(data.gallery) && data.gallery.length > 0) {
+                    portfolioData = data.gallery.map(g => ({ img: g.image, title: g.title }));
+                    renderGallerySection(data.gallery);
+                }
+
+                // 5. UPI Settings
+                if (data.upi) {
+                    const upi = data.upi;
+                    if (upi.qrImage) {
+                        const qrElem = document.querySelector('#pay img');
+                        if (qrElem) qrElem.src = upi.qrImage;
+                    }
+                    if (upi.upiId) {
+                        const idElem = document.querySelector('#pay p');
+                        if (idElem) idElem.innerText = upi.upiId;
+                        const btnElem = document.querySelector('#pay a');
+                        if (btnElem) {
+                            btnElem.onclick = function() {
+                                this.href = `upi://pay?pa=${upi.upiId}&pn=${encodeURIComponent(upi.payeeName || 'Captgains')}&cu=INR&tr=TXN` + Date.now();
+                            };
+                        }
+                    }
+                    if (upi.buttonText) {
+                        const btnElem = document.querySelector('#pay a');
+                        if (btnElem) btnElem.innerText = upi.buttonText;
+                    }
+                }
+
+                // 6. Contact Details
+                if (data.contact) {
+                    const c = data.contact;
+                    if (c.mobile) {
+                        const callBtn = document.querySelector('#hero-call-btn');
+                        if (callBtn && !data.businessProfile?.heroCtaLink) callBtn.href = `tel:${c.mobile.replace(/\s+/g, '')}`;
+                    }
+                    if (c.mapUrl) {
+                        const iframe = document.querySelector('#contact iframe');
+                        if (iframe) iframe.src = c.mapUrl;
+                    }
+                }
+
+                // 7. SEO
+                if (data.seo) {
+                    if (data.seo.siteTitle) document.title = data.seo.siteTitle;
+                }
+
+            } catch (err) {
+                console.log('Using default local site data:', err);
+            }
+        }
+
+        function renderCoursesSection(courses) {
+            const container = document.getElementById('products-scroll');
+            if (!container) return;
+            container.innerHTML = courses.map(c => `
+                <div class="scrolling-item group bg-white dark:bg-darkCard rounded-apple shadow-premium overflow-hidden border border-black/5 dark:border-white/5 tap-scale">
+                    <div class="h-44 overflow-hidden bg-black/5 dark:bg-gray-800">
+                        <img src="${c.image}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 ease-out">
+                    </div>
+                    <div class="p-5">
+                        <h3 class="font-bold text-lg mb-1 line-clamp-1">${c.name}</h3>
+                        <p class="text-appleBlue font-extrabold text-base mb-4">₹ ${Number(c.price).toLocaleString()}</p>
+                        <button onclick="openEnquiryModal('${encodeURIComponent(c.name)}')"
+                            class="w-full bg-appleText dark:bg-white dark:text-appleText text-white py-3 rounded-xl font-bold text-xs flex items-center justify-center transition-transform active:scale-95">
+                            Enquire Now
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function renderExpertiseSection(expertiseItems) {
+            const container = document.querySelector('#expertise .grid');
+            if (!container) return;
+            container.innerHTML = expertiseItems.map((e, idx) => `
+                <div class="reveal-item delay-${(idx%4)+1} group bg-white dark:bg-darkCard p-6 rounded-apple shadow-soft flex items-center gap-6 border border-black/5 dark:border-white/5 hover:shadow-premium hover:-translate-y-1 transition-all duration-300">
+                    <div class="bg-blue-50 dark:bg-blue-500/10 w-16 h-16 rounded-[20px] flex items-center justify-center text-appleBlue shrink-0 shadow-inner transition-transform duration-300 group-hover:scale-110 group-hover:rotate-3">
+                        <svg class="w-8 h-8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                            <polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline><polyline points="17 6 23 6 23 12"></polyline>
+                        </svg>
+                    </div>
+                    <div>
+                        <h3 class="font-bold text-xl group-hover:text-appleBlue transition-colors duration-300">${e.title}</h3>
+                        <p class="text-sm text-appleSecondary dark:text-gray-400 mt-1">${e.description || ''}</p>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function renderGallerySection(items) {
+            const container = document.getElementById('gallery-scroll');
+            if (!container) return;
+            container.innerHTML = items.map(g => `
+                <div onclick="openLightbox('${g.image}')"
+                    class="flex-shrink-0 w-72 h-80 bg-black/5 dark:bg-gray-800 rounded-apple overflow-hidden tap-scale shadow-premium border border-black/5 dark:border-white/10 relative group cursor-zoom-in">
+                    <img src="${g.image}" alt="${g.title}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 ease-out">
+                    <div class="absolute inset-0 bg-black/30 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
+                        <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+                            <path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v6m3-3H7" />
+                        </svg>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // PUBLIC COURSE ENQUIRY MODAL HANDLERS
+        function openEnquiryModal(courseName) {
+            const decoded = courseName ? decodeURIComponent(courseName) : 'General Enquiry';
+            document.getElementById('enq-course-name').value = decoded;
+            document.getElementById('enq-course-display').value = decoded;
+
+            const modal = document.getElementById('enquiry-public-modal');
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+        }
+
+        function closeEnquiryModal() {
+            const modal = document.getElementById('enquiry-public-modal');
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+        }
+
+        async function submitPublicEnquiry(e) {
+            e.preventDefault();
+            const btn = document.getElementById('enq-submit-btn');
+            btn.disabled = true;
+            btn.innerText = 'Submitting...';
+
+            const payload = {
+                name: document.getElementById('enq-user-name').value,
+                mobile: document.getElementById('enq-user-mobile').value,
+                email: document.getElementById('enq-user-email').value,
+                course: document.getElementById('enq-course-name').value,
+                message: document.getElementById('enq-user-msg').value,
+                source: 'Website Enquiry Form'
+            };
+
+            try {
+                const res = await fetch(`${PUBLIC_API_URL}/enquiries`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+                const data = await res.json();
+                if (res.ok) {
+                    closeEnquiryModal();
+                    document.getElementById('public-enquiry-form').reset();
+                    showToast('Thank you! Your enquiry has been submitted.');
+                } else {
+                    alert(data.error || 'Submission failed.');
+                }
+            } catch (err) {
+                // Fallback to WhatsApp if API offline
+                const waUrl = `https://wa.me/917387556786?text=${encodeURIComponent(`Hi Captgains, I'm ${payload.name} (${payload.mobile}). Interested in ${payload.course}. ${payload.message}`)}`;
+                window.open(waUrl, '_blank');
+                closeEnquiryModal();
+            } finally {
+                btn.disabled = false;
+                btn.innerText = 'Submit Enquiry';
+            }
+        }
+
+        function toggleDarkMode() {
+            const html = document.documentElement;
+            const icon = document.getElementById('theme-icon');
+            if (html.classList.contains('dark')) {
+                html.classList.remove('dark');
+                icon.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path>';
+            } else {
+                html.classList.add('dark');
+                icon.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364-6.364l-.707.707M6.343 17.657l-.707.707m12.728 0l-.707-.707M6.343 6.343l-.707-.707M12 8a4 4 0 100 8 4 4 0 000-8z"></path>';
+            }
+        }
+
+        function scrollSection(id, amount) {
+            const container = document.getElementById(id);
+            container.scrollBy({ left: amount, behavior: 'smooth' });
+        }
+
+        // Open Full Gallery with Dynamic Layouts
+        function openFullGallery(type) {
+            const modal = document.getElementById('full-gallery-modal');
+            const modalContent = document.getElementById('modal-content');
+            const title = document.getElementById('modal-title');
+            const container = document.getElementById('modal-dynamic-container');
+            container.innerHTML = '';
+
+            if (type === 'products') {
+                title.innerText = 'All Courses';
+                container.className = 'grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 pb-8';
+
+                productsData.forEach((p, i) => {
+                    let delay = i * 100;
+                    container.innerHTML += `
+                        <div class="bg-white dark:bg-darkCard rounded-apple shadow-premium overflow-hidden border border-black/5 dark:border-white/5 tap-scale opacity-0" style="animation: fadeInScale 0.6s cubic-bezier(0.22, 1, 0.36, 1) forwards ${delay}ms;">
+                            <div class="h-48 overflow-hidden bg-black/5 dark:bg-gray-800">
+                                <img src="${p.img}" class="w-full h-full object-cover transition-transform duration-700 hover:scale-110" onclick="openLightbox('${p.img}')">
+                            </div>
+                            <div class="p-5">
+                                <h3 class="font-bold text-lg mb-1">${p.title}</h3>
+                                <p class="text-appleBlue font-extrabold text-base mb-4">${p.price}</p>
+                                <button onclick="openEnquiryModal('${encodeURIComponent(p.title)}')" class="w-full bg-appleText dark:bg-white dark:text-appleText text-white py-3 rounded-xl font-bold text-xs flex items-center justify-center gap-2 hover:opacity-90 transition-opacity">
+                                    Enquire Now
+                                </button>
+                            </div>
+                        </div>`;
+                });
+            } else {
+                title.innerText = 'Our Gallery';
+                container.className = 'masonry-grid';
+
+                portfolioData.forEach((item, i) => {
+                    let delay = i * 100;
+                    const imgSrc = typeof item === 'string' ? item : item.img;
+                    container.innerHTML += `
+                        <div class="masonry-item rounded-2xl overflow-hidden shadow-soft border border-black/5 dark:border-white/5 cursor-zoom-in" style="animation-delay: ${delay}ms;">
+                            <img src="${imgSrc}" class="w-full transition-transform duration-700 hover:scale-105" onclick="openLightbox('${imgSrc}')">
+                        </div>`;
+                });
+            }
+
+            modal.classList.remove('hidden');
+            setTimeout(() => {
+                modal.classList.replace('opacity-0', 'opacity-100');
+                modalContent.classList.replace('scale-95', 'scale-100');
+                modal.classList.remove('pointer-events-none');
+            }, 10);
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeFullGallery() {
+            const modal = document.getElementById('full-gallery-modal');
+            const modalContent = document.getElementById('modal-content');
+
+            modal.classList.replace('opacity-100', 'opacity-0');
+            modalContent.classList.replace('scale-100', 'scale-95');
+            modal.classList.add('pointer-events-none');
+
+            setTimeout(() => {
+                modal.classList.add('hidden');
+                document.body.style.overflow = 'auto';
+            }, 500);
+        }
+
+        function openLightbox(src) {
+            const lb = document.getElementById('lightbox');
+            const img = document.getElementById('lightbox-img');
+            img.src = src;
+            lb.classList.remove('hidden');
+            lb.classList.add('flex');
+            setTimeout(() => {
+                lb.classList.replace('opacity-0', 'opacity-100');
+                img.classList.replace('scale-95', 'scale-100');
+            }, 10);
+        }
+
+        function closeLightbox() {
+            const lb = document.getElementById('lightbox');
+            const img = document.getElementById('lightbox-img');
+            lb.classList.replace('opacity-100', 'opacity-0');
+            img.classList.replace('scale-100', 'scale-95');
+            setTimeout(() => {
+                lb.classList.add('hidden');
+                lb.classList.remove('flex');
+            }, 300);
+        }
+
+        // Setup Intersection Observer for smooth reveal on scroll
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: "0px 0px -50px 0px"
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('active');
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.reveal, .reveal-group').forEach(el => observer.observe(el));
+
+        // Initial Load Animations & CMS Hydration
+        window.onload = () => {
+            fetchCmsData();
+            setTimeout(() => {
+                const nav = document.querySelector('nav').parentElement;
+                if (nav) {
+                    nav.style.transform = 'translateY(0)';
+                    nav.classList.add('active');
+                }
+            }, 500);
+        };
+
+        // Scroll spy for bottom nav
+        window.addEventListener('scroll', () => {
+            const sections = ['home', 'products', 'gallery', 'pay', 'contact'];
+            let current = 'home';
+            sections.forEach(section => {
+                const element = document.getElementById(section);
+                if (element && element.getBoundingClientRect().top <= 250) current = section;
+            });
+            document.querySelectorAll('nav a').forEach(a => {
+                const isCurrent = a.getAttribute('href') === `#${current}`;
+                a.classList.toggle('text-appleBlue', isCurrent);
+                a.classList.toggle('text-appleSecondary', !isCurrent);
+                a.classList.toggle('dark:text-gray-400', !isCurrent);
+            });
+        });
+
+        function sharePage() {
+            if (navigator.share) {
+                navigator.share({ title: 'Captgains Trading Institute', url: window.location.href });
+            } else {
+                showToast('Link copied to clipboard!');
+            }
+        }
+
+        function showToast(msg) {
+            const toast = document.getElementById('toast');
+            if (!toast) return;
+            toast.innerText = msg;
+            toast.classList.remove('opacity-0', 'translate-y-4');
+            toast.classList.add('opacity-100', 'translate-y-0');
+            setTimeout(() => { toast.classList.add('opacity-0', 'translate-y-4'); }, 3000);
+        }
+
+        // Auto detect system theme
+        if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+            toggleDarkMode();
+        }
+
+        function downloadVCard() {
+            const vCardData = `BEGIN:VCARD\nVERSION:3.0\nFN:Captgains Trading & Training Institute\nORG:Captgains Trading & Training Institute;\nTITLE:Trading & Training Institute\nTEL;TYPE=WORK,VOICE:+917387556786\nEMAIL;TYPE=WORK:captgains.trading@gmail.com\nADR;TYPE=WORK:;;Sahyadri Siddhi Apartment, Tuljainagar;Sangli;Maharashtra;416416;India\nURL:${window.location.href}\nEND:VCARD`;
+
+            const blob = new Blob([vCardData], { type: 'text/vcard' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.style.display = 'none';
+            a.href = url;
+            a.download = 'Captgains.vcf';
+            document.body.appendChild(a);
+            a.click();
+            window.URL.revokeObjectURL(url);
+        }
+    </script>
+</body>
+</html>
