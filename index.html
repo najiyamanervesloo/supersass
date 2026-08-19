@@ -386,8 +386,8 @@
         <section id="products" class="mb-16 reveal">
             <div class="px-8 flex items-center justify-between mb-8">
                 <div>
-                    <h2 class="text-3xl md:text-4xl lg:text-5xl font-bold mb-2">Courses</h2>
-                    <p class="text-xs text-appleSecondary dark:text-gray-400 font-medium tracking-wide">Premium Learning
+                    <h2 class="text-3xl md:text-4xl lg:text-5xl font-bold mb-2">Products</h2>
+                    <p class="text-xs text-appleSecondary dark:text-gray-400 font-medium tracking-wide">Premium Offerings
                     </p>
                 </div>
                 <div class="flex items-center gap-3">
@@ -422,7 +422,7 @@
                     <div class="p-5">
                         <h3 class="font-bold text-lg mb-1">Beginner / Foundation Course</h3>
                         <p class="text-appleBlue font-extrabold text-base mb-4">₹ 10,000</p>
-                        <button onclick="openEnquiryModal('Beginner / Foundation Course')"
+                        <button onclick="openEnquiryModal('Beginner%20%2F%20Foundation%20Course')"
                             class="w-full bg-appleText dark:bg-white dark:text-appleText text-white py-3 rounded-xl font-bold text-xs flex items-center justify-center transition-transform active:scale-95">Enquire
                             Now</button>
                     </div>
@@ -437,7 +437,7 @@
                     <div class="p-5">
                         <h3 class="font-bold text-lg mb-1">Technical Analysis Course</h3>
                         <p class="text-appleBlue font-extrabold text-base mb-4">₹ 20,000</p>
-                        <button onclick="openEnquiryModal('Technical Analysis Course')"
+                        <button onclick="openEnquiryModal('Technical%20Analysis%20Course')"
                             class="w-full bg-appleText dark:bg-white dark:text-appleText text-white py-3 rounded-xl font-bold text-xs flex items-center justify-center transition-transform active:scale-95">Enquire
                             Now</button>
                     </div>
@@ -452,7 +452,7 @@
                     <div class="p-5">
                         <h3 class="font-bold text-lg mb-1 line-clamp-1">Fundamental Analysis & Valuation Course</h3>
                         <p class="text-appleBlue font-extrabold text-base mb-4">₹ 45,000</p>
-                        <button onclick="openEnquiryModal('Fundamental Analysis %26 Valuation Course')"
+                        <button onclick="openEnquiryModal('Fundamental%20Analysis%20%26%20Valuation%20Course')"
                             class="w-full bg-appleText dark:bg-white dark:text-appleText text-white py-3 rounded-xl font-bold text-xs flex items-center justify-center transition-transform active:scale-95">Enquire
                             Now</button>
                     </div>
@@ -465,9 +465,9 @@
                             class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 ease-out">
                     </div>
                     <div class="p-5">
-                        <h3 class="font-bold text-lg mb-1 line-clamp-1">Derivatives & Options Trading Strategies</h3>
+                        <h3 class="font-bold text-lg mb-1 line-clamp-1">Derivatives & Options Course</h3>
                         <p class="text-appleBlue font-extrabold text-base mb-4">₹ 50,000</p>
-                        <button onclick="openEnquiryModal('Derivatives %26 Options Trading Strategies')"
+                        <button onclick="openEnquiryModal('Derivatives%20%26%20Options%20Course')"
                             class="w-full bg-appleText dark:bg-white dark:text-appleText text-white py-3 rounded-xl font-bold text-xs flex items-center justify-center transition-transform active:scale-95">Enquire
                             Now</button>
                     </div>
@@ -994,8 +994,8 @@
         let productsData = [
             { img: 'c1.png', title: 'Beginner / Foundation Course', price: '₹ 10,000' },
             { img: 'c2.png', title: 'Technical Analysis Course', price: '₹ 20,000' },
-            { img: 'c3.png', title: 'Fundamental Analysis & Valuation', price: '₹ 45,000' },
-            { img: 'https://images.unsplash.com/photo-1642543492481-44e81e3914a7?auto=format&fit=crop&w=600&q=80', title: 'Derivatives & Options Trading', price: '₹ 50,000' },
+            { img: 'c3.png', title: 'Fundamental Analysis & Valuation Course', price: '₹ 45,000' },
+            { img: 'https://images.unsplash.com/photo-1642543492481-44e81e3914a7?auto=format&fit=crop&w=600&q=80', title: 'Derivatives & Options Course', price: '₹ 50,000' },
             { img: 'https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?auto=format&fit=crop&w=600&q=80', title: 'Certification Course', price: '₹ 60,000' }
         ];
 
@@ -1242,19 +1242,34 @@
 
         // PUBLIC COURSE ENQUIRY MODAL HANDLERS
         function openEnquiryModal(courseName) {
-            const decoded = courseName ? decodeURIComponent(courseName) : 'General Enquiry';
-            document.getElementById('enq-course-name').value = decoded;
-            document.getElementById('enq-course-display').value = decoded;
+            let decoded = 'General Enquiry';
+            if (courseName) {
+                try {
+                    decoded = decodeURIComponent(courseName);
+                } catch (e) {
+                    decoded = courseName;
+                }
+            }
+            const nameField = document.getElementById('enq-course-name');
+            const displayField = document.getElementById('enq-course-display');
+            if (nameField) nameField.value = decoded;
+            if (displayField) displayField.value = decoded;
 
             const modal = document.getElementById('enquiry-public-modal');
-            modal.classList.remove('hidden');
-            modal.classList.add('flex');
+            if (modal) {
+                modal.classList.remove('hidden');
+                modal.classList.add('flex');
+                modal.style.display = 'flex';
+            }
         }
 
         function closeEnquiryModal() {
             const modal = document.getElementById('enquiry-public-modal');
-            modal.classList.add('hidden');
-            modal.classList.remove('flex');
+            if (modal) {
+                modal.classList.add('hidden');
+                modal.classList.remove('flex');
+                modal.style.display = 'none';
+            }
         }
 
         function openWhatsAppEnquiry() {
@@ -1340,7 +1355,7 @@
             container.innerHTML = '';
 
             if (type === 'products') {
-                title.innerText = 'All Courses';
+                title.innerText = 'All Products';
                 container.className = 'grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 pb-8';
 
                 productsData.forEach((p, i) => {
