@@ -123,11 +123,44 @@ function writeSuperAdminDB(data) {
     } catch (err) { console.error('Error writing SuperAdmin DB:', err); return false; }
 }
 
+// Case-insensitive client finder with auto-healing fallback
+function findClient(rawSubname) {
+    if (!rawSubname) return null;
+    const cleanSubname = String(rawSubname).toLowerCase().trim().replace(/\/$/, '');
+    const saDB = readSuperAdminDB();
+    
+    // 1. Match from superadmin registry (case insensitive)
+    let client = (saDB.clients || []).find(c => c && c.subname && c.subname.toLowerCase().trim() === cleanSubname);
+    
+    // 2. Auto-healing: If DB exists on disk but missing from registry
+    if (!client && fs.existsSync(getClientDBPath(cleanSubname))) {
+        const clientDB = readClientDB(cleanSubname);
+        const bizName = (clientDB && clientDB.business_profile && clientDB.business_profile.name) ? clientDB.business_profile.name : cleanSubname;
+        client = {
+            id: 'cli_auto_' + Date.now(),
+            subname: cleanSubname,
+            businessName: bizName,
+            ownerEmail: 'admin@' + cleanSubname + '.com',
+            plan: 'Standard',
+            status: 'Active',
+            createdAt: new Date().toISOString().substring(0, 10),
+            shareableLink: `/c/${cleanSubname}`,
+            adminLink: `/c/${cleanSubname}/admin`
+        };
+        if (!saDB.clients) saDB.clients = [];
+        saDB.clients.push(client);
+        writeSuperAdminDB(saDB);
+    }
+    
+    return client;
+}
+
 // ==========================================
 // DB HELPERS - CLIENT-SPECIFIC
 // ==========================================
 function getClientDBPath(subname) {
-    return path.join(CLIENTS_DIR, subname, 'db.json');
+    const clean = String(subname || '').toLowerCase().trim();
+    return path.join(CLIENTS_DIR, clean, 'db.json');
 }
 
 function readClientDB(subname) {
@@ -218,8 +251,7 @@ function authenticateClientToken(subname) {
 // Validate client is active
 function validateClient(subname) {
     return (req, res, next) => {
-        const saDB = readSuperAdminDB();
-        const client = (saDB.clients || []).find(c => c.subname === subname);
+        const client = findClient(subname);
         if (!client) return res.status(404).json({ error: 'Client site not found' });
         if (client.status === 'Suspended') {
             return res.status(403).json({ error: 'This client site has been suspended.' });
@@ -656,8 +688,7 @@ app.get('/api/superadmin/dashboard', authenticateSuperAdmin, (req, res) => {
 // Public data for client site
 app.get('/c/:subname/api/public-data', (req, res) => {
     const { subname } = req.params;
-    const saDB = readSuperAdminDB();
-    const client = (saDB.clients || []).find(c => c.subname === subname);
+    const client = findClient(subname);
     if (!client) return res.status(404).json({ error: 'Client not found' });
     if (client.status === 'Suspended') return res.status(403).json({ error: 'This site has been suspended.' });
 
@@ -1043,12 +1074,11 @@ app.get('/c/:subname/admin*', (req, res) => {
 });
 
 // Client Public Site — serve index.html but it will detect /c/:subname context
-app.get('/c/:subname', (req, res) => {
+app.get(['/c/:subname', '/c/:subname/'], (req, res) => {
     const { subname } = req.params;
-    const saDB = readSuperAdminDB();
-    const client = (saDB.clients || []).find(c => c.subname === subname);
-    if (!client) return res.status(404).send('<h2>Client site not found.</h2>');
-    if (client.status === 'Suspended') return res.status(403).send('<h2>This client site has been suspended.</h2>');
+    const client = findClient(subname);
+    if (!client) return res.status(404).send('<h2 style="font-family:sans-serif;text-align:center;margin-top:20%;">Client site not found.</h2>');
+    if (client.status === 'Suspended') return res.status(403).send('<h2 style="font-family:sans-serif;text-align:center;margin-top:20%;">This client site has been suspended.</h2>');
     res.sendFile(path.join(__dirname, 'index.html'));
 });
 
