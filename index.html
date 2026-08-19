@@ -975,7 +975,7 @@
         const _pathParts = window.location.pathname.split('/').filter(Boolean);
         const _isClientSite = _pathParts[0] === 'c' && _pathParts[1];
         const _clientSubname = _isClientSite ? _pathParts[1] : null;
-        const _baseOrigin = (window.location.protocol.startsWith('http') && window.location.port === '3000')
+        const _baseOrigin = window.location.protocol.startsWith('http')
             ? '' : 'http://localhost:3000';
         const PUBLIC_API_URL = _isClientSite
             ? `${_baseOrigin}/c/${_clientSubname}/api`
