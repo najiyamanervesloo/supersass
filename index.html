@@ -1015,12 +1015,16 @@
                 // 1. Business Profile
                 if (data.businessProfile) {
                     const bp = data.businessProfile;
+                    const titleText = bp.heroHeading || bp.name;
+                    const subtitleText = bp.heroDescription || bp.tagline;
+
+                    if (bp.name) document.title = `${bp.name} | Digital Business Card`;
                     if (bp.logo) document.getElementById('hero-logo-img').src = bp.logo;
-                    if (bp.heroHeading) document.getElementById('hero-title').innerText = bp.heroHeading;
-                    if (bp.heroDescription) document.getElementById('hero-subtitle').innerHTML = bp.heroDescription;
-                    if (bp.heroCtaText) document.getElementById('hero-call-btn-text').innerText = bp.heroCtaText;
-                    if (bp.heroCtaLink) document.getElementById('hero-call-btn').href = bp.heroCtaLink;
-                    if (bp.status) document.getElementById('hero-status-badge').innerText = bp.status === 'Active' ? 'Open' : 'Closed';
+                    if (titleText) document.getElementById('hero-title').innerText = titleText;
+                    if (subtitleText) document.getElementById('hero-subtitle').innerHTML = subtitleText;
+                    if (bp.heroCtaText && document.getElementById('hero-call-btn-text')) document.getElementById('hero-call-btn-text').innerText = bp.heroCtaText;
+                    if (bp.heroCtaLink && document.getElementById('hero-call-btn')) document.getElementById('hero-call-btn').href = bp.heroCtaLink;
+                    if (bp.status && document.getElementById('hero-status-badge')) document.getElementById('hero-status-badge').innerText = bp.status === 'Active' ? 'Open' : 'Closed';
                 }
 
                 // 2. Courses
