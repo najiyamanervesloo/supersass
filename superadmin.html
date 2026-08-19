@@ -358,9 +358,9 @@
                         <div>
                             <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">Subname (URL Path) *</label>
                             <div class="relative">
-                                <span class="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 text-xs font-mono font-bold">/c/</span>
+                                <span class="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 text-xs font-mono font-bold">/</span>
                                 <input type="text" id="new-subname" required placeholder="tradewise"
-                                    class="w-full pl-10 pr-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm font-bold text-blue-700 font-mono focus:outline-none focus:ring-2 focus:ring-blue-600 focus:bg-white transition-all placeholder-slate-400"
+                                    class="w-full pl-7 pr-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm font-bold text-blue-700 font-mono focus:outline-none focus:ring-2 focus:ring-blue-600 focus:bg-white transition-all placeholder-slate-400"
                                     oninput="this.value=this.value.toLowerCase().replace(/[^a-z0-9-]/g,'-')">
                             </div>
                             <p class="text-slate-400 text-[11px] font-medium mt-1">Lowercase letters, numbers, and hyphens only.</p>
@@ -403,7 +403,7 @@
                         </div>
                         <div class="flex-1 min-w-0">
                             <p class="text-[10px] text-blue-700 font-bold uppercase tracking-wider mb-0.5">DYNAMIC URL PREVIEW</p>
-                            <p id="link-preview" class="text-xs text-slate-800 font-bold font-mono truncate">yourdomain.com/c/<span class="text-blue-600">subname</span></p>
+                            <p id="link-preview" class="text-xs text-slate-800 font-bold font-mono truncate">yourdomain.com/<span class="text-blue-600">subname</span></p>
                         </div>
                     </div>
 
@@ -682,7 +682,7 @@
                         <button onclick="openShareModal('${escHtml(c.subname)}')" class="p-1.5 text-slate-400 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-colors" title="Share Links">
                             <i data-lucide="share-2" class="w-4 h-4"></i>
                         </button>
-                        <a href="/c/${escHtml(c.subname)}" target="_blank" class="p-1.5 text-slate-400 hover:text-emerald-600 hover:bg-emerald-50 rounded-lg transition-colors" title="Open Public Site">
+                        <a href="/${escHtml(c.subname)}" target="_blank" class="p-1.5 text-slate-400 hover:text-emerald-600 hover:bg-emerald-50 rounded-lg transition-colors" title="Open Public Site">
                             <i data-lucide="external-link" class="w-4 h-4"></i>
                         </a>
                     </div>
@@ -699,8 +699,8 @@
             lucide.createIcons(); return;
         }
         tbody.innerHTML = clientsData.map(c => {
-            const pubLink = `${window.location.origin}/c/${c.subname}`;
-            const adminLink = `${window.location.origin}/c/${c.subname}/admin`;
+            const pubLink = `${window.location.origin}/${c.subname}`;
+            const adminLink = `${window.location.origin}/${c.subname}/admin`;
             return `
             <tr class="hover:bg-blue-50/40 transition-colors">
                 <td class="px-6 py-4">
@@ -709,7 +709,7 @@
                 </td>
                 <td class="px-4 py-4">
                     <div class="flex items-center gap-2">
-                        <code class="text-blue-700 text-[11px] font-mono bg-blue-50 px-2 py-0.5 rounded border border-blue-100 font-bold">/c/${escHtml(c.subname)}</code>
+                        <code class="text-blue-700 text-[11px] font-mono bg-blue-50 px-2 py-0.5 rounded border border-blue-100 font-bold">/${escHtml(c.subname)}</code>
                         <button onclick="copyText('${pubLink}')" class="copy-btn text-slate-400 hover:text-slate-800 transition-colors" title="Copy Link">
                             <i data-lucide="copy" class="w-3.5 h-3.5"></i>
                         </button>
@@ -804,7 +804,7 @@
                 successBox.classList.remove('hidden');
                 lucide.createIcons();
                 document.getElementById('create-client-form').reset();
-                document.getElementById('link-preview').innerHTML = `${window.location.origin}/c/<span class="text-blue-600 font-bold">subname</span>`;
+                document.getElementById('link-preview').innerHTML = `${window.location.origin}/<span class="text-blue-600 font-bold">subname</span>`;
                 loadDashboard();
                 loadClients();
                 showToast('Client organization created!');
@@ -883,8 +883,8 @@
 
     // ── Share Modal ────────────────────────────────────────────────────
     function openShareModal(subname) {
-        const pubLink   = `${window.location.origin}/c/${subname}`;
-        const adminLink = `${window.location.origin}/c/${subname}/admin`;
+        const pubLink   = `${window.location.origin}/${subname}`;
+        const adminLink = `${window.location.origin}/${subname}/admin`;
         document.getElementById('share-public-link').textContent  = pubLink;
         document.getElementById('share-admin-link').textContent   = adminLink;
         document.getElementById('share-open-site').href   = pubLink;
