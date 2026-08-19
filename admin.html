@@ -992,7 +992,7 @@
         const _adminPathParts = window.location.pathname.split('/').filter(Boolean);
         const _adminIsClient = _adminPathParts[0] === 'c' && _adminPathParts[1];
         const _adminSubname = _adminIsClient ? _adminPathParts[1] : null;
-        const _adminBaseOrigin = (window.location.protocol.startsWith('http') && window.location.port === '3000')
+        const _adminBaseOrigin = window.location.protocol.startsWith('http')
             ? '' : 'http://localhost:3000';
         const API_URL = _adminIsClient
             ? `${_adminBaseOrigin}/c/${_adminSubname}/api`
