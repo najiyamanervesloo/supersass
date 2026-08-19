@@ -155,8 +155,8 @@ function findClient(rawSubname) {
             plan: 'Standard',
             status: 'Active',
             createdAt: new Date().toISOString().substring(0, 10),
-            shareableLink: `/c/${cleanSubname}`,
-            adminLink: `/c/${cleanSubname}/admin`
+            shareableLink: `/${cleanSubname}`,
+            adminLink: `/${cleanSubname}/admin`
         };
         if (!saDB.clients) saDB.clients = [];
         saDB.clients.push(client);
@@ -570,6 +570,8 @@ app.get('/api/superadmin/clients', authenticateSuperAdmin, (req, res) => {
         const clientDB = readClientDB(client.subname);
         return {
             ...client,
+            shareableLink: `/${client.subname}`,
+            adminLink: `/${client.subname}/admin`,
             stats: clientDB ? clientDB.stats || {} : {},
             enquiriesCount: clientDB ? (clientDB.enquiries || []).length : 0,
             newEnquiries: clientDB ? (clientDB.enquiries || []).filter(e => e.status === 'New').length : 0,
@@ -632,8 +634,8 @@ app.post('/api/superadmin/clients', authenticateSuperAdmin, (req, res) => {
         plan: plan || 'Standard',
         status: 'Active',
         createdAt: new Date().toISOString().substring(0, 10),
-        shareableLink: `/c/${slug}`,
-        adminLink: `/c/${slug}/admin`
+        shareableLink: `/${slug}`,
+        adminLink: `/${slug}/admin`
     };
     if (!saDB.clients) saDB.clients = [];
     saDB.clients.push(newClient);
