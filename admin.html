@@ -716,18 +716,39 @@
                     <!-- TAB 9: ACTION BUTTONS -->
                     <!-- ========================================== -->
                     <div id="tab-action-buttons" class="tab-content hidden space-y-6">
-                        <div class="bg-white p-8 rounded-2xl border border-slate-200/80 shadow-sm max-w-4xl">
-                            <div class="border-b border-slate-100 pb-6 mb-6">
+                        <div class="bg-white p-8 rounded-2xl border border-slate-200/80 shadow-sm max-w-4xl space-y-6">
+                            <div class="border-b border-slate-100 pb-6">
                                 <h3 class="text-base font-bold text-slate-900">Action Buttons & Social Links</h3>
                                 <p class="text-xs text-slate-500 mt-1">Configure quick action grid (Call, WhatsApp, Pay, Location, Share) and social media handles.</p>
                             </div>
+                            
                             <div id="action-buttons-list" class="space-y-4">
                                 <!-- Action button configs -->
                             </div>
-                            <div class="flex justify-end pt-6">
+
+                            <!-- Social Media Links Section -->
+                            <div class="border-t border-slate-100 pt-6 space-y-4">
+                                <h4 class="text-xs font-bold text-slate-900 uppercase tracking-wider">Social Media Handles</h4>
+                                <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                                    <div>
+                                        <label class="block text-xs font-semibold text-slate-600 mb-1">Instagram URL</label>
+                                        <input type="text" id="social-instagram" class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-mono" placeholder="https://instagram.com/yourhandle">
+                                    </div>
+                                    <div>
+                                        <label class="block text-xs font-semibold text-slate-600 mb-1">Facebook URL</label>
+                                        <input type="text" id="social-facebook" class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-mono" placeholder="https://facebook.com/yourpage">
+                                    </div>
+                                    <div>
+                                        <label class="block text-xs font-semibold text-slate-600 mb-1">YouTube Channel URL</label>
+                                        <input type="text" id="social-youtube" class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-mono" placeholder="https://youtube.com/@yourchannel">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="flex justify-end pt-4">
                                 <button onclick="saveActionButtons()" class="px-6 py-3 bg-brand-600 hover:bg-brand-700 text-white font-bold text-xs rounded-xl shadow-md transition-colors flex items-center gap-2">
                                     <i data-lucide="save" class="w-4 h-4"></i>
-                                    <span>Save Action Buttons</span>
+                                    <span>Save Action Buttons & Social Links</span>
                                 </button>
                             </div>
                         </div>
@@ -1798,39 +1819,63 @@
         }
 
         // --- ACTION BUTTONS & SOCIAL ---
+        const DEFAULT_ACTION_BUTTONS = [
+            { id: 'act_call', label: 'Call', icon: 'phone', link: 'tel:', status: 'Active', order: 1 },
+            { id: 'act_wa', label: 'WhatsApp', icon: 'message-circle', link: 'https://wa.me/', status: 'Active', order: 2 },
+            { id: 'act_loc', label: 'Location', icon: 'map-pin', link: '#contact', status: 'Active', order: 3 },
+            { id: 'act_pay', label: 'Pay', icon: 'credit-card', link: '#pay', status: 'Active', order: 4 },
+            { id: 'act_share', label: 'Share', icon: 'share-2', link: 'javascript:sharePage()', status: 'Active', order: 5 },
+            { id: 'act_review', label: 'Review', icon: 'star', link: '#contact', status: 'Active', order: 6 }
+        ];
+
         async function renderActionButtonsTab() {
             const res = await fetch(`${API_URL}/admin/action-buttons`, { headers: { 'Authorization': `Bearer ${authToken}` } });
             const data = await res.json();
-            cmsState.actionButtons = data.actionButtons || [];
+            cmsState.actionButtons = (data.actionButtons && data.actionButtons.length) ? data.actionButtons : DEFAULT_ACTION_BUTTONS;
+            cmsState.socialLinks = data.socialLinks || {};
 
             const container = document.getElementById('action-buttons-list');
-            container.innerHTML = cmsState.actionButtons.map((btn, idx) => `
-                <div class="flex items-center gap-4 p-4 bg-slate-50 border border-slate-200 rounded-xl">
-                    <div class="w-8 h-8 rounded-lg bg-white border border-slate-200 flex items-center justify-center font-bold text-xs">${idx + 1}</div>
-                    <input type="text" value="${btn.label}" id="btn-label-${idx}" class="w-32 px-3 py-1.5 bg-white border border-slate-200 rounded-lg text-xs font-bold">
-                    <input type="text" value="${btn.link}" id="btn-link-${idx}" class="flex-1 px-3 py-1.5 bg-white border border-slate-200 rounded-lg text-xs font-mono">
-                    <select id="btn-status-${idx}" class="px-3 py-1.5 bg-white border border-slate-200 rounded-lg text-xs font-bold">
-                        <option value="Active" ${btn.status === 'Active' ? 'selected' : ''}>Active</option>
-                        <option value="Inactive" ${btn.status === 'Inactive' ? 'selected' : ''}>Inactive</option>
-                    </select>
-                </div>
-            `).join('');
+            if (container) {
+                container.innerHTML = cmsState.actionButtons.map((btn, idx) => `
+                    <div class="flex flex-col sm:flex-row items-start sm:items-center gap-3 p-4 bg-slate-50 border border-slate-200 rounded-xl">
+                        <div class="w-7 h-7 rounded-lg bg-white border border-slate-200 flex items-center justify-center font-bold text-xs shrink-0">${idx + 1}</div>
+                        <input type="text" value="${btn.label || ''}" id="btn-label-${idx}" placeholder="Button Label" class="w-full sm:w-36 px-3 py-2 bg-white border border-slate-200 rounded-lg text-xs font-bold">
+                        <input type="text" value="${btn.link || ''}" id="btn-link-${idx}" placeholder="URL / Link Target" class="flex-1 w-full px-3 py-2 bg-white border border-slate-200 rounded-lg text-xs font-mono">
+                        <select id="btn-status-${idx}" class="w-full sm:w-auto px-3 py-2 bg-white border border-slate-200 rounded-lg text-xs font-bold">
+                            <option value="Active" ${btn.status === 'Active' ? 'selected' : ''}>Active</option>
+                            <option value="Inactive" ${btn.status === 'Inactive' ? 'selected' : ''}>Inactive</option>
+                        </select>
+                    </div>
+                `).join('');
+            }
+
+            // Populate Social links
+            const soc = cmsState.socialLinks;
+            if (document.getElementById('social-instagram')) document.getElementById('social-instagram').value = soc.instagram || '';
+            if (document.getElementById('social-facebook')) document.getElementById('social-facebook').value = soc.facebook || '';
+            if (document.getElementById('social-youtube')) document.getElementById('social-youtube').value = soc.youtube || '';
         }
 
         async function saveActionButtons() {
-            const updated = cmsState.actionButtons.map((btn, idx) => ({
+            const updatedButtons = (cmsState.actionButtons || DEFAULT_ACTION_BUTTONS).map((btn, idx) => ({
                 ...btn,
-                label: document.getElementById(`btn-label-${idx}`).value,
-                link: document.getElementById(`btn-link-${idx}`).value,
-                status: document.getElementById(`btn-status-${idx}`).value
+                label: document.getElementById(`btn-label-${idx}`) ? document.getElementById(`btn-label-${idx}`).value : btn.label,
+                link: document.getElementById(`btn-link-${idx}`) ? document.getElementById(`btn-link-${idx}`).value : btn.link,
+                status: document.getElementById(`btn-status-${idx}`) ? document.getElementById(`btn-status-${idx}`).value : btn.status
             }));
+            const updatedSocial = {
+                instagram: document.getElementById('social-instagram') ? document.getElementById('social-instagram').value : '',
+                facebook: document.getElementById('social-facebook') ? document.getElementById('social-facebook').value : '',
+                youtube: document.getElementById('social-youtube') ? document.getElementById('social-youtube').value : ''
+            };
             const res = await fetch(`${API_URL}/admin/action-buttons`, {
                 method: 'PUT',
                 headers: { 'Authorization': `Bearer ${authToken}`, 'Content-Type': 'application/json' },
-                body: JSON.stringify({ actionButtons: updated })
+                body: JSON.stringify({ actionButtons: updatedButtons, socialLinks: updatedSocial })
             });
             if (res.ok) {
-                showToast('Action buttons updated!');
+                showToast('Action buttons & Social links updated!');
+                renderActionButtonsTab();
             }
         }
 
