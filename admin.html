@@ -1182,6 +1182,7 @@
             document.getElementById('page-title').innerText = titleMap[tabId] || 'Admin Panel';
 
             // Load tab specific data
+            if (tabId === 'profile') renderProfileTab();
             if (tabId === 'courses') renderCoursesTab();
             if (tabId === 'expertise') renderExpertiseTab();
             if (tabId === 'gallery') renderGalleryTab();
@@ -1234,9 +1235,8 @@
             }
         }
 
-        // ── SIDEBAR BRAND UPDATER ───────────────────────────────────────────
-        // Fetches the business profile and updates the sidebar brand name live.
-        // Called after login and after saving business profile.
+        // ── SIDEBAR BRAND UPDATER & PROFILE PRE-FILL ─────────────────────
+        // Fetches the business profile, updates sidebar brand name and pre-populates form fields.
         async function updateSidebarBrand() {
             try {
                 const res = await fetch(`${API_URL}/admin/business-profile`, {
@@ -1247,8 +1247,19 @@
                 const brandName = p.name || (_adminIsClient ? _adminSubname : 'Captgains');
                 const el = document.getElementById('sidebar-brand-name');
                 if (el) el.textContent = brandName;
-                // Also update the browser tab title
                 if (_adminIsClient) document.title = `${brandName} Admin`;
+
+                // Pre-populate profile form fields
+                if (document.getElementById('prof-name')) document.getElementById('prof-name').value = p.name || '';
+                if (document.getElementById('prof-category')) document.getElementById('prof-category').value = p.category || '';
+                if (document.getElementById('prof-tagline')) document.getElementById('prof-tagline').value = p.tagline || '';
+                if (document.getElementById('prof-logo-url')) document.getElementById('prof-logo-url').value = p.logo || '';
+                if (document.getElementById('prof-logo-preview')) document.getElementById('prof-logo-preview').src = p.logo || 'Captgains logo.png';
+                if (document.getElementById('prof-hero-heading')) document.getElementById('prof-hero-heading').value = p.heroHeading || '';
+                if (document.getElementById('prof-hero-desc')) document.getElementById('prof-hero-desc').value = p.heroDescription || '';
+                if (document.getElementById('prof-hero-cta-text')) document.getElementById('prof-hero-cta-text').value = p.heroCtaText || '';
+                if (document.getElementById('prof-hero-cta-link')) document.getElementById('prof-hero-cta-link').value = p.heroCtaLink || '';
+                if (document.getElementById('prof-status')) document.getElementById('prof-status').value = p.status || 'Active';
             } catch (e) { /* silent fail */ }
         }
 
