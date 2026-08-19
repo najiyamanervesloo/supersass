@@ -995,11 +995,37 @@ app.get('/c/:subname/api/admin/contact', (req, res) => {
     const { subname } = req.params;
     clientAuth(subname, req, res, () => { const db = readClientDB(subname); res.json(db ? db.contact_details || {} : {}); });
 });
+function cleanMapUrlBackend(input, address) {
+    if (!input || typeof input !== 'string') {
+        const query = address ? encodeURIComponent(address) : '';
+        return query ? `https://maps.google.com/maps?q=${query}&output=embed` : '';
+    }
+    let url = input.trim();
+    if (url.includes('<iframe')) {
+        const match = url.match(/src=["']([^"']+)["']/i);
+        if (match && match[1]) url = match[1];
+    }
+    url = url.replace(/&amp;/g, '&');
+    if (url.includes('google.com/maps/embed') || url.includes('maps.google.com/maps/embed')) return url;
+    if (url.includes('google.com/maps') || url.includes('maps.google.com')) {
+        if (!url.includes('output=embed')) url += (url.includes('?') ? '&' : '?') + 'output=embed';
+        return url;
+    }
+    if (url && !url.startsWith('http')) {
+        return `https://maps.google.com/maps?q=${encodeURIComponent(url)}&output=embed`;
+    }
+    return url;
+}
+
 app.put('/c/:subname/api/admin/contact', (req, res) => {
     const { subname } = req.params;
     clientAuth(subname, req, res, () => {
         const db = readClientDB(subname); if (!db) return res.status(404).json({ error: 'Not found' });
-        db.contact_details = { ...db.contact_details, ...req.body };
+        const updated = { ...req.body };
+        if (updated.mapUrl !== undefined) {
+            updated.mapUrl = cleanMapUrlBackend(updated.mapUrl, updated.address || db.contact_details?.address);
+        }
+        db.contact_details = { ...db.contact_details, ...updated };
         logActivity(db, req.user.name, req.user.role, 'Updated contact details', 'Contact Details'); writeClientDB(subname, db);
         res.json({ success: true, contact: db.contact_details });
     });
