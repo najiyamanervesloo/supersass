@@ -790,8 +790,8 @@
             });
             const data = await res.json();
             if (res.ok) {
-                const pubLink = `${window.location.origin}/c/${payload.subname}`;
-                const adminLink = `${window.location.origin}/c/${payload.subname}/admin`;
+                const pubLink = `${window.location.origin}/${payload.subname}`;
+                const adminLink = `${window.location.origin}/${payload.subname}/admin`;
                 successBox.innerHTML = `
                     <div class="flex items-start gap-3">
                         <div class="p-1.5 rounded-lg bg-emerald-600 text-white mt-0.5"><i data-lucide="check" class="w-4 h-4"></i></div>
