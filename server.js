@@ -752,11 +752,11 @@ app.post('/c/:subname/api/enquiries', (req, res) => {
 
 // Client admin login
 app.post('/c/:subname/api/auth/login', (req, res) => {
-    const { subname } = req.params;
+    const cleanSubname = String(req.params.subname || '').toLowerCase().trim().replace(/\/$/, '');
     const { email, password } = req.body;
     if (!email || !password) return res.status(400).json({ error: 'Email and password required' });
 
-    const db = readClientDB(subname);
+    const db = readClientDB(cleanSubname);
     if (!db) return res.status(404).json({ error: 'Client not found' });
 
     const users = db.admin_users || [];
@@ -769,17 +769,17 @@ app.post('/c/:subname/api/auth/login', (req, res) => {
 
     user.lastLogin = new Date().toISOString().replace('T', ' ').substring(0, 16);
     logActivity(db, user.name, user.role, 'User logged into Client Admin Panel', 'Auth');
-    writeClientDB(subname, db);
+    writeClientDB(cleanSubname, db);
 
-    const token = jwt.sign({ id: user.id, email: user.email, role: user.role, name: user.name, clientSubname: subname }, JWT_SECRET + '_' + subname, { expiresIn: '24h' });
+    const token = jwt.sign({ id: user.id, email: user.email, role: user.role, name: user.name, clientSubname: cleanSubname }, JWT_SECRET + '_' + cleanSubname, { expiresIn: '24h' });
     res.json({ success: true, token, user: { id: user.id, name: user.name, email: user.email, role: user.role } });
 });
 
 app.get('/c/:subname/api/auth/me', (req, res) => {
-    const { subname } = req.params;
+    const cleanSubname = String(req.params.subname || '').toLowerCase().trim().replace(/\/$/, '');
     const token = (req.headers['authorization'] || '').split(' ')[1];
     if (!token) return res.status(401).json({ error: 'Token required' });
-    jwt.verify(token, JWT_SECRET + '_' + subname, (err, user) => {
+    jwt.verify(token, JWT_SECRET + '_' + cleanSubname, (err, user) => {
         if (err) return res.status(403).json({ error: 'Invalid token' });
         res.json({ success: true, user });
     });
@@ -787,19 +787,19 @@ app.get('/c/:subname/api/auth/me', (req, res) => {
 
 // Client upload
 app.post('/c/:subname/api/upload', (req, res, next) => {
-    const { subname } = req.params;
+    const cleanSubname = String(req.params.subname || '').toLowerCase().trim().replace(/\/$/, '');
     const token = (req.headers['authorization'] || '').split(' ')[1];
     if (!token) return res.status(401).json({ error: 'Token required' });
-    jwt.verify(token, JWT_SECRET + '_' + subname, (err, user) => {
+    jwt.verify(token, JWT_SECRET + '_' + cleanSubname, (err, user) => {
         if (err) return res.status(403).json({ error: 'Invalid token' });
         req.user = user;
-        const uploader = createClientUploader(subname);
+        const uploader = createClientUploader(cleanSubname);
         uploader.single('image')(req, res, (uploadErr) => {
             if (uploadErr) return res.status(400).json({ error: uploadErr.message });
             if (!req.file) return res.status(400).json({ error: 'No image uploaded' });
-            const relativePath = `/uploads/clients/${subname}/` + req.file.filename;
-            const db = readClientDB(subname);
-            if (db) { logActivity(db, user.name, user.role, `Uploaded: ${req.file.originalname}`, 'Gallery'); writeClientDB(subname, db); }
+            const relativePath = `/uploads/clients/${cleanSubname}/` + req.file.filename;
+            const db = readClientDB(cleanSubname);
+            if (db) { logActivity(db, user.name, user.role, `Uploaded: ${req.file.originalname}`, 'Gallery'); writeClientDB(cleanSubname, db); }
             res.json({ success: true, filePath: relativePath, originalName: req.file.originalname, sizeName: (req.file.size / 1024).toFixed(1) + ' KB' });
         });
     });
@@ -808,12 +808,14 @@ app.post('/c/:subname/api/upload', (req, res, next) => {
 // ==========================================
 // CLIENT ADMIN CMS ENDPOINTS (generic helper)
 // ==========================================
-function clientAuth(subname, req, res, next) {
+function clientAuth(rawSubname, req, res, next) {
+    const cleanSubname = String(rawSubname || '').toLowerCase().trim().replace(/\/$/, '');
     const token = (req.headers['authorization'] || '').split(' ')[1];
     if (!token) return res.status(401).json({ error: 'Token required' });
-    jwt.verify(token, JWT_SECRET + '_' + subname, (err, user) => {
+    jwt.verify(token, JWT_SECRET + '_' + cleanSubname, (err, user) => {
         if (err) return res.status(403).json({ error: 'Invalid token' });
         req.user = user;
+        req.cleanSubname = cleanSubname;
         next();
     });
 }
