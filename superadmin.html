@@ -625,6 +625,11 @@
     async function loadDashboard() {
         try {
             const res = await fetch(`${BASE}/api/superadmin/dashboard`, { headers: { Authorization: `Bearer ${saToken}` } });
+            if (res.status === 401 || res.status === 403) {
+                handleLogout();
+                return;
+            }
+            if (!res.ok) return;
             const d = await res.json();
             document.getElementById('kpi-total-clients').textContent   = d.totalClients || 0;
             document.getElementById('kpi-active-clients').textContent  = d.activeClients || 0;
@@ -638,10 +643,17 @@
     async function loadClients() {
         try {
             const res = await fetch(`${BASE}/api/superadmin/clients`, { headers: { Authorization: `Bearer ${saToken}` } });
+            if (res.status === 401 || res.status === 403) {
+                handleLogout();
+                return;
+            }
+            if (!res.ok) return;
             const data = await res.json();
-            clientsData = data.clients || [];
-            renderClientsTable();
-            renderClientsFullTable();
+            if (data && Array.isArray(data.clients)) {
+                clientsData = data.clients;
+                renderClientsTable();
+                renderClientsFullTable();
+            }
         } catch (err) { console.error('Clients load error:', err); }
     }
 
