@@ -22,12 +22,15 @@ app.use(express.json({ limit: '20mb' }));
 app.use(express.urlencoded({ extended: true, limit: '20mb' }));
 
 // Paths
-const DATA_DIR = path.join(__dirname, 'data');
+const REPO_DATA_DIR = path.join(__dirname, 'data');
+const DATA_DIR = process.env.DATA_DIR || process.env.RENDER_DISK_PATH || REPO_DATA_DIR;
+const UPLOADS_DIR = process.env.UPLOADS_DIR || path.join(DATA_DIR, 'uploads');
 const DB_FILE = path.join(DATA_DIR, 'db.json');
 const SUPERADMIN_FILE = path.join(DATA_DIR, 'superadmin.json');
-const CLIENT_TEMPLATE_FILE = path.join(DATA_DIR, 'client-template.json');
+const CLIENT_TEMPLATE_FILE = fs.existsSync(path.join(DATA_DIR, 'client-template.json')) 
+    ? path.join(DATA_DIR, 'client-template.json') 
+    : path.join(REPO_DATA_DIR, 'client-template.json');
 const CLIENTS_DIR = path.join(DATA_DIR, 'clients');
-const UPLOADS_DIR = path.join(__dirname, 'uploads');
 const CLIENT_UPLOADS_DIR = path.join(UPLOADS_DIR, 'clients');
 
 // ── Clean Tenant URL Middleware ───────────────────────────────────────────
@@ -46,6 +49,24 @@ if (!fs.existsSync(DATA_DIR)) fs.mkdirSync(DATA_DIR, { recursive: true });
 if (!fs.existsSync(UPLOADS_DIR)) fs.mkdirSync(UPLOADS_DIR, { recursive: true });
 if (!fs.existsSync(CLIENTS_DIR)) fs.mkdirSync(CLIENTS_DIR, { recursive: true });
 if (!fs.existsSync(CLIENT_UPLOADS_DIR)) fs.mkdirSync(CLIENT_UPLOADS_DIR, { recursive: true });
+
+// Auto-seed persistent DATA_DIR if initialized in external folder (e.g. Render Persistent Disk)
+if (DATA_DIR !== REPO_DATA_DIR && fs.existsSync(REPO_DATA_DIR)) {
+    try {
+        if (!fs.existsSync(DB_FILE) && fs.existsSync(path.join(REPO_DATA_DIR, 'db.json'))) {
+            fs.copyFileSync(path.join(REPO_DATA_DIR, 'db.json'), DB_FILE);
+        }
+        if (!fs.existsSync(SUPERADMIN_FILE) && fs.existsSync(path.join(REPO_DATA_DIR, 'superadmin.json'))) {
+            fs.copyFileSync(path.join(REPO_DATA_DIR, 'superadmin.json'), SUPERADMIN_FILE);
+        }
+        const repoClients = path.join(REPO_DATA_DIR, 'clients');
+        if (fs.existsSync(repoClients)) {
+            fs.cpSync(repoClients, CLIENTS_DIR, { recursive: true, errorOnExist: false });
+        }
+    } catch (e) {
+        console.error('Seed data copy error:', e);
+    }
+}
 
 // Serve static uploads
 app.use('/uploads', express.static(UPLOADS_DIR));
@@ -1206,13 +1227,14 @@ app.get('*', (req, res) => {
 });
 
 // Start Server
-app.listen(PORT, () => {
+app.listen(PORT, '0.0.0.0', () => {
     console.log(`==================================================`);
     console.log(`  CAPTGAINS MULTI-TENANT CMS SERVER`);
-    console.log(`  Server running at:    http://localhost:${PORT}`);
+    console.log(`  Server running at:    http://0.0.0.0:${PORT}`);
+    console.log(`  Data Directory:       ${DATA_DIR}`);
+    console.log(`  Uploads Directory:    ${UPLOADS_DIR}`);
     console.log(`  Original Admin Panel: http://localhost:${PORT}/admin`);
     console.log(`  Super Admin Panel:    http://localhost:${PORT}/superadmin`);
-    console.log(`  Client Site Example:  http://localhost:${PORT}/c/:subname`);
     console.log(`==================================================`);
     console.log(`  Super Admin Login:    superadmin@veslootech.com / superadmin123`);
     console.log(`==================================================`);
