@@ -122,9 +122,61 @@ function writeDB(data) {
 // ==========================================
 function readSuperAdminDB() {
     try {
-        if (!fs.existsSync(SUPERADMIN_FILE)) return { super_admin: {}, clients: [] };
-        return JSON.parse(fs.readFileSync(SUPERADMIN_FILE, 'utf8'));
-    } catch (err) { console.error('Error reading SuperAdmin DB:', err); return { super_admin: {}, clients: [] }; }
+        let saDB = { super_admin: {}, clients: [] };
+        if (fs.existsSync(SUPERADMIN_FILE)) {
+            saDB = JSON.parse(fs.readFileSync(SUPERADMIN_FILE, 'utf8'));
+        }
+        if (!saDB.super_admin || !saDB.super_admin.email) {
+            saDB.super_admin = {
+                id: 'sa_1',
+                name: 'Veslootech',
+                email: 'superadmin@veslootech.com',
+                passwordHash: '',
+                plainPassword: 'superadmin123',
+                createdAt: new Date().toISOString().substring(0, 10)
+            };
+        }
+        if (!saDB.clients) saDB.clients = [];
+
+        if (fs.existsSync(CLIENTS_DIR)) {
+            const folders = fs.readdirSync(CLIENTS_DIR);
+            let modified = false;
+            for (const subname of folders) {
+                const clean = subname.toLowerCase().trim();
+                const dbPath = path.join(CLIENTS_DIR, clean, 'db.json');
+                if (fs.existsSync(dbPath)) {
+                    const exists = saDB.clients.some(c => c && c.subname && c.subname.toLowerCase().trim() === clean);
+                    if (!exists) {
+                        let clientDB = null;
+                        try { clientDB = JSON.parse(fs.readFileSync(dbPath, 'utf8')); } catch (e) {}
+                        const bizName = (clientDB && clientDB.business_profile && clientDB.business_profile.name) ? clientDB.business_profile.name : clean;
+                        saDB.clients.push({
+                            id: 'cli_auto_' + Date.now() + '_' + Math.floor(Math.random() * 1000),
+                            subname: clean,
+                            businessName: bizName,
+                            ownerEmail: 'admin@' + clean + '.com',
+                            plan: 'Standard',
+                            status: 'Active',
+                            createdAt: new Date().toISOString().substring(0, 10),
+                            shareableLink: `/${clean}`,
+                            adminLink: `/${clean}/admin`
+                        });
+                        modified = true;
+                    }
+                }
+            }
+            if (modified) {
+                fs.writeFileSync(SUPERADMIN_FILE, JSON.stringify(saDB, null, 2), 'utf8');
+            }
+        }
+        return saDB;
+    } catch (err) {
+        console.error('Error reading SuperAdmin DB:', err);
+        return {
+            super_admin: { id: 'sa_1', name: 'Veslootech', email: 'superadmin@veslootech.com', plainPassword: 'superadmin123' },
+            clients: []
+        };
+    }
 }
 
 function writeSuperAdminDB(data) {
